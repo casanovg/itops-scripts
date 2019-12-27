@@ -7,7 +7,7 @@
 # * gcasanova@hellermanntyton.com.ar                  *
 # *****************************************************
 
-VMFile='/home/netbackup/ActiveVMs'
+VMFile=~/ActiveVMs
 
 while read virtualmachine
   do

@@ -9,9 +9,9 @@
 
 # HTA-BusinessMate VirtualBox Virtual Machines Backup (Every Sunday at 07:00 AM)
 # -----------------------------------------------------------------------------------
-  0  12 *  *  sat /home/netbackup/itops-scripts/bare-metal/update-os.sh
-  0  7  *  *  sun /home/netbackup/itops-scripts/bare-metal/vboxbackup.sh
+  0  12 *  *  sat ~/itops-scripts/bare-metal/update-os.sh
+  0  7  *  *  sun ~/itops-scripts/bare-metal/vboxbackup.sh
 
 # After reboot, start HTA network servers ...
-  @reboot sleep 60 && /home/netbackup/itops-scripts/bare-metal/vboxall-on.sh
+  @reboot sleep 60 && ~/itops-scripts/bare-metal/vboxall-on.sh
 

@@ -15,7 +15,7 @@ echo "**************************************************************************
 echo "* $DateNow * Backing-up  >>> `hostname -s | tr [a-z] [A-Z]` <<< VirtualBox Virtual Machines";
 echo "********************************************************************************";
 
-for virtualmachine in `cat /root/ActiveVMs`
+for virtualmachine in `cat /home/netbackup/ActiveVMs`
   do
     echo "--------------------------------------------------------------------------------";
     echo "Trying to shutdown >> $virtualmachine << VM  on `date` ...";
@@ -70,3 +70,4 @@ echo "**************************************************************************
 echo "[]";
 echo "[]";
 echo "[]";
+

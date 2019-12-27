@@ -13,7 +13,7 @@ rm -rf /data/`hostname -s`-root-folder/*
 \cp -rf  /root/* /data/`hostname -s`-root-folder/
 chown -R netbackup:wheel /data/`hostname -s`-root-folder/
 
-#/root/vboxbkpactivevms.sh 1>>$LogFile 2>>$LogFile
-/root/vboxbkpvms-stopall.sh 1>>$LogFile 2>>$LogFile
-#/root/vboxbkpinactivevms.sh 1>>$LogFile 2>>$LogFile
+#/home/netbackup/itops-scripts/bare-metal/vboxbkpactivevms.sh 1>>$LogFile 2>>$LogFile
+#/home/netbackup/itops-scripts/bare-metal/vboxbkpinactivevms.sh 1>>$LogFile 2>>$LogFile
+/home/netbackup/itops-scripts/bare-metal/vboxbkpvms-stopall.sh 1>>$LogFile 2>>$LogFile
 

@@ -13,5 +13,9 @@
   0  7  *  *  sun ~/itops-scripts/bare-metal/vboxbackup.sh
 
 # After reboot, start HTA network servers ...
-  @reboot sleep 60 && ~/itops-scripts/bare-metal/vboxall-on.sh
+  @reboot sleep 15 && ~/itops-scripts/bare-metal/vboxall-on.sh
+
+# Verify every 6 hours that essential network services are up
+  0 */6 *  *  *  ~/itops-scripts/bare-metal/vbox-on.sh "HTA-Firewall"
+  0 */6 *  *  *  ~/itops-scripts/bare-metal/vbox-on.sh "HTA-NetPal"
 

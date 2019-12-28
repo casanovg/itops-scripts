@@ -7,13 +7,18 @@
 # * gcasanova@hellermanntyton.com.ar                 *
 # ****************************************************
 
-for virtualmachine in `vboxmanage list runningvms | gawk '{gsub("\"","",$1);print $1}'`;
-  do
-    echo ""
-    echo "$virtualmachine Server active, sending shutdown signal ...";
-    vboxmanage controlvm $virtualmachine acpipowerbutton;
-    sleep 2;
-    vboxmanage controlvm $virtualmachine acpipowerbutton;
-    sleep 60;
-  done
+ESSENTIAL_NET_SERVICE="`cat ~/EssentialNetServices`";
+
+echo "";
+for VM in `vboxmanage list runningvms | gawk '{gsub("\"","",$1);print $1}'`;
+do
+	if [ "$VM" != "$ESSENTIAL_NET_SERVICE" ]
+	then
+		~/itops-scripts/bare-metal/vbox-off.sh $VM;
+	else
+		echo "";
+		echo "$VM runs an essential network service, keeping it up ...";
+	fi
+done
+echo "";
 

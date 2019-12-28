@@ -8,6 +8,7 @@
 # ************************************************
 
 VM=`vboxmanage list vms | gawk '{gsub("\"","",$1);print $1}' | grep -w $1`;
+TIMES=60;
 
 if [ ! -z "$VM" ]; then
         RUNNING_VM=`vboxmanage list runningvms | gawk '{gsub("\"","",$1);print $1}' | grep -w $VM`;
@@ -17,16 +18,13 @@ if [ ! -z "$VM" ]; then
         	vboxmanage controlvm $VM acpipowerbutton;
         	sleep 2;
         	vboxmanage controlvm $VM acpipowerbutton;
-        	sleep 60;
-                echo "";
+		sleep 5;
         else
                 echo "";
 		echo "$VM virtual machine not active, exiting ...";
-                echo "";
         fi
 else
         echo "";
         echo "$1 virtual machine not found, exiting ...";
-        echo "";
 fi
 

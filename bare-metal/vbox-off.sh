@@ -19,6 +19,10 @@ if [ ! -z "$VM" ]; then
         	sleep 2;
         	vboxmanage controlvm $VM acpipowerbutton;
 		sleep 5;
+    		while [ `vboxmanage list runningvms | gawk '{gsub("\"","",$1);print $1}' | grep -w $VM` ]
+    		do
+            		sleep 1;
+    		done
         else
                 echo "";
 		echo "$VM virtual machine not active, exiting ...";

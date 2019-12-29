@@ -7,23 +7,23 @@
 # * gcasanova@hellermanntyton.com.ar            *
 # ************************************************
 
-VM=`vboxmanage list vms | gawk '{gsub("\"","",$1);print $1}' | grep -w $1`;
+VM=`vboxmanage list vms | gawk -F\" '{print $(NF-1)}' | grep -w "^$1$"`;
 
 if [ ! -z "$VM" ]; then
-	RUNNING_VM=`vboxmanage list runningvms | gawk '{gsub("\"","",$1);print $1}' | grep -w $VM`;
+        RUNNING_VM=`vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$VM$"`;
 	if [ -z "$RUNNING_VM" ]; then
         	echo "";
-        	echo "$VM virtual machine inactive, trying to power it on ...";
-    		vboxmanage startvm $VM --type headless;
+        	echo ""$VM" virtual machine inactive, trying to power it on ...";
+    		vboxmanage startvm "$VM" --type headless;
 		echo "";
 	else
         	echo "";
-        	echo "$VM virtual machine already active, exiting ...";
+        	echo ""$VM" virtual machine already active, exiting ...";
         	echo "";
 	fi
 else
 	echo "";
-	echo "$1 virtual machine not found, exiting ...";
+	echo ""$1" virtual machine not found, exiting ...";
 	echo "";
 fi
 

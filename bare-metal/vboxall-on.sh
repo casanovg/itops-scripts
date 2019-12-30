@@ -7,12 +7,13 @@
 # * gcasanova@hellermanntyton.com.ar                  *
 # *****************************************************
 
-VMFile=~/ActiveVMs
+VM_FILE=~/ActiveVMs
+IFS=$'\n'
 
-while read virtualmachine; do
+while read VM; do
 	echo ""
 	#vboxmanage startvm $virtualmachine --type headless
 	~/itops-scripts/bare-metal/vbox-on.sh "$VM"
 	echo "Waiting 2 minutes for VM's services startup ..."
 	sleep 120
-done <$VMFile
+done <$VM_FILE

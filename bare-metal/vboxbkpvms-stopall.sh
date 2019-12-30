@@ -6,14 +6,14 @@
 # 2018-04-22 Gustavo Casanova
 #
 
-BackupDir='/data/VirtualBox-Exports'
-DateNow=$(date -I --date='now')
-LogFile='/data/VirtualBox-Exports/Log/vboxbackup.log'
-EssentialService=''
+BACKUP_DIR='/data/VirtualBox-Exports'
+DATE_NOW=$(date -I --date='now')
+LOG_FILE='/data/VirtualBox-Exports/Log/vboxbackup.log'
+ESSENTIAL_SERVICE=''
 IFS=$'\n'
 
 echo "********************************************************************************"
-echo "* $DateNow * Backing-up >>> $(hostname -s | tr [a-z] [A-Z]) <<< VirtualBox Virtual Machines"
+echo "* $DATE_NOW * Backing-up >>> $(hostname -s | tr [a-z] [A-Z]) <<< VirtualBox Virtual Machines"
 echo "********************************************************************************"
 
 for VM in $(cat ~/ActiveVMs); do
@@ -24,16 +24,16 @@ done
 for VM in $(cat ~/ActiveVMs); do
 	echo "--------------------------------------------------------------------------------"
 	echo "Removing old "$VM" backups ..."
-	find $BackupDir -type f -mtime +0 -name "$VM*"
-	find $BackupDir -type f -mtime +0 -name "$VM*" -execdir rm -- '{}' \;
+	find $BACKUP_DIR -type f -mtime +0 -name "$VM*"
+	find $BACKUP_DIR -type f -mtime +0 -name "$VM*" -execdir rm -- '{}' \;
 	sleep 3
-	echo "Backing-up "$VM" to file $BackupDir/"$VM" $DateNow.ova"
-	rm -f $BackupDir/"$VM $DateNow.ova" 2>>/dev/null
-	vboxmanage export "$VM" --output $BackupDir/"$VM $DateNow.ova" --ovf20
-	chown netbackup:wheel $BackupDir/"$VM $DateNow.ova"
+	echo "Backing-up "$VM" to file $BACKUP_DIR/"$VM" $DATE_NOW.ova"
+	rm -f $BACKUP_DIR/"$VM $DATE_NOW.ova" 2>>/dev/null
+	vboxmanage export "$VM" --output $BACKUP_DIR/"$VM $DATE_NOW.ova" --ovf20
+	chown netbackup:wheel $BACKUP_DIR/"$VM $DATE_NOW.ova"
 	echo ""
 	sleep 3
-	if [ "$VM" == "$EssentialService" ]; then
+	if [ "$VM" == "$ESSENTIAL_SERVICE" ]; then
 		echo "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
 		echo "|| "$VM" runs essential services, starting it now ..."
 		echo "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
@@ -42,7 +42,7 @@ for VM in $(cat ~/ActiveVMs); do
 	fi
 done
 for VM in $(cat ~/ActiveVMs); do
-	if [ "$VM" != "$EssentialService" ]; then
+	if [ "$VM" != "$ESSENTIAL_SERVICE" ]; then
 		echo "Restarting >> "$VM" << on $(date) ..."
 		~/itops-scripts/bare-metal/vbox-on.sh "$VM"
 		sleep 60
@@ -51,7 +51,7 @@ done
 echo "--------------------------------------------------------------------------------"
 
 echo "********************************************************************************"
-echo "* $DateNow * >>> $(hostname -s | tr [a-z] [A-Z]) <<< VirtualBox Backup Complete"
+echo "* $DATE_NOW * >>> $(hostname -s | tr [a-z] [A-Z]) <<< VirtualBox Backup Complete"
 echo "********************************************************************************"
 echo "[]"
 echo "[]"

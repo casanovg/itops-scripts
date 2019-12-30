@@ -8,9 +8,10 @@
 # ****************************************************
 
 ESSENTIAL_NET_SERVICE="$(cat ~/EssentialNetServices)"
+IFS=$'\n'
 
 echo ""
-for VM in $(vboxmanage list runningvms | gawk '{gsub("\"","",$1);print $1}'); do
+for VM in $(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}'); do
 	if [ "$VM" != "$ESSENTIAL_NET_SERVICE" ]; then
 		~/itops-scripts/bare-metal/vbox-off.sh "$VM"
 	else

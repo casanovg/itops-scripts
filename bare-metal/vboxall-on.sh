@@ -3,17 +3,27 @@
 # *****************************************************
 # * Script to power on all necessary virtual machines *
 # * ================================================= *
-# * 2018-03-15 Gustavo Casanova                       *
+# * 2019-12-29 Gustavo Casanova                       *
 # * gcasanova@hellermanntyton.com.ar                  *
 # *****************************************************
 
-VM_FILE=~/ActiveVMs
+POST_START_DLY=15
 IFS=$'\n'
 
-while read VM; do
-	echo ""
-	#vboxmanage startvm $virtualmachine --type headless
+for VM in $(cat ~/ActiveVMs); do
 	~/itops-scripts/bare-metal/vbox-on.sh "$VM"
-	echo "Waiting 2 minutes for VM's services startup ..."
-	sleep 120
-done <$VM_FILE
+	if [ $? -eq 0 ]; then
+		echo "Waiting $POST_START_DLY seconds for VM's services startup ..."
+		sleep $POST_START_DLY
+	fi
+done
+echo "All virtual machines started!"
+
+#VM_FILE=~/ActiveVMs
+# while read VM; do
+# 	echo ""
+# 	#vboxmanage startvm $virtualmachine --type headless
+# 	~/itops-scripts/bare-metal/vbox-on.sh "$VM"
+# 	echo "Waiting 2 minutes for VM's services startup ..."
+# 	sleep 30
+# done <$VM_FILE

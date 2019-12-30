@@ -49,7 +49,7 @@ do
     then
     	echo "Restarting >> "$VM" << on `date` ...";
 		~/itops-scripts/bare-metal/vbox-on.sh "$VM"
-       	sleep 60;
+    	sleep 60;
     fi
 done
 echo "--------------------------------------------------------------------------------";

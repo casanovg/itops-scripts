@@ -18,12 +18,12 @@ if [ ! -z "$VM" ]; then
 		echo "";
 	else
         	echo "";
-        	echo ""$VM" virtual machine already active, exiting ...";
+        	echo ""$VM" virtual machine already active!";
         	echo "";
 	fi
 else
 	echo "";
-	echo ""$1" virtual machine not found, exiting ...";
+	echo ""$1" virtual machine not found!";
 	echo "";
 fi
 

@@ -40,7 +40,7 @@ do
     	sleep 3;
     	echo "Backing-up "$VM" to file $BackupDir/"$VM" $DateNow.ova";
     	rm -f $BackupDir/"$VM $DateNow.ova" 2>>/dev/null;
-    	#vboxmanage export "$VM" --output $BackupDir/"$VM $DateNow.ova" --ovf20;
+    	vboxmanage export "$VM" --output $BackupDir/"$VM $DateNow.ova" --ovf20;
     	chown netbackup:wheel $BackupDir/"$VM $DateNow.ova";
     	sleep 3;
     	if [ "$VM" == "$EssentialService" ]

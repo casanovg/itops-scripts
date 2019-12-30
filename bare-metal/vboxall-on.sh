@@ -9,11 +9,10 @@
 
 VMFile=~/ActiveVMs
 
-while read virtualmachine
-  do
-    echo ""
-    vboxmanage startvm $virtualmachine --type headless
-    echo "Waiting 2 minutes for VM's services startup ..."
-    sleep 120
-  done < $VMFile
-
+while read virtualmachine; do
+	echo ""
+	#vboxmanage startvm $virtualmachine --type headless
+	~/itops-scripts/bare-metal/vbox-on.sh "$VM"
+	echo "Waiting 2 minutes for VM's services startup ..."
+	sleep 120
+done <$VMFile

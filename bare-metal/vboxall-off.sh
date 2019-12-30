@@ -7,19 +7,16 @@
 # * gcasanova@hellermanntyton.com.ar                 *
 # ****************************************************
 
-ESSENTIAL_NET_SERVICE="`cat ~/EssentialNetServices`";
+ESSENTIAL_NET_SERVICE="$(cat ~/EssentialNetServices)"
 
-echo "";
-for VM in `vboxmanage list runningvms | gawk '{gsub("\"","",$1);print $1}'`;
-do
-	if [ "$VM" != "$ESSENTIAL_NET_SERVICE" ]
-	then
-		~/itops-scripts/bare-metal/vbox-off.sh $VM;
+echo ""
+for VM in $(vboxmanage list runningvms | gawk '{gsub("\"","",$1);print $1}'); do
+	if [ "$VM" != "$ESSENTIAL_NET_SERVICE" ]; then
+		~/itops-scripts/bare-metal/vbox-off.sh "$VM"
 	else
-		echo "";
-		echo "$VM runs an essential network service, keeping it up ...";
-		echo "";
+		echo ""
+		echo "$VM runs an essential network service, keeping it up ..."
+		echo ""
 	fi
 done
-echo "";
-
+echo ""

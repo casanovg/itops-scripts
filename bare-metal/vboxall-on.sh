@@ -7,7 +7,7 @@
 # * gcasanova@hellermanntyton.com.ar                  *
 # *****************************************************
 
-POST_START_DLY=15
+POST_START_DLY=60
 IFS=$'\n'
 
 for VM in $(cat ~/ActiveVMs); do

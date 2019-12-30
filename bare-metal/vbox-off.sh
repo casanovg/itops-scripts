@@ -22,7 +22,7 @@ if [ ! -z "$VM" ]; then
 		while [[ "$RUNNING_VM" && $WAIT_TIME -gt 0 ]]; do
 			RUNNING_VM=$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$VM$")
 			((WAIT_TIME = WAIT_TIME - 1))
-			echo "$WAIT_TIME"
+			#echo "$WAIT_TIME"
 			sleep 1
 		done
 		echo ""

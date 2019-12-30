@@ -18,6 +18,7 @@ do
 	else
 		echo "";
 		echo "$VM runs an essential network service, keeping it up ...";
+		echo "";
 	fi
 done
 echo "";

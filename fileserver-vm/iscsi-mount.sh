@@ -22,9 +22,3 @@ ls -l /data/aleph-disk;
 echo;
 ls -l /data/taxpy-disk;
 echo;
-
-# umount /data/aleph-disk;
-# umount /data/taxpy-disk;
-# iscsiadm -m node --targetname iqn.2019-12.lan.htargentina:hta-mothership.aleph -p 10.6.17.40 --logout;
-# iscsiadm -m node --targetname iqn.2019-12.lan.htargentina:hta-mothership.taxpy -p 10.6.17.40 --logout;
-

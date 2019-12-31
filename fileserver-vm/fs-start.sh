@@ -4,15 +4,14 @@
 # ...........................................
 # 2019-12-09 gcasanova@hellermanntyton.com.ar
 
-pwd=`cat /root/fs-usr | openssl aes-256-cbc -a -d -salt -pass pass:' '`
-echo ""
+pwd=$(cat ~/fs-usr | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')
 echo "Joining HTARGENTINA Domain"
 echo "--------------------------"
 echo "Windows domain administrator password required ..."
-net ads join -U administrator%$pwd -S hta-pdc.htargentina.lan -I 10.6.17.45
-winbindd
-smbd
-nmbd
+sudo net ads join -U administrator%$pwd -S hta-pdc.htargentina.lan -I 10.6.17.45
+sudo winbindd
+sudo smbd
+sudo nmbd
 wbinfo --ping-dc
 getent group "HTARGENTINA\\Domain Users"
 # chown "HTARGENTINA\domain admins:HTARGENTINA\domain users" /data/aleph-disk/

@@ -12,7 +12,7 @@ TXT_NO_CHANGES="nothing to commit"
 cd ~/"$GIT_REP"
 
 # Get latest origin changes
-git pull
+#git pull
 
 # Push latest local changes
 for DIR in $(ls -d -1 */); do
@@ -21,7 +21,7 @@ for DIR in $(ls -d -1 */); do
 done
 
 if [ ! -z $(git commit -m "Update scripts $(date)" | grep -w "$TXT_NO_CHANGES") ]; then
-    git commit -m "Update scripts $(date)"
+    #git commit -m "Update scripts $(date)"
     git push
 else
     echo "Local branch is up to date with origin ..."

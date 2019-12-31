@@ -10,11 +10,16 @@ TXT_NO_CHANGES="nothing to commit"
 
 cd ~/"$GIT_REP"
 
+echo ""
+echo "Synchronizing the "$GIT_REP" repository ..."
+echo
+
 # Get latest origin changes
 echo "Getting latest changes from origin ..."
 git pull
 
 # Push latest local changes
+echo ""
 for DIR in $(ls -d -1 */); do
     cd ~/"$GIT_REP"/$DIR
     sleep 1
@@ -28,5 +33,6 @@ if [ ! "$(git commit -m "$TXT_COMMIT $(date)" | grep -w "$TXT_NO_CHANGES")" ]; t
     echo "Changes commited, pushing to origin ..."
     git push
 else
-    echo "Local branch is up to date with origin ..."
+    echo "Local branch is up to date with origin!"
 fi
+echo ""

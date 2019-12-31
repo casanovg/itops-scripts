@@ -23,9 +23,11 @@ for DIR in $(ls -d -1 */); do
     git add -A .
 done
 
-if [ ! -z $(git commit -m "Update scripts $(date)" | grep -w "$TXT_NO_CHANGES") ]; then
-    #git commit -m "Update scripts $(date)"
-    git push
-else
-    echo "Local branch is up to date with origin ..."
-fi
+git commit -m "Update scripts $(date)"
+
+# if [ ! -z $(git commit -m "Update scripts $(date)" | grep -w "$TXT_NO_CHANGES") ]; then
+#     #git commit -m "Update scripts $(date)"
+#     git push
+# else
+#     echo "Local branch is up to date with origin ..."
+# fi

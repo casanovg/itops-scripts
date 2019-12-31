@@ -18,7 +18,7 @@ cd ~/"$GIT_REP"
 for DIR in $(ls -d -1 */); do
     cd ~/"$GIT_REP"/$DIR
     pwd
-    sleep 3
+    sleep 2
     echo "Adding changes from $DIR ..."
     git add -A .
 done
@@ -28,7 +28,8 @@ done
 if [ ! $(git commit -m "Update scripts $(date)" | grep -w "$TXT_NO_CHANGES") ]; then
     #git commit -m "Update scripts $(date)"
     #git push
-    echo "COMMITED OK"
+    echo "Changes commited, pushing to origin ..."
+    git push
 else
     echo "Local branch is up to date with origin ..."
 fi

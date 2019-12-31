@@ -12,8 +12,10 @@ IFS=$'\n'
 
 echo ""
 for VM in $(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}'); do
-	echo "Shutting "$VM" down ..."
-	~/itops-scripts/bare-metal/vbox-off.sh "$VM"
+	if [ "$VM" != "$ESSENTIAL_NET_SERVICE" ]; then
+		echo "Shutting "$VM" down ..."
+		~/itops-scripts/bare-metal/vbox-off.sh "$VM"
+	fi
 done
 echo "All virtual machines stopped!"
 echo ""

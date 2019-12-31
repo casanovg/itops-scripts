@@ -15,7 +15,7 @@ POST_START_DLY=60
 VM_FILE=~/ActiveVMs
 while read -r VM; do
 	echo ""
-	if [ "$(~/"$GIT_REP"/"$PHY_SVR_SCRIPTS"/vbox-on.sh "$VM")" -eq 0 ]; then
+	if [ $(~/"$GIT_REP"/"$PHY_SVR_SCRIPTS"/vbox-on.sh "$VM") -eq 0 ]; then
 		echo "Waiting $POST_START_DLY seconds for VM's services startup ..."
 		sleep $POST_START_DLY
 	fi

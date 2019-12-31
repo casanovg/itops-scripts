@@ -16,10 +16,10 @@ cd ~/"$GIT_REP"
 
 # Push latest local changes
 for DIR in $(ls -d -1 */); do
-    echo "Adding changes from $DIR ..."
     cd ~/"$GIT_REP"/$DIR
     pwd
     sleep 3
+    echo "Adding changes from $DIR ..."
     git add -A .
 done
 

@@ -7,11 +7,15 @@
 # |  |  |  |  |
 # *  *  *  *  * user-name  command to be executed
 
-# HTA-Mothership VirtualBox Virtual Machines Backup (Every Sunday at 07:00 AM)
+# After reboot, wait 15 seconds and start all virtual machines
 # -----------------------------------------------------------------------------------
-  0  14 *  *  sat ~/itops-scripts/bare-metal/update-os.sh
-  0  7  *  *  sun ~/itops-scripts/bare-metal/vboxbackup.sh
-
-# After reboot, start HTA network servers ...
   @reboot sleep 15 && ~/itops-scripts/bare-metal/vboxall-on.sh
+
+# Server operating system update (Every Saturday at 12:00 PM)
+# -----------------------------------------------------------------------------------
+  0  14 *  *  sat   ~/itops-scripts/bare-metal/update-os.sh
+
+# VirtualBox full virtual machines backup (Every Sunday at 07:00 AM)
+# -----------------------------------------------------------------------------------
+  0  7  *  *  sun   ~/itops-scripts/bare-metal/vboxbackup.sh
 

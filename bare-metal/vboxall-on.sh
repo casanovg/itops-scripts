@@ -12,22 +12,13 @@ source ~/itops-scripts/common/set-env.sh
 POST_START_DLY=60
 #IFS=$'\n'
 
-VM_FILE=~/ActiveVMs
-while read -r VM; do
-	echo ""
+for VM in $(cat ~/ActiveVMs); do
+	#~/"$GIT_REP"/"$PHY_SVR_SCRIPTS"/vbox-on.sh "$VM"
 	if [ "$(~/"$GIT_REP"/"$PHY_SVR_SCRIPTS"/vbox-on.sh "$VM")" -eq 0 ]; then
-		echo "Waiting $POST_START_DLY seconds for VM\'s services startup ..."
+		echo "Waiting $POST_START_DLY seconds for VM's services startup ..."
 		sleep $POST_START_DLY
 	fi
-done <$VM_FILE
-
-# for VM in $(cat ~/ActiveVMs); do
-# 	#~/"$GIT_REP"/"$PHY_SVR_SCRIPTS"/vbox-on.sh "$VM"
-# 	if [ "$(~/"$GIT_REP"/"$PHY_SVR_SCRIPTS"/vbox-on.sh "$VM")" -eq 0 ]; then
-# 		echo "Waiting $POST_START_DLY seconds for VM's services startup ..."
-# 		sleep $POST_START_DLY
-# 	fi
-# done
+done
 echo "All virtual machines started!"
 echo ""
 

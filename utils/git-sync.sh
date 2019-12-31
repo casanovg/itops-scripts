@@ -11,7 +11,8 @@ TXT_NO_CHANGES="nothing to commit"
 cd ~/"$GIT_REP"
 
 # Get latest origin changes
-#git pull
+echo "Getting latest changes from origin ..."
+git pull
 
 # Push latest local changes
 for DIR in $(ls -d -1 */); do

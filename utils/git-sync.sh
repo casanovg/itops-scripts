@@ -25,7 +25,7 @@ done
 
 #git commit -m "Update scripts $(date)"
 
-if [ ! -z $(git commit -m "Update scripts $(date)" | grep -w "$TXT_NO_CHANGES") ]; then
+if [ ! $(git commit -m "Update scripts $(date)" | grep -w "$TXT_NO_CHANGES") ]; then
     #git commit -m "Update scripts $(date)"
     #git push
     echo "COMMITED OK"

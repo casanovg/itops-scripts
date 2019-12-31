@@ -13,8 +13,8 @@ POST_START_DLY=60
 IFS=$'\n'
 
 for VM in $(cat ~/ActiveVMs); do
-	~/"$GIT_REP"/"$PHY_SVR_SCRIPTS"/vbox-on.sh "$VM"
-	if [ $? -eq 0 ]; then
+	#~/"$GIT_REP"/"$PHY_SVR_SCRIPTS"/vbox-on.sh "$VM"
+	if [ "$(~/"$GIT_REP"/"$PHY_SVR_SCRIPTS"/vbox-on.sh "$VM")" -eq 0 ]; then
 		echo "Waiting $POST_START_DLY seconds for VM's services startup ..."
 		sleep $POST_START_DLY
 	fi

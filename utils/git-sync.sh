@@ -15,7 +15,8 @@ git pull
 # Push latest local changes
 git add -A .
 if [ ! -z $(git commit -m "Update scripts $(date)" | grep -w "$TXT_NO_CHANGES") ]; then
+    git commit -m "Update scripts $(date)"
     git push
 else
-    echo "Local branch is up to date with origin ... "
+    echo "Local branch is up to date with origin ..."
 fi

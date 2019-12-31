@@ -63,12 +63,12 @@ done
 
 # Authenticate with AD domain controller and start Samba shares
 if [ ! "$(wbinfo --ping-dc 2>>/dev/null | grep -w "succeeded")" ]; then
-    #echo "CHONGA MUST SAMBAR"
    ~/itops-scripts/fileserver-vm/fs-start.sh
    sleep 1
    ~/itops-scripts/fileserver-vm/fs-stop.sh
    sleep 1
    ~/itops-scripts/fileserver-vm/fs-start.sh
 #else
-    #echo "NADA"
+    #echo "Samba already on!"
 fi
+

@@ -2,13 +2,14 @@
 
 # Synchronize git repository
 # ...........................................
-# 2019-12-31 gcasanova@hellermanntyton.com.arFOLDER_1="bare-metal"
+# 2019-12-31 gcasanova@hellermanntyton.com.ar
 
-GIT_REP="itops-scripts"
+source ~/itops-scripts/common/set-env.sh
+
 TXT_COMMIT="Update scripts"
 TXT_NO_CHANGES="nothing to commit"
 
-cd ~/"$GIT_REP"
+cd ~/"$GIT_REP" || return
 
 echo ""
 echo "Synchronizing the "$GIT_REP" repository ..."
@@ -21,7 +22,7 @@ git pull
 # Push latest local changes
 echo ""
 for DIR in $(ls -d -1 */); do
-    cd ~/"$GIT_REP"/$DIR
+    cd ~/"$GIT_REP"/$DIR || return
     sleep 1
     echo "Looking for changes in $(pwd) ..."
     git add -A .

@@ -6,7 +6,7 @@
 
 GIT_REP="itops-scripts"
 COMMON_SCRIPTS="common"
-SERVER_SCRIPTS="bare-metal"
+PHY_SVR_SCRIPTS="bare-metal"
 FILES_VM_SCRIPTS="fileserver-vm"
 UTILS_SCRIPTS="utils"
 

@@ -9,11 +9,11 @@ source ~/itops-scripts/common/set-env.sh
 # Stop all virtual machines
 echo ""
 echo "Stopping virtual machines ..."
-~/"$GIT_REP"/bare-metal/vboxall-off.sh
+~/"$GIT_REP"/"$PHY_SVR_SCRIPTS"/vboxall-off.sh
 # Stopping essential net services
 echo "Stopping $ESSENTIAL_NET_SERVICE essential network services, Bye Bye!"
 echo ""
-~/"$GIT_REP"/bare-metal/vbox-off.sh "$ESSENTIAL_NET_SERVICE"
+~/"$GIT_REP"/"$PHY_SVR_SCRIPTS"/vbox-off.sh "$ESSENTIAL_NET_SERVICE"
 sleep 3
 # Reboot
 echo ""
@@ -23,4 +23,4 @@ sudo /usr/sbin/reboot
 sleep 180
 echo ""
 echo "Starting virtual machines ..."
-~/"$GIT_REP"/bare-metal/vboxall-on.sh
+~/"$GIT_REP"/"$PHY_SVR_SCRIPTS"/vboxall-on.sh

@@ -1,12 +1,21 @@
 #!/bin/sh
 
-# Install xrdp (MS Remote Desktop Protocol)
+# Synchronize git repository
 # ...........................................
-# 2019-12-29 gcasanova@hellermanntyton.com.ar
+# 2019-12-31 gcasanova@hellermanntyton.com.ar
 
-sudo dnf -y install xrdp
-sudo systemctl start xrdp
-sudo systemctl enable xrdp
-sudo firewall-cmd --add-port=3389/tcp --permanent
-sudo firewall-cmd --reload
+GIT_REP="itops-scripts"
+TXT_NO_CHANGES="nothing to commit"
 
+cd ~/"$GIT_REP"
+
+# Get latest origin changes
+git pull
+
+# Push latest local changes
+git add -A .
+if [ ! -z $(git commit -m "Update scripts $(date)" | grep -w "$TXT_NO_CHANGES") ]; then
+    git push
+else
+    echo "Local branch is up to date with origin ..."
+fi

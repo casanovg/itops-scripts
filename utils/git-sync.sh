@@ -18,6 +18,8 @@ cd ~/"$GIT_REP"
 for DIR in $(ls -d -1 */); do
     echo "Adding changes from $DIR ..."
     cd ~/"$GIT_REP"/$DIR
+    pwd
+    sleep 3
     git add -A .
 done
 

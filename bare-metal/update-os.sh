@@ -16,7 +16,7 @@ sudo dnf -y update
 sleep 3
 # Stopping essential net services
 echo ""
-echo "Stopping $ESSENTIAL_NET_SERVICE essential network services, Bye Bye!"
+echo "Stopping $ESSENTIAL_NET_SERVICE essential network services, Bye!"
 ~/itops-scripts/bare-metal/vbox-off.sh "$ESSENTIAL_NET_SERVICE"
 sleep 3
 # Reboot

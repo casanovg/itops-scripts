@@ -33,7 +33,7 @@ if [ ! -z "$VM" ]; then
 		EXIT_CODE=1
 	fi
 else
-	echo ""
+	#echo ""
 	echo ""$1" virtual machine not found!"
 	echo ""
 	EXIT_CODE=2

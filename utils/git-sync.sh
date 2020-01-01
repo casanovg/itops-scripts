@@ -34,6 +34,7 @@ if [ ! "$(git commit -m "$TXT_COMMIT $(date)" | grep -w "$TXT_NO_CHANGES")" ]; t
     echo "Changes commited, pushing to origin ..."
     git push
 else
+    echo ""
     echo "Local branch is up to date with origin!"
 fi
 echo ""

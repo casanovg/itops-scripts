@@ -2,16 +2,19 @@
 
 # Synchronize git repository *
 # ...........................................
-# NOTE: Use git-update-id-sh to create or
-# ***** update your GitHub credentials  
+# NOTES: Use git-update-id-sh to create or
+# *****  update your GitHub credentials.
+#        You also may need run:
+# git config --global credential.helper store
+#        before using this script 
 # ...........................................
 # 2019-12-31 gcasanova@hellermanntyton.com.ar
 
 source ~/itops-scripts/common/set-env.sh
 
 GITHUBREP="github.com/casanovg/itops-scripts.git"
-GITHUBUSR=$(cat ~/.github-usr | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')
-GITHUBPWD=$(cat ~/.github-pwd | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')
+GITHUBUSR="$(cat ~/.github-usr | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')"
+GITHUBPWD="$(cat ~/.github-pwd | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')"
 
 TXT_COMMIT="Update scripts"
 TXT_NO_CHANGES="nothing to commit"

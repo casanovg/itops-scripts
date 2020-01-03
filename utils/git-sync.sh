@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Synchronize git repository
+# Synchronize git repository *
 # ...........................................
 # NOTE: Use git-update-id-sh to create or
 # ***** update your GitHub credentials  
@@ -9,7 +9,7 @@
 
 source ~/itops-scripts/common/set-env.sh
 
-GITHUBREP="github.com/casanovg/itops-scripts"
+GITHUBREP="github.com/casanovg/itops-scripts.git"
 GITHUBUSR="$(cat ~/.github-usr | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')"
 GITHUBPWD="$(cat ~/.github-pwd | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')"
 

@@ -5,6 +5,7 @@
 # 2019-12-29 gcasanova@hellermanntyton.com.ar
 
 source ~/itops-scripts/common/set-env.sh
+source ~/itops-scripts/common/set-vm-lists.sh
 
 # Stop all virtual machines
 echo ""

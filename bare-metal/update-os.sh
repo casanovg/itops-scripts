@@ -4,7 +4,7 @@
 # ...........................................
 # 2019-12-24 gcasanova@hellermanntyton.com.ar
 
-ESSENTIAL_NET_SERVICE="$(cat ~/EssentialNetServices)"
+source ~/itops-scripts/common/set-vm-lists.sh
 
 # Stop all virtual machines
 ~/itops-scripts/bare-metal/vboxall-off.sh

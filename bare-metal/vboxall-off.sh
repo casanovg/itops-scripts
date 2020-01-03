@@ -7,7 +7,7 @@
 # * gcasanova@hellermanntyton.com.ar                 *
 # ****************************************************
 
-ESSENTIAL_NET_SERVICE="$(cat ~/EssentialNetServices)"
+source ~/itops-scripts/common/set-vm-lists.sh
 IFS=$'\n'
 
 echo ""

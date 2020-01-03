@@ -32,7 +32,7 @@ git pull
 # Push latest local changes
 echo ""
 for DIR in $(ls -d -1 */); do
-    cd ~/"$GIT_REP"/$DIR || return
+    cd ~/"$GIT_REP"/"$DIR" || return
     sleep 1
     echo "Looking for changes in $(pwd) ..."
     git add -A .

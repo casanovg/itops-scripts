@@ -12,7 +12,7 @@
 
 source ~/itops-scripts/common/set-env.sh
 
-GITHUBREP="github.com/casanovg/itops-scripts.git"
+GITHUBREP="github.com/casanovg/$GIT_REP.git"
 GITHUBUSR="$(cat ~/.github-usr | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')"
 GITHUBPWD="$(cat ~/.github-pwd | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')"
 

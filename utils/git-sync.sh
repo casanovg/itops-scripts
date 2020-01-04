@@ -2,7 +2,7 @@
 
 # Synchronize git repository *
 # ...........................................
-# NOTES: Use git-update-id-sh to create or
+# NOTES: Use git-update-id.sh to create or
 # *****  update your GitHub credentials.
 #        You also may need run:
 # git config --global credential.helper store
@@ -42,8 +42,6 @@ done
 
 if [ ! "$(git commit -m "$TXT_COMMIT $(date)" | grep -w "$TXT_NO_CHANGES")" ]; then
     echo "Changes commited, pushing to origin ..."
-    #git push
-    #git push https://user:pass@yourrepo.com/path HEAD
     git push https://$GITHUBUSR:$GITHUBPWD@$GITHUBREP HEAD
 else
     echo ""

@@ -25,12 +25,17 @@ else
     else
         ping -c1 -W1 -q $DEST &>/dev/null
         CONTACTED=$( echo $? )
+        echo ""
         if [ "$CONTACTED" -ne 0 ] ; then
             echo "$DEST server can NOT be contactacted!"
         else
-            echo "$DEST server contacted OK, trying to copy $VM virtual machine  ..."
-            rsync -r -a --info=progress2 $DEST:"$VBOX_PATH"/"$VM"
+            echo "Remote server $DEST contacted!"
+            ~/itops-scripts/bare-metal/vbox-off.sh "$VM"
+            echo "Trying to copy $VM virtual machine  ..."
+            echo ""
+            rsync -r -a --relative "$VBOX_PATH"/"$VM" --info=progress2 $DEST:/
         fi
+        echo ""
     fi
 fi
 

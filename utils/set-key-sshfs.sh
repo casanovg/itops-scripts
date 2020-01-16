@@ -6,7 +6,7 @@
 # - Passphrase: No passphrase 
 #
 ssh-keygen -t rsa
-#ssh-copy-id -i ~/.ssh/id_rsa.pub netbackup@10.6.17.30
+ssh-copy-id -i ~/.ssh/id_rsa.pub netbackup@10.6.17.30
 ssh-copy-id -i ~/.ssh/id_rsa.pub netbackup@10.6.17.40
 ssh-copy-id -i ~/.ssh/id_rsa.pub netbackup@10.6.17.50
 #ssh-copy-id -i ~/.ssh/id_rsa.pub netbackup@10.6.17.70

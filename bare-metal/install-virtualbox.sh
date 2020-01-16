@@ -8,9 +8,11 @@ NEW_VBOX_LINK="https://download.virtualbox.org/virtualbox/6.1.2/VirtualBox-6.1-6
 NEW_VBOX="VirtualBox-6.1"
 OLD_VBOX="VirtualBox-6.0"
 
+~/itops-scripts/bare-metal/vboxall-off.sh
 sudo wget $NEW_VBOX_LINK 
 sudo sudo rpm --import oracle_vbox.asc
 sudo dnf remove -y $OLD_VBOX
 sudo dnf install -y $NEW_VBOX
 sudo rm -f *.rpm
+~/itops-scripts/bare-metal/vboxall-on.sh
 

@@ -1,3 +1,9 @@
+#!/bin/sh
+
+# Set the user's public key
+# ...........................................
+# 2019-12-29 gcasanova@hellermanntyton.com.ar
+
 #
 # Key for sshfs on
 # - HTA-BusinessMate (10.6.17.30)

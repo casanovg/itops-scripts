@@ -4,6 +4,10 @@
 # ...........................................
 # 2020-01-18 gcasanova@hellermanntyton.com.ar
 
+# Date for High Sierra installation: sudo date 121401582018
+# Date for Mojave installation:      sudo date 030300002019
+# Date for Catalina installation:    sudo date 012219142020
+
 APPLE_VM=$1
 
 if [ ! -z $APPLE_VM ]; then

@@ -9,7 +9,7 @@
 
 # After reboot, wait 15 seconds and start all virtual machines
 # -----------------------------------------------------------------------------------
-  @reboot sleep 15 && ~/itops-scripts/bare-metal/vboxall-on.sh
+  @reboot sleep 90 && ~/itops-scripts/bare-metal/vboxall-on.sh
 
 # Server operating system update (Every Wednesday at 22:00 PM)
 # -----------------------------------------------------------------------------------

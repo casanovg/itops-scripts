@@ -16,7 +16,7 @@ ASTERISK_MYSQL_USR="asterisk";
 ASTERISK_MYSQL_PWD="asterisk";
 ASTERISK_MYSQL_MAINDB="asterisk";
 ASTERISK_MYSQL_CDRDB="cdrdb";
-MYSQL_ROOT_PASSWORD="PrincessLeia77";
+MYSQL_ROOT_PASSWORD="PASSWORD";
 INSTALL_FILES_DIR="/data/asterisk-install";
 #########################
 # End declarations      #

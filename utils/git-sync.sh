@@ -22,6 +22,11 @@ GITHUBREP="github.com/casanovg/$GIT_REP.git"
 GITHUBUSR="$(cat ~/.github-usr | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ' 1>>/dev/null 2>>/dev/null)"
 GITHUBPWD="$(cat ~/.github-pwd | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ' 1>>/dev/null 2>>/dev/null)"
 
+echo "*****"
+echo $GITHUBUSR
+echo $GITHUBUSR
+echo "*****"
+
 TXT_COMMIT="Update scripts"
 TXT_NO_CHANGES="nothing to commit"
 

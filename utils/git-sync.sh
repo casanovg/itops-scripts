@@ -22,12 +22,11 @@ if [ ! -f ~/.github-usr ] || [ ! -f ~/.github-pwd ]; then
         ~/"$GIT_REP"/"$UTILS_SCRIPTS"/git-update-id.sh
 fi
 
+cd ~/"$GIT_REP" || return
 
 GITHUBREP="$(git config --get remote.origin.url)"
 GITHUBUSR="$(cat ~/.github-usr | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ' 1>>/dev/null 2>>/dev/null)"
 GITHUBPWD="$(cat ~/.github-pwd | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ' 1>>/dev/null 2>>/dev/null)"
-
-cd ~/"$GIT_REP" || return
 
 TXT_COMMIT="Update scripts"
 TXT_NO_CHANGES="nothing to commit"

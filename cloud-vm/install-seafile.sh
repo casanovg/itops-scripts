@@ -107,8 +107,11 @@ echo "$SECURE_MYSQL"
 cp -f ~/$GIT_REP/$CLOUD_VM/setup-seafile-mysql_fedora-patch.sh $SEAFILE_DIR/seafile-server-7.0.5/setup-seafile-mysql.sh
 
 # Setup Seafile
+sudo mkdir /data
+sudo chown -R netbackup:wheel /data
 cd $SEAFILE_DIR
-./setup-seafile-mysql.sh
+$SEAFILE_DIR/seafile-server-7.0.5/setup-seafile-mysql.sh
+sudo chown root:root /data
 
 # Open firewall ports
 sudo firewall-cmd --zone=public --permanent --add-port=8082/tcp

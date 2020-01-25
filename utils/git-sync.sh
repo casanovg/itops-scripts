@@ -24,7 +24,7 @@ fi
 
 cd ~/"$GIT_REP" || return
 
-GITHUBREP="$(git config --get remote.origin.url)"
+GITHUBREP="github.com/casanovg/$GIT_REP.git"
 GITHUBUSR="$(cat ~/.github-usr | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ' 1>>/dev/null 2>>/dev/null)"
 GITHUBPWD="$(cat ~/.github-pwd | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ' 1>>/dev/null 2>>/dev/null)"
 
@@ -52,8 +52,7 @@ done
 
 if [ ! "$(git commit -m "$TXT_COMMIT $(date)" | grep -w "$TXT_NO_CHANGES")" ]; then
     echo "Changes commited, pushing to origin ..."
-    #git push https://$GITHUBUSR:$GITHUBPWD@$GITHUBREP HEAD
-    git push $GITHUBREP HEAD
+    git push https://$GITHUBUSR:$GITHUBPWD@$GITHUBREP HEAD
 else
     echo ""
     echo "Local branch is up to date with origin!"

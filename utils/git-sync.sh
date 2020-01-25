@@ -19,12 +19,7 @@ source ~/itops-scripts/common/set-env.sh
 #UTILS_SCRIPTS="utils"
 
 if [ ! -f ~/.github-usr ] || [ ! -f ~/.github-pwd ]; then
-        echo ""
-	echo "NO NO NO"
         ~/"$GIT_REP"/"$UTILS_SCRIPTS"/git-update-id.sh
-else
-        echo ""
-	echo "SI SI SI"
 fi
 
 

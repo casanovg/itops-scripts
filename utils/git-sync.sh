@@ -12,12 +12,6 @@
 
 source ~/itops-scripts/common/set-env.sh
 
-#GIT_REP="itops-scripts"
-#COMMON_SCRIPTS="common"
-#PHY_SVR_SCRIPTS="bare-metal"
-#FILES_VM_SCRIPTS="fileserver-vm"
-#UTILS_SCRIPTS="utils"
-
 if [ ! -f ~/.github-usr ] || [ ! -f ~/.github-pwd ]; then
         ~/"$GIT_REP"/"$UTILS_SCRIPTS"/git-update-id.sh
 fi

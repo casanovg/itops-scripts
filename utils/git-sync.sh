@@ -19,7 +19,7 @@ source ~/itops-scripts/common/set-env.sh
 #UTILS_SCRIPTS="utils"
 
 
-if [ ! ~/.github-usr ] || [ ! ~/.github-pwd ]; then
+if [ ! -f "~/.github-usr" ] || [ ! -f "~/.github-pwd" ]; then
 	~/"$GIT_REP"/"$UTILS_SCIPTS"/git-update-id.sh
 fi
 

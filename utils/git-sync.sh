@@ -12,6 +12,7 @@
 
 source ~/itops-scripts/common/set-env.sh
 
+# Check if GitHub user and password are set
 if [ ! -f ~/.github-usr ] || [ ! -f ~/.github-pwd ]; then
         ~/"$GIT_REP"/"$UTILS_SCRIPTS"/git-update-id.sh
 fi

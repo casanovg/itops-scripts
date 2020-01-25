@@ -18,7 +18,7 @@ source ~/itops-scripts/common/set-env.sh
 #FILES_VM_SCRIPTS="fileserver-vm"
 #UTILS_SCRIPTS="utils"
 
-if [ ! -f "~/.github-usr" ] || [ ! -f "~/.github-pwd" ]; then
+if [ ! -f ~/.github-usr ] || [ ! -f ~/.github-pwd ]; then
         echo ""
 	echo "NO NO NO"
         ~/"$GIT_REP"/"$UTILS_SCRIPTS"/git-update-id.sh

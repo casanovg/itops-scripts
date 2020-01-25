@@ -27,7 +27,7 @@ cd ~/"$GIT_REP" || return
 if [ -z "$GITHUBUSR" ] || [ -z "$GITHUBPWD" ]; then
 echo "NO LALALALA"
 echo ""
-	~/"$GIT_REP"/"$UTILS_SCIPTS"/git-update-id.sh
+	sh ~/"$GIT_REP"/"$UTILS_SCIPTS"/git-update-id.sh
 fi
 
 

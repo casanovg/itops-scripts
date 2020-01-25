@@ -6,6 +6,8 @@
 # 2020-01-25 Gustavo Casanova
 #
 
+source ~/itops-scripts/common/set-env.sh
+
 SEAFILE_SERVER_LINK="https://download.seadrive.org/seafile-server_7.0.5_x86-64.tar.gz"
 PYTHON_VER="2.7.17"
 PYTHON_LINK="https://www.python.org/ftp/python/$PYTHON_VER/Python-$PYTHON_VER.tgz"
@@ -66,15 +68,43 @@ curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
 python2.7 get-pip.py
 
 # Install Python-MySQL connector
+sudo dnf install -y python2-mysql
 sudo dnf install -y python2-protobuf
-sudo dnf install python2-mysql
-#sudo dnf install -y mysql-connector-python
-#sudo dnf install -y mysql-connector-python-cext
 
 # Install nginx web server
 sudo dnf install -y nginx
 sudo systemctl enable nginx
 sudo systemctl start nginx
+
+# Install MySQL/MariaDB databaase
+sudo dnf -y install mariadb mariadb-server mariadb-devel
+sudo dnf -y install expect
+
+# Bsic setup database
+sudo systemctl start mariadb;
+sudo systemctl enable mariadb;
+# mysql_secure_installation;
+SECURE_MYSQL=$(expect -c "
+set timeout 10
+spawn mysql_secure_installation
+expect \"Enter current password for root (enter for none):\"
+send \"$MYSQL\r\"
+expect \"Set root password?\"
+send \"n\r\"
+expect \"Remove anonymous users?\"
+send \"y\r\"
+expect \"Disallow root login remotely?\"
+send \"y\r\"
+expect \"Remove test database and access to it?\"
+send \"y\r\"
+expect \"Reload privilege tables now?\"
+send \"y\r\"
+expect eof
+")
+echo "$SECURE_MYSQL"
+
+# Patch setup script to discover Python MySQL connector in Fedora
+cp -f ~/$GIT_REP/$CLOUD_VM/setup-seafile-mysql_fedora-patch.sh $SEAFILE_DIR/seafile-server-7.0.5/setup-seafile-mysql.sh
 
 # Setup Seafile
 cd $SEAFILE_DIR

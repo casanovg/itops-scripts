@@ -12,14 +12,25 @@
 
 source ~/itops-scripts/common/set-env.sh
 
-GITHUBREP="github.com/casanovg/$GIT_REP.git"
+#GIT_REP="itops-scripts"
+#COMMON_SCRIPTS="common"
+#PHY_SVR_SCRIPTS="bare-metal"
+#FILES_VM_SCRIPTS="fileserver-vm"
+#UTILS_SCRIPTS="utils"
+
+
+if [ -z ~/.github-usr || -z ~/github-pwd ]; then
+	~/"$GIT_REP"/"$UTILS_SCIPTS"/git-update-id.sh
+fi
+
+cd ~/"$GIT_REP" || return
+
+GITHUBREP="$(git config --get remote.origin.url)"
 GITHUBUSR="$(cat ~/.github-usr | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')"
 GITHUBPWD="$(cat ~/.github-pwd | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')"
 
 TXT_COMMIT="Update scripts"
 TXT_NO_CHANGES="nothing to commit"
-
-cd ~/"$GIT_REP" || return
 
 echo ""
 echo "Synchronizing the "$GIT_REP" repository ..."

@@ -18,16 +18,18 @@ source ~/itops-scripts/common/set-env.sh
 #FILES_VM_SCRIPTS="fileserver-vm"
 #UTILS_SCRIPTS="utils"
 
-
-if [ ! -f "~/.github-usr" ] || [ ! -f "~/.github-pwd" ]; then
-	~/"$GIT_REP"/"$UTILS_SCIPTS"/git-update-id.sh
-fi
-
-cd ~/"$GIT_REP" || return
-
 GITHUBREP="$(git config --get remote.origin.url)"
 GITHUBUSR="$(cat ~/.github-usr | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')"
 GITHUBPWD="$(cat ~/.github-pwd | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')"
+
+cd ~/"$GIT_REP" || return
+
+if [ -z "$GITHUBUSR" ] || [ -z "$GITHUBPWD" ]; then
+echo "NO LALALALA"
+echo ""
+	~/"$GIT_REP"/"$UTILS_SCIPTS"/git-update-id.sh
+fi
+
 
 TXT_COMMIT="Update scripts"
 TXT_NO_CHANGES="nothing to commit"

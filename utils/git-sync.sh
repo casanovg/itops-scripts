@@ -19,15 +19,13 @@ source ~/itops-scripts/common/set-env.sh
 #UTILS_SCRIPTS="utils"
 
 GITHUBREP="$(git config --get remote.origin.url)"
-GITHUBUSR="$(cat ~/.github-usr | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')"
-GITHUBPWD="$(cat ~/.github-pwd | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')"
+GITHUBUSR="$(cat ~/.github-usr | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ' 1>>/dev/null 2>>/dev/null)"
+GITHUBPWD="$(cat ~/.github-pwd | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ' 1>>/dev/null 2>>/dev/null)"
 
 cd ~/"$GIT_REP" || return
 
 if [ -z "$GITHUBUSR" ] || [ -z "$GITHUBPWD" ]; then
-echo "NO LALALALA"
-echo ""
-	sh ~/"$GIT_REP"/"$UTILS_SCIPTS"/git-update-id.sh
+	~/"$GIT_REP"/"$UTILS_SCRIPTS"/git-update-id.sh
 fi
 
 

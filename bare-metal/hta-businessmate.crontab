@@ -19,6 +19,10 @@
 # -----------------------------------------------------------------------------------
   0  7  *  *  sun   ~/itops-scripts/bare-metal/vboxbackup.sh
 
+# Synchronize IT Operations GitHub repository every 1 hour
+# -----------------------------------------------------------------------------------
+  0  *  *  *  *     ~/itops-scripts/utils/git-sync.sh
+
 # Verify every 6 hours that essential network services are running. This schedule
 # is to prevent a virtual machine from restarting while it is being backed up
 # -----------------------------------------------------------------------------------

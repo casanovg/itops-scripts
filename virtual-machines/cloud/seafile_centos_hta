@@ -455,7 +455,7 @@ chown -R ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_USER} $CUSTOM_DATA_DIR
 # Create ccnet, seafile, seahub conf using setup script
 # -------------------------------------------
 
-./setup-seafile-mysql.sh auto -u seafile -w ${SQLSEAFILEPW} -r ${SQLROOTPW}
+./setup-seafile-mysql.sh auto -u seafile -w ${SQLSEAFILEPW} -r ${SQLROOTPW} -d ${CUSTOM_DATA_DIR}
 
 # -------------------------------------------
 # Configure Seafile WebDAV Server(SeafDAV)

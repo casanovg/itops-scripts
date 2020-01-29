@@ -448,8 +448,8 @@ SEAFILE_DATA_DIR=$CUSTOM_DATA_DIR
 DEST_SETTINGS_PY=${TOPDIR}/conf/seahub_settings.py
 
 mkdir -p ${DEFAULT_CONF_DIR}
-mkdir -p $CUSTOM_DATA_DIR
-chown -R ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_USER} $CUSTOM_DATA_DIR
+# mkdir -p $CUSTOM_DATA_DIR
+# chown -R ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_USER} $CUSTOM_DATA_DIR
 
 # -------------------------------------------
 # Create ccnet, seafile, seahub conf using setup script

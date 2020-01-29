@@ -104,7 +104,8 @@ SEAFILE_SERVER_USER=seafile
 SEAFILE_SERVER_HOME=/opt/seafile
 IP_OR_DOMAIN=127.0.0.1
 SEAFILE_VERSION=$1
-TIME_ZONE="Europe/Berlin"
+TIME_ZONE="America/Argentina/Buenos Aires"
+CUSTOM_DATA_DIR="/data/cloud-disk"
 
 if is_pro; then
     SEAFILE_SERVER_PACKAGE=seafile-pro-server_${SEAFILE_VERSION}_x86-64.tar.gz
@@ -424,10 +425,13 @@ cd $INSTALLPATH
 # -------------------------------------------
 TOPDIR=$(dirname "${INSTALLPATH}")
 DEFAULT_CONF_DIR=${TOPDIR}/conf
-SEAFILE_DATA_DIR=${TOPDIR}/seafile-data
+#SEAFILE_DATA_DIR=${TOPDIR}/seafile-data
+SEAFILE_DATA_DIR=$CUSTOM_DATA_DIR
 DEST_SETTINGS_PY=${TOPDIR}/conf/seahub_settings.py
 
 mkdir -p ${DEFAULT_CONF_DIR}
+mkdir -p $CUSTOM_DATA_DIR
+chown -R ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_USER} $CUSTOM_DATA_DIR
 
 # -------------------------------------------
 # Create ccnet, seafile, seahub conf using setup script
@@ -503,9 +507,9 @@ eval "sed -i 's/= ask_admin_password()/= \"${SEAFILE_ADMIN_PW}\"/' ${INSTALLPATH
 # -------------------------------------------
 ${INSTALLPATH}/seafile.sh start
 ${INSTALLPATH}/seahub.sh start
-wait				# wait for a while, otherwise seahub will not be stopped
+sleep 10				# wait for a while, otherwise seahub will not be stopped
 ${INSTALLPATH}/seahub.sh stop
-sleep 1
+sleep 10
 ${INSTALLPATH}/seafile.sh stop
 
 

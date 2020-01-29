@@ -161,7 +161,7 @@ sed -i 's/^SELINUX=.*/SELINUX=permissive/' /etc/selinux/config
 # -------------------------------------------
 # Setup firewall & fail2ban
 # -------------------------------------------
-yum install firewalld fail2ban -y
+dnf install firewalld fail2ban -y
 # https://www.optimox.de/tutorials/linux-allgemein/centos-firewall-konfigurieren-mit-firewalld
 systemctl status firewalld &> /dev/null \
 && for i in ssh http https ; do firewall-cmd --zone=public --add-service=${i} --permanent ; done \
@@ -172,11 +172,11 @@ systemctl status firewalld &> /dev/null \
 # -------------------------------------------
 # extra packages for enterprise linux
 
-yum install epel-release -y
-yum upgrade -y
+#dnf install epel-release -y
+dnf upgrade -y
 
 if [[ ${SEAFILE_VERSION} =~ 6\.[0-9]*\.[0-9]* ]]; then
-    yum install python-setuptools MySQL-python memcached python-urllib3 \
+    dnf install python-setuptools memcached python-urllib3 \
         pwgen curl openssl python-ldap java-1.8.0-openjdk poppler-utils libreoffice python-requests \
         libreoffice-headless libreoffice-pyuno wqy-microhei-fonts wqy-zenhei-fonts wqy-unibit-fonts \
         gcc libffi-devel python-devel openssl-devel libmemcached libmemcached-devel python2-pip -y
@@ -185,7 +185,7 @@ if [[ ${SEAFILE_VERSION} =~ 6\.[0-9]*\.[0-9]* ]]; then
     pip install --timeout=3600 Pillow==4.3.0
     pip install psd-tools==1.4
 else
-    yum install python-setuptools MySQL-python memcached python-urllib3 \
+    dnf install python-setuptools memcached \
         pwgen curl openssl python-ldap java-1.8.0-openjdk poppler-utils libreoffice \
         libreoffice-headless libreoffice-pyuno wqy-microhei-fonts wqy-zenhei-fonts wqy-unibit-fonts \
         libffi-devel openssl-devel libmemcached -y
@@ -197,7 +197,7 @@ systemctl enable --now memcached
 # -------------------------------------------
 # Install nginx
 # -------------------------------------------
-yum install nginx -y
+dnf install nginx -y
 systemctl enable nginx
 rm -rf /etc/nginx/conf.d/*
 
@@ -323,7 +323,7 @@ then
     echo "MariaDB installed before, skip this part"
     SQLROOTPW=`sed -n 's/password=//p' /root/.my.cnf`
 else
-    yum install mariadb-server -y
+    dnf install mariadb-server -y
     systemctl start mariadb
     systemctl enable mariadb
 

@@ -186,6 +186,7 @@ if [[ ${SEAFILE_VERSION} =~ 6\.[0-9]*\.[0-9]* ]]; then
     pip install --timeout=3600 Pillow==4.3.0
     pip install psd-tools==1.4
 else
+    dnf install -y python2-mysql
     dnf install python-setuptools memcached \
         pwgen curl openssl python-ldap java-1.8.0-openjdk poppler-utils libreoffice \
         libreoffice-headless libreoffice-pyuno wqy-microhei-fonts wqy-zenhei-fonts wqy-unibit-fonts \

@@ -104,7 +104,7 @@ SEAFILE_SERVER_USER=seafile
 SEAFILE_SERVER_HOME=/opt/seafile
 IP_OR_DOMAIN=127.0.0.1
 SEAFILE_VERSION=$1
-TIME_ZONE="America/Argentina/Buenos Aires"
+TIME_ZONE="America/Argentina/Buenos_Aires"
 CUSTOM_DATA_DIR="/data/cloud-disk"
 
 if is_pro; then

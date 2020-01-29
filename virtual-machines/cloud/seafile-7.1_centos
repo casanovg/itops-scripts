@@ -107,6 +107,7 @@ SEAFILE_VERSION=$1
 TIME_ZONE="America/Argentina/Buenos Aires"
 CUSTOM_DATA_DIR="/data/cloud-disk"
 
+
 if is_pro; then
     SEAFILE_SERVER_PACKAGE=seafile-pro-server_${SEAFILE_VERSION}_x86-64.tar.gz
     if [[ ! -e /opt/$SEAFILE_SERVER_PACKAGE ]]; then

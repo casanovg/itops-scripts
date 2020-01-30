@@ -63,11 +63,11 @@ done
 
 # Authenticate with AD domain controller and start Samba shares
 if [ ! "$(wbinfo --ping-dc 2>>/dev/null | grep -w "succeeded")" ]; then
-   ~/itops-scripts/fileserver-vm/fs-start.sh
+   ~/itops-scripts/virtual-machines/fileserver/fs-start.sh
    sleep 1
-   ~/itops-scripts/fileserver-vm/fs-stop.sh
+   ~/itops-scripts/virtual-machines/fileserver/fs-stop.sh
    sleep 1
-   ~/itops-scripts/fileserver-vm/fs-start.sh
+   ~/itops-scripts/virtual-machines/fileserver/fs-start.sh
 #else
     #echo "Samba already on!"
 fi

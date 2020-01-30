@@ -106,6 +106,7 @@ IP_OR_DOMAIN=127.0.0.1
 SEAFILE_VERSION=$1
 TIME_ZONE="America/Argentina/Buenos_Aires"
 CUSTOM_DATA_DIR="/data/cloud-disk"
+BASE_DATA_DIR="/data"
 
 if is_pro; then
     SEAFILE_SERVER_PACKAGE=seafile-pro-server_${SEAFILE_VERSION}_x86-64.tar.gz
@@ -448,6 +449,10 @@ SEAFILE_DATA_DIR=$CUSTOM_DATA_DIR
 DEST_SETTINGS_PY=${TOPDIR}/conf/seahub_settings.py
 
 mkdir -p ${DEFAULT_CONF_DIR}
+if [ ! -d "${BASE_DATA_DIR}" ]
+then
+    mkdir ${BASE_DATA_DIR}
+fi
 # mkdir -p $CUSTOM_DATA_DIR
 # chown -R ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_USER} $CUSTOM_DATA_DIR
 

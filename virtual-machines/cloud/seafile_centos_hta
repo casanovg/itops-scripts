@@ -554,6 +554,8 @@ if [[ -d /tmp/seafile-office-output/ ]]; then
     chown ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_USER} -R /tmp/seafile-office-output/
 fi
 
+chown -R ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_USER} $CUSTOM_DATA_DIR
+
 # -------------------------------------------
 # Restart seafile server
 # -------------------------------------------

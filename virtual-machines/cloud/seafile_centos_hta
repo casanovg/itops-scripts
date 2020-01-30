@@ -101,6 +101,7 @@ echo
 # -------------------------------------------
 SEAFILE_ADMIN=admin@seafile.local
 SEAFILE_SERVER_USER=seafile
+SEAFILE_SERVER_GROUP=seafile
 SEAFILE_SERVER_HOME=/opt/seafile
 IP_OR_DOMAIN=127.0.0.1
 SEAFILE_VERSION=$1
@@ -141,11 +142,12 @@ then
 fi
 
 # -------------------------------------------
-# Abort if seafile user exists
+# Check if seafile user exists
 # -------------------------------------------
 if getent passwd ${SEAFILE_SERVER_USER} > /dev/null 2>&1 ;
 then
-  echo "Aborting because user ${SEAFILE_SERVER_USER} already exist" ; exit 1
+  echo "User ${SEAFILE_SERVER_USER} already exist"
+  # exit 1
 fi
 
 # -------------------------------------------
@@ -356,7 +358,7 @@ After=network.target remote-fs.target mariadb.service
 ExecStart=${SEAFILE_SERVER_HOME}/seafile-server-latest/seafile.sh start
 ExecStop=${SEAFILE_SERVER_HOME}/seafile-server-latest/seafile.sh stop
 User=${SEAFILE_SERVER_USER}
-Group=${SEAFILE_SERVER_USER}
+Group=${SEAFILE_SERVER_GROUP}
 LimitNOFILE=infinity
 Type=oneshot
 RemainAfterExit=yes
@@ -375,7 +377,7 @@ After=network.target seafile.service
 ExecStart=${SEAFILE_SERVER_HOME}/seafile-server-latest/seahub.sh start
 ExecStop=${SEAFILE_SERVER_HOME}/seafile-server-latest/seahub.sh stop
 User=${SEAFILE_SERVER_USER}
-Group=${SEAFILE_SERVER_USER}
+Group=${SEAFILE_SERVER_GROUP}
 Type=oneshot
 RemainAfterExit=yes
 
@@ -454,7 +456,7 @@ then
     mkdir ${BASE_DATA_DIR}
 fi
 # mkdir -p $CUSTOM_DATA_DIR
-# chown -R ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_USER} $CUSTOM_DATA_DIR
+# chown -R ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_GROUP} $CUSTOM_DATA_DIR
 
 # -------------------------------------------
 # Create ccnet, seafile, seahub conf using setup script
@@ -549,9 +551,9 @@ fi
 # -------------------------------------------
 # Fix permissions
 # -------------------------------------------
-chown ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_USER} -R ${SEAFILE_SERVER_HOME}
+chown ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_GROUP} -R ${SEAFILE_SERVER_HOME}
 if [[ -d /tmp/seafile-office-output/ ]]; then
-    chown ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_USER} -R /tmp/seafile-office-output/
+    chown ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_GROUP} -R /tmp/seafile-office-output/
 fi
 
 chown -R ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_USER} $CUSTOM_DATA_DIR

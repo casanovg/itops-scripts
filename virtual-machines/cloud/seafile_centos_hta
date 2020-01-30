@@ -100,8 +100,8 @@ echo
 # Vars
 # -------------------------------------------
 SEAFILE_ADMIN=admin@seafile.local
-SEAFILE_SERVER_USER=seafile
-SEAFILE_SERVER_GROUP=seafile
+SEAFILE_SERVER_USER=netbackup
+SEAFILE_SERVER_GROUP=wheel
 SEAFILE_SERVER_HOME=/opt/seafile
 IP_OR_DOMAIN=127.0.0.1
 SEAFILE_VERSION=$1

@@ -15,6 +15,10 @@
 # -----------------------------------------------------------------------------------
   0  22 *  *  thu   ~/itops-scripts/virtual-machines/fileserver/update-os.sh
 
+# Synchronize IT Operations GitHub repository every 1 hour
+# -----------------------------------------------------------------------------------
+  0  *  *  *  *     ~/itops-scripts/utils/git-sync.sh
+
 # Verify every 5 minutes that essential file services are up
 # -----------------------------------------------------------------------------------
  */5 *  *  *  *     ~/itops-scripts/virtual-machines/fileserver/start-fileserver.sh

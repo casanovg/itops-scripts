@@ -417,7 +417,9 @@ fi
 # -------------------------------------------
 # Add seafile user
 # -------------------------------------------
-useradd --system --comment "${SEAFILE_SERVER_USER}" ${SEAFILE_SERVER_USER} --home-dir  ${SEAFILE_SERVER_HOME}
+if [[ $(getent passwd "${SEAFILE_SERVER_USER}") = "" ]]; then
+    useradd --system --comment "${SEAFILE_SERVER_USER}" ${SEAFILE_SERVER_USER} --home-dir  ${SEAFILE_SERVER_HOME}
+fi
 
 # -------------------------------------------
 # Go to /opt/seafile/seafile-pro-server-${SEAFILE_VERSION}

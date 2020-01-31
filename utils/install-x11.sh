@@ -11,8 +11,9 @@ sudo dnf install -y xorg-x11-server-Xorg xorg-x11-xauth xorg-x11-apps
 sudo systemctl restart sshd
 
 # X11 forwarding reminder
+echo ""
 echo "==================================================================="
-echo "= Please verify that X11 forwarding is enabled in sshd_config ...  "
+echo "= Please verify that X11 forwarding is enabled in sshd_config ... ="
 echo "= $ sudo vim etc/ssh/sshd_config                                  ="
 echo "= X11Forwarding yes                                               ="
 echo "==================================================================="

@@ -100,13 +100,14 @@ echo
 # Vars
 # -------------------------------------------
 SEAFILE_ADMIN=admin@seafile.local
-SEAFILE_SERVER_USER=seafile
+SEAFILE_SERVER_USER=netbackup
+SEAFILE_SERVER_GROUP=wheel
 SEAFILE_SERVER_HOME=/opt/seafile
 IP_OR_DOMAIN=127.0.0.1
 SEAFILE_VERSION=$1
 TIME_ZONE="America/Argentina/Buenos_Aires"
 CUSTOM_DATA_DIR="/data/cloud-disk"
-
+BASE_DATA_DIR="/data"
 
 if is_pro; then
     SEAFILE_SERVER_PACKAGE=seafile-pro-server_${SEAFILE_VERSION}_x86-64.tar.gz
@@ -145,7 +146,9 @@ fi
 # -------------------------------------------
 if getent passwd ${SEAFILE_SERVER_USER} > /dev/null 2>&1 ;
 then
-  echo "Aborting because user ${SEAFILE_SERVER_USER} already exist" ; exit 1
+  echo "User ${SEAFILE_SERVER_USER} already exist"
+  echo ""
+  # exit 1
 fi
 
 # -------------------------------------------
@@ -338,7 +341,7 @@ After=network.target remote-fs.target mariadb.service
 ExecStart=${SEAFILE_SERVER_HOME}/seafile-server-latest/seafile.sh start
 ExecStop=${SEAFILE_SERVER_HOME}/seafile-server-latest/seafile.sh stop
 User=${SEAFILE_SERVER_USER}
-Group=${SEAFILE_SERVER_USER}
+Group=${SEAFILE_SERVER_GROUP}
 LimitNOFILE=infinity
 Type=oneshot
 RemainAfterExit=yes
@@ -357,7 +360,7 @@ After=network.target seafile.service
 ExecStart=${SEAFILE_SERVER_HOME}/seafile-server-latest/seahub.sh start
 ExecStop=${SEAFILE_SERVER_HOME}/seafile-server-latest/seahub.sh stop
 User=${SEAFILE_SERVER_USER}
-Group=${SEAFILE_SERVER_USER}
+Group=${SEAFILE_SERVER_GROUP}
 Type=oneshot
 RemainAfterExit=yes
 
@@ -431,14 +434,18 @@ SEAFILE_DATA_DIR=$CUSTOM_DATA_DIR
 DEST_SETTINGS_PY=${TOPDIR}/conf/seahub_settings.py
 
 mkdir -p ${DEFAULT_CONF_DIR}
-mkdir -p $CUSTOM_DATA_DIR
-chown -R ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_USER} $CUSTOM_DATA_DIR
+if [ ! -d "${BASE_DATA_DIR}" ]
+then
+    mkdir ${BASE_DATA_DIR}
+fi
+# mkdir -p $CUSTOM_DATA_DIR
+# chown -R ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_GROUP} $CUSTOM_DATA_DIR
 
 # -------------------------------------------
 # Create ccnet, seafile, seahub conf using setup script
 # -------------------------------------------
 
-./setup-seafile-mysql.sh auto -u seafile -w ${SQLSEAFILEPW} -r ${SQLROOTPW}
+./setup-seafile-mysql.sh auto -u seafile -w ${SQLSEAFILEPW} -r ${SQLROOTPW} -d ${CUSTOM_DATA_DIR}
 
 # -------------------------------------------
 # Configure Seafile WebDAV Server(SeafDAV)
@@ -527,10 +534,12 @@ fi
 # -------------------------------------------
 # Fix permissions
 # -------------------------------------------
-chown ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_USER} -R ${SEAFILE_SERVER_HOME}
+chown ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_GROUP} -R ${SEAFILE_SERVER_HOME}
 if [[ -d /tmp/seafile-office-output/ ]]; then
-    chown ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_USER} -R /tmp/seafile-office-output/
+    chown ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_GROUP} -R /tmp/seafile-office-output/
 fi
+
+chown -R ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_GROUP} $CUSTOM_DATA_DIR
 
 # -------------------------------------------
 # Restart seafile server

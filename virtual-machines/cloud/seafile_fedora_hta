@@ -146,6 +146,7 @@ fi
 # -------------------------------------------
 if getent passwd ${SEAFILE_SERVER_USER} > /dev/null 2>&1 ;
 then
+  echo ""
   echo "User ${SEAFILE_SERVER_USER} already exist"
   # exit 1
 fi
@@ -558,7 +559,7 @@ if [[ -d /tmp/seafile-office-output/ ]]; then
     chown ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_GROUP} -R /tmp/seafile-office-output/
 fi
 
-chown -R ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_USER} $CUSTOM_DATA_DIR
+chown -R ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_GROUP} $CUSTOM_DATA_DIR
 
 # -------------------------------------------
 # Restart seafile server

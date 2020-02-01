@@ -443,7 +443,7 @@ fi
 
 # GC: This is to solve custom data dir problems in 7.1.X installations
 mkdir -p ${TOPDIR}/seafile-data
-chown -R ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_GROUP} ${TOPDIR}/seafile-data
+#chown -R ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_GROUP} ${TOPDIR}/seafile-data
 
 # -------------------------------------------
 # Create ccnet, seafile, seahub conf using setup script

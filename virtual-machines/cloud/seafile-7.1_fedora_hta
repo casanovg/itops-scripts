@@ -431,25 +431,27 @@ cd $INSTALLPATH
 # -------------------------------------------
 TOPDIR=$(dirname "${INSTALLPATH}")
 DEFAULT_CONF_DIR=${TOPDIR}/conf
-#SEAFILE_DATA_DIR=${TOPDIR}/seafile-data
-SEAFILE_DATA_DIR=$CUSTOM_DATA_DIR
+SEAFILE_DATA_DIR=${TOPDIR}/seafile-data
+#SEAFILE_DATA_DIR=$CUSTOM_DATA_DIR
 DEST_SETTINGS_PY=${TOPDIR}/conf/seahub_settings.py
 
 mkdir -p ${DEFAULT_CONF_DIR}
-if [ ! -d "${BASE_DATA_DIR}" ]
-then
-    mkdir ${BASE_DATA_DIR}
-fi
+
+# if [ ! -d "${BASE_DATA_DIR}" ]
+# then
+#     mkdir ${BASE_DATA_DIR}
+# fi
 
 # GC: This is to solve custom data dir problems in 7.1.X installations
-mkdir -p ${TOPDIR}/seafile-data
-#chown -R ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_GROUP} ${TOPDIR}/seafile-data
+# mkdir -p ${TOPDIR}/seafile-data
+# chown -R ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_GROUP} ${TOPDIR}/seafile-data
 
 # -------------------------------------------
 # Create ccnet, seafile, seahub conf using setup script
 # -------------------------------------------
 
-./setup-seafile-mysql.sh auto -u seafile -w ${SQLSEAFILEPW} -r ${SQLROOTPW} -d ${CUSTOM_DATA_DIR}
+/setup-seafile-mysql.sh auto -u seafile -w ${SQLSEAFILEPW} -r ${SQLROOTPW}
+# ./setup-seafile-mysql.sh auto -u seafile -w ${SQLSEAFILEPW} -r ${SQLROOTPW} -d ${CUSTOM_DATA_DIR}
 
 # -------------------------------------------
 # Configure Seafile WebDAV Server(SeafDAV)
@@ -543,7 +545,7 @@ if [[ -d /tmp/seafile-office-output/ ]]; then
     chown ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_GROUP} -R /tmp/seafile-office-output/
 fi
 
-chown -R ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_GROUP} $CUSTOM_DATA_DIR
+# chown -R ${SEAFILE_SERVER_USER}:${SEAFILE_SERVER_GROUP} $CUSTOM_DATA_DIR
 
 # -------------------------------------------
 # Restart seafile server

@@ -18,7 +18,7 @@ CL_DIR="/data/cloud-disk"
 # Connect HTA cloud iscsi target
 if [ ! "$(cat /proc/partitions | grep -w "$DEV_CLOUD")" ]; then
     sudo iscsiadm -m node --targetname $TARGET_CLOUD -p $SERVER_CLOUD --login
-    sleep 5
+    sleep 1
 fi
 # Mount HTA cloud Seafile storage
 if [ "$(cat /proc/partitions | grep -w "$DEV_CLOUD")" ]; then
@@ -27,9 +27,21 @@ if [ "$(cat /proc/partitions | grep -w "$DEV_CLOUD")" ]; then
     fi
 fi
 
-# If is inactive, start service
-if [ $(systemctl is-active nginx) == "inactive" ]; then
-    echo "SHITLAND ACTIVATING"
-else
-    echo "IT'S ALLRIGHT ..."
-fi
+sleep 5
+
+# Start cloud services
+for SERVICE in seafile seahub nginx; do
+    if [ $(systemctl is-active ${SERVICE}) == "inactive" ]; then
+        echo "Starting ${SERVICE} ..."
+        sudo systemctl start ${SERVICE}
+    else
+        echo "Service ${SERVICE} already running ..."
+    fi
+done
+
+# Services restart
+# for ACTION in stop start ; do
+#     for SERVICE in seafile seahub nginx; do
+#       systemctl ${ACTION} ${SERVICE}
+#     done
+# done

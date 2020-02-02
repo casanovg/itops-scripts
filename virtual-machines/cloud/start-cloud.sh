@@ -13,7 +13,7 @@ SERVER_CLOUD="10.6.17.40"
 SHARE_WARNING="SHARE_NOT_MOUNTED"
 ISCSI_WARNING="DISK_NOT_MOUNTED"
 
-CL_DIR="/data/cloud-disk"
+CL_DIR="/data/seafile-data"
 
 # Connect HTA cloud iscsi target
 if [ ! "$(cat /proc/partitions | grep -w "$DEV_CLOUD")" ]; then

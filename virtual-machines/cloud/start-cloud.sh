@@ -22,8 +22,14 @@ if [ ! "$(cat /proc/partitions | grep -w "$DEV_CLOUD")" ]; then
 fi
 # Mount HTA cloud Seafile storage
 if [ "$(cat /proc/partitions | grep -w "$DEV_CLOUD")" ]; then
-    if [ ! -z "$(ls -1 $FS_DIR | grep $ISCSI_WARNING)" ]; then
+    if [ ! -z "$(ls -1 $CL_DIR | grep $ISCSI_WARNING)" ]; then
         sudo mount /dev/$DEV_CLOUD $CL_DIR
     fi
 fi
 
+# If is inactive, start service
+if [ $(systemctl is-active nginx) == "inactive" ]; then
+    echo "SHITLAND ACTIVATING"
+else
+    echo "IT'S ALLRIGHT ..."
+fi

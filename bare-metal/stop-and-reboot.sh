@@ -19,7 +19,7 @@ sleep 3
 # Reboot
 echo ""
 echo "Rebooting ..."
-sudo /usr/sbin/reboot
+sudo shutdown -r now
 # Start all virtual machines (in case that reboot fails)
 sleep 180
 echo ""

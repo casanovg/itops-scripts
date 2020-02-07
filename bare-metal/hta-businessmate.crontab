@@ -9,7 +9,7 @@
 
 # After reboot, wait 15 seconds and start all virtual machines
 # -----------------------------------------------------------------------------------
-  @reboot sleep 90 && ~/itops-scripts/bare-metal/vboxall-on.sh
+  @reboot sleep 90 && ~/itops-scripts/bare-metal/vmall-on.sh
 
 # Server operating system update (Every Wednesday at 21:15 PM)
 # -----------------------------------------------------------------------------------
@@ -26,6 +26,6 @@
 # Verify every 6 hours that essential network services are running. This schedule
 # is to prevent a virtual machine from restarting while it is being backed up
 # -----------------------------------------------------------------------------------
-  0 */6 *  *  *     ~/itops-scripts/bare-metal/vbox-on.sh "HTA-Firewall"
-  0 */6 *  *  *     ~/itops-scripts/bare-metal/vbox-on.sh "HTA-NetPal"
+  0 */6 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh "HTA-Firewall"
+  0 */6 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh "HTA-NetPal"
 

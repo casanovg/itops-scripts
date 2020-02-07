@@ -30,7 +30,7 @@ else
             echo "$DEST server can NOT be contactacted!"
         else
             echo "Remote server $DEST contacted!"
-            ~/itops-scripts/bare-metal/vbox-off.sh "$VM"
+            ~/itops-scripts/bare-metal/vm-off.sh "$VM"
             echo "Copying \"$VM\" virtual machine to $DEST host ..."
             echo ""
             rsync -r -a --relative "$VBOX_PATH"/"$VM" --info=progress2 $DEST:/

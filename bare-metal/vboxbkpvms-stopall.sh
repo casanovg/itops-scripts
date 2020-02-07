@@ -19,7 +19,7 @@ echo "**************************************************************************
 for VM in $(cat ~/ActiveVMs); do
 	echo "--------------------------------------------------------------------------------"
 	echo "Shutting >> "$VM" << down on $(date) ..."
-	~/itops-scripts/bare-metal/vbox-off.sh "$VM"
+	~/itops-scripts/bare-metal/vm-off.sh "$VM"
 done
 for VM in $(cat ~/ActiveVMs); do
 	echo "--------------------------------------------------------------------------------"
@@ -37,14 +37,14 @@ for VM in $(cat ~/ActiveVMs); do
 		echo "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
 		echo "|| "$VM" runs essential services, starting it now ..."
 		echo "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
-		~/itops-scripts/bare-metal/vbox-on.sh "$VM"
+		~/itops-scripts/bare-metal/vm-on.sh "$VM"
 		sleep 5
 	fi
 done
 for VM in $(cat ~/ActiveVMs); do
 	if [ "$VM" != "$ESSENTIAL_SERVICE" ]; then
 		echo "Restarting >> "$VM" << on $(date) ..."
-		~/itops-scripts/bare-metal/vbox-on.sh "$VM"
+		~/itops-scripts/bare-metal/vm-on.sh "$VM"
 		sleep 60
 	fi
 done

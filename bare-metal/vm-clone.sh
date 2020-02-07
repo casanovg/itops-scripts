@@ -20,6 +20,7 @@ else
     fi
 
     # Stop the virtual machine to be cloned
+    echo "Stopping "
     ~/itops-scripts/bare-metal/vm-off.sh "$VM"
 
     # Clone virtual machine
@@ -37,9 +38,11 @@ else
         fi        
         shift
     done
-        if [ $RESTART_VM ]
+        if [ $RESTART_VM -eq 1 ]
         then
             # Start the virtual machine cloned
-            ~/itops-scripts/bare-metal/vm-off.sh "$VM"
+            echo "Starting "$VM" ..."
+            ~/itops-scripts/bare-metal/vm-on.sh "$VM"
         fi
+        echo ""
 fi

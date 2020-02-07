@@ -44,6 +44,7 @@ else
             echo "Starting $VM ..."
             ~/itops-scripts/bare-metal/vm-on.sh "$VM"
         else
+            echo ""
             echo "WARNING! Keeping $VM virtual machine stopped!"
         fi
         echo ""

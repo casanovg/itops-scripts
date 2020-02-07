@@ -24,7 +24,7 @@ else
     ~/itops-scripts/bare-metal/vm-off.sh "$VM"
 
     # Clone virtual machine
-    vboxmanage clonevm $VM --register --name $CLONE_NAME
+    vboxmanage clonevm "$VM" --register --name "$CLONE_NAME"
     
     # Check if any argument contains "--no-restart"
     while test $# -gt 0
@@ -41,8 +41,10 @@ else
         if [ $RESTART_VM -eq 1 ]
         then
             # Start the virtual machine cloned
-            echo "Starting "$VM" ..."
+            echo "Starting $VM ..."
             ~/itops-scripts/bare-metal/vm-on.sh "$VM"
+        else
+            echo "WARNING! Keeping $VM virtual machine stopped!"
         fi
         echo ""
 fi

@@ -11,7 +11,7 @@ VBOX_PATH="/data/VirtualBox-VMs"
 if [ $# -eq 0 ] || [ -z "$1" ] || [ -z "$2" ]
   then
     echo ""
-    echo "Usage: vbox-move.sh <VIRTUAL-MACHINE> <DESTINATION-SERVER>"
+    echo "Usage: vm-move-out.sh <VIRTUAL-MACHINE> <DESTINATION-SERVER>"
     echo ""
 else
     if [ -z "$VM" ]; then

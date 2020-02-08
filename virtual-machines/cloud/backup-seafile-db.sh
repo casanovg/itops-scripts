@@ -39,7 +39,7 @@ if [ "$SERVICE_STATUS" = "active" ]; then
 
 else
     echo ""
-    echo "MariaDB not running, unable to back the Seafile databases up!"
+    echo "WARNING! MariaDB not running, unable to back the Seafile databases up!"
 
 fi
 

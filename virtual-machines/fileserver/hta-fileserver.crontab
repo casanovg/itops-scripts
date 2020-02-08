@@ -9,19 +9,19 @@
 
 # After reboot, wait 15 seconds and start file services
 # -----------------------------------------------------------------------------------
-@reboot sleep 15 && ~/itops-scripts/virtual-machines/fileserver/start-fileserver.sh
+  @reboot sleep 15 && ~/itops-scripts/virtual-machines/fileserver/start-fileserver.sh
 
 # Virtual machine operating system update (Every Thursday at 22:00 PM)
 # -----------------------------------------------------------------------------------
-0  22 *  *  sun   ~/itops-scripts/virtual-machines/fileserver/update-os.sh
+  0  22 *  *  sun   ~/itops-scripts/virtual-machines/fileserver/update-os.sh
 
 # Synchronize IT Operations GitHub repository every 1 hour
 # -----------------------------------------------------------------------------------
-0  *  *  *  *     ~/itops-scripts/utils/git-sync.sh
+  0  *  *  *  *     ~/itops-scripts/utils/git-sync.sh
 
 # Verify every 5 minutes that essential file services are up
 # -----------------------------------------------------------------------------------
-*/5 *  *  *  *     ~/itops-scripts/virtual-machines/fileserver/start-fileserver.sh
+ */5 *  *  *  *     ~/itops-scripts/virtual-machines/fileserver/start-fileserver.sh
 
 #Back In Time system entry, this will be edited by the gui:
 0 0 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime backup-job >/dev/null

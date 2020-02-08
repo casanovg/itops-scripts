@@ -15,4 +15,5 @@ for SERVICE in nginx seahub seafile; do
     else
         echo "Service $SERVICE already stopped ..."
     fi
+    SERVICE_STATUS=""
 done

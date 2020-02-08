@@ -41,7 +41,8 @@ else
         if [ $RESTART_VM -eq 1 ]
         then
             # Start the virtual machine cloned
-            echo "Starting $VM ..."
+            echo ""
+	    echo "Starting $VM ..."
             ~/itops-scripts/bare-metal/vm-on.sh "$VM"
         else
             echo ""

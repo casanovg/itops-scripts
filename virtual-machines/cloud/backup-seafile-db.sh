@@ -37,6 +37,10 @@ if [ "$SERVICE_STATUS" = "active" ]; then
     echo "Backing seahub_db up ..."
     mysqldump -h localhost -uroot -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" --opt seahub_db > /data/seafile-data/database-backup/seahub_db.sql.$(date +"%Y-%m-%d_%H-%M-%S")
 
+else
+    echo ""
+    echo "MariaDB not running, unable to back the Seafile databases up!"
+
 fi
 
 # Start Seafile services

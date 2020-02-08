@@ -8,10 +8,10 @@
 
 # Start cloud services
 for SERVICE in seafile seahub nginx; do
-    if [ $(systemctl is-active ${SERVICE}) == "inactive" ]; then
-        echo "Starting ${SERVICE} ..."
-        sudo systemctl start ${SERVICE}
+    if [ "$(systemctl is-active $SERVICE)" = "inactive" ]; then
+        echo "Starting $SERVICE ..."
+        sudo systemctl start $SERVICE
     else
-        echo "Service ${SERVICE} already running ..."
+        echo "Service $SERVICE already running ..."
     fi
 done

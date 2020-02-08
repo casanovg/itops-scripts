@@ -8,10 +8,10 @@
 
 # Stop cloud services
 for SERVICE in nginx seahub seafile; do
-    SERVICE_STATUS=$(systemctl is-active $SERVICE)
+    SERVICE_STATUS="$(systemctl is-active $SERVICE)"
     if [ "$SERVICE_STATUS" = "inactive" ]; then
         echo "Stopping $SERVICE ..."
-        sudo systemctl start ${SERVICE}
+        sudo systemctl stop $SERVICE
     else
         echo "Service $SERVICE already stopped ..."
     fi

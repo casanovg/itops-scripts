@@ -13,7 +13,7 @@
 
 # Virtual machine operating system update (Every Thursday at 22:00 PM)
 # -----------------------------------------------------------------------------------
-  0  22 *  *  sun   ~/itops-scripts/virtual-machines/cloud/update-os.sh
+  0  23 *  *  sun   ~/itops-scripts/virtual-machines/cloud/update-os.sh
 
 # Seafile MySQL (MariaDB) databases backup (Every day 01:55 PM)
 # -----------------------------------------------------------------------------------

@@ -7,7 +7,7 @@
 source ~/itops-scripts/common/set-vm-lists.sh
 
 # Stop all virtual machines
-~/itops-scripts/bare-metal/vmall-off.sh
+~/itops-scripts/bare-metal/vboxall-off.sh
 # Update OS
 sleep 3
 echo ""
@@ -24,4 +24,5 @@ echo ""
 echo "Rebooting ..."
 sudo /usr/sbin/reboot
 # Start all virtual machines (in case that reboot fails)
-~/itops-scripts/bare-metal/vmall-on.sh
+~/itops-scripts/bare-metal/vboxall-on.sh
+

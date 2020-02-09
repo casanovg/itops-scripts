@@ -19,3 +19,4 @@ for VM in $(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}'); do
 done
 echo "All virtual machines stopped!"
 echo ""
+

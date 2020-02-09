@@ -18,12 +18,5 @@ for VM in $(cat ~/ActiveVMs); do
 	fi
 done
 echo "All virtual machines started!"
+# echo ""
 
-#VM_FILE=~/ActiveVMs
-# while read VM; do
-# 	echo ""
-# 	#vboxmanage startvm $virtualmachine --type headless
-# 	~/itops-scripts/bare-metal/vbox-on.sh "$VM"
-# 	echo "Waiting 2 minutes for VM's services startup ..."
-# 	sleep 30
-# done <$VM_FILE

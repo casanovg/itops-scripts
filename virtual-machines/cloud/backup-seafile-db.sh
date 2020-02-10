@@ -22,24 +22,24 @@ DB_SERVICE_STATUS="$(systemctl is-active mariadb)"
 # Backup Seafile databases
 if [ "$DB_SERVICE_STATUS" = "active" ]; then
 
+    echo ""
+    echo "Backing Seafile databases up ..."
+
     # Delete previous ccnet_db
     rm -rf $BACKUP_DATABASE/ccnet_db*
     # Backup updated ccnet_db
-    echo ""
     echo "Backing ccnet_db up ..."
     mysqldump -h localhost -uroot -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" --opt ccnet_db > $BACKUP_DATABASE/ccnet_db.sql."$(date +"%Y-%m-%d_%H-%M-%S")"
 
     # Delete previous seafile_db
     rm -rf $BACKUP_DATABASE/seafile_db*
     # Backup updated seafile_db
-    echo ""
     echo "Backing seafile_db up ..."
     mysqldump -h localhost -uroot -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" --opt seafile_db > $BACKUP_DATABASE/seafile_db.sql."$(date +"%Y-%m-%d_%H-%M-%S")"
 
     # Delete previous seahub_db
     rm -rf $BACKUP_DATABASE/seahub_db*
     # Backup updated seahub_db
-    echo ""
     echo "Backing seahub_db up ..."
     mysqldump -h localhost -uroot -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" --opt seahub_db > $BACKUP_DATABASE/seahub_db.sql."$(date +"%Y-%m-%d_%H-%M-%S")"
 

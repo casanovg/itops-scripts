@@ -6,6 +6,8 @@
 # 2020-02-02 gcasanova@hellermanntyton.com.ar
 #
 
+SYSTEM_DIR="/opt/seafile"
+SYSTEM_USR="/opt/seafile.my.cnf"
 BACKUP_SYSTEM="/data/seafile-data/backup-system"
 BACKUP_DATABASE="/data/seafile-data/backup-database"
 
@@ -15,9 +17,10 @@ echo "Stopping Seafile services ..."
 #sudo systemctl stop nginx seahub seafile
 ~/itops-scripts/virtual-machines/cloud/cl-stop.sh
 
-SERVICE_STATUS="$(systemctl is-active mariadb)"
+DB_SERVICE_STATUS="$(systemctl is-active mariadb)"
 
-if [ "$SERVICE_STATUS" = "active" ]; then
+# Backup Seafile databases
+if [ "$DB_SERVICE_STATUS" = "active" ]; then
 
     # Delete previous ccnet_db
     rm -rf $BACKUP_DATABASE/ccnet_db*
@@ -45,6 +48,10 @@ else
     echo "WARNING! MariaDB not running, unable to back the Seafile databases up!"
 
 fi
+
+# Backup Seafile system files
+sudo rsync -r -a $SYSTEM_DIR $BACKUP_SYSTEM
+sudo rsync -r -a $SYSTEM_USR $BACKUP_SYSTEM
 
 # Start Seafile services
 echo ""

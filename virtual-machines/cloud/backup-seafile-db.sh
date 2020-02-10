@@ -8,6 +8,8 @@ SYSTEM_DIR="/opt/seafile"
 SYSTEM_USR="/opt/seafile.my.cnf"
 BACKUP_SYSTEM="/data/seafile-data/backup-system"
 BACKUP_DATABASE="/data/seafile-data/backup-database"
+BKP_USR="netbackup"
+BKP_GRP="wheel"
 
 # Stop Seafile services
 echo ""
@@ -52,6 +54,7 @@ echo ""
 echo "Backing Seafile system files up ..."
 sudo rsync -r -a $SYSTEM_DIR $BACKUP_SYSTEM
 sudo rsync -r -a $SYSTEM_USR $BACKUP_SYSTEM
+sudo chown -R $BKP_USR:$BKP_GRP $BACKUP_SYSTEM
 
 # Start Seafile services
 echo ""

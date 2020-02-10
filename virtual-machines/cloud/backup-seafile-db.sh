@@ -50,6 +50,8 @@ else
 fi
 
 # Backup Seafile system files
+echo ""
+echo "Backing Seafile system files up ..."
 sudo rsync -r -a $SYSTEM_DIR $BACKUP_SYSTEM
 sudo rsync -r -a $SYSTEM_USR $BACKUP_SYSTEM
 

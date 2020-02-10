@@ -1,10 +1,8 @@
 #!/bin/sh
 
-#
-# Backup Seafile MySQL (MariaDB) databases
-# ...............................................................
+# Backup Seafile MySQL (MariaDB) databases and system files
+# ..........................................................
 # 2020-02-02 gcasanova@hellermanntyton.com.ar
-#
 
 SYSTEM_DIR="/opt/seafile"
 SYSTEM_USR="/opt/seafile.my.cnf"

@@ -4,15 +4,20 @@
 # .............................................
 # 2020-02-07 gcasanova@hellermanntyton.com.ar
 
+OPT_1="--no-start"
+OPT_2="--start-vm"
+OPT_3="--start-clone"
+
 if [ $# -eq 0 ] || [ -z "$1" ]
 then
     echo ""
-    echo "Usage: vm-clone.sh <VIRTUAL-MACHINE> [CLONE-NAME] [--no-restart]"
+    echo "Usage: vm-clone.sh <VIRTUAL-MACHINE> [CLONE-NAME] [$OPT_1 | $OPT_2 | $OPT_3]"
     echo ""
 else
 
     VM=$1
-    if [ ! -z "$2" ] && [ "$2" != "--no-restart" ]
+  
+    if [ ! -z "$2" ] && [ "$2" != "$OPT_1" ] && [ "$2" != "$OPT_2" ] && [ "$2" != "$OPT_3" ]
     then
         CLONE_NAME=$2
     else
@@ -24,29 +29,43 @@ else
     ~/itops-scripts/bare-metal/vm-off.sh "$VM"
 
     # Clone virtual machine
-    vboxmanage clonevm "$VM" --register --name "$CLONE_NAME"
+    vboxmanage clonevm "$VM" --register --name "$CLONE_NAME" 2>>/dev/null
+
+    if [ $? -ne 0 ]
+    then
+         echo ""
+         echo "ERROR! Unable to clone $VM virtual machine, please check whether the clone name already exist ..."
     
-    # Check if any argument contains "--no-restart"
+    # Check and execute arguments
     while test $# -gt 0
     do
-        if [ ! -z "$1" ] && [ "$1" = "--no-restart" ]
+        if [ ! -z "$1" ]
         then
-            RESTART_VM=0
-        else
-            # ~/itops-scripts/bare-metal/vm-on.sh "$VM"
-            RESTART_VM=1
+
+            case "$1" in
+
+            $OPT_1) echo ""
+                    echo "WARNING! Keeping $VM and $CLONE_NAME virtual machines stopped!"
+                    ;;
+
+            $OPT_2) echo ""
+	                echo "Starting $VM ..."
+                    ~/itops-scripts/bare-metal/vm-on.sh "$VM"
+                    ;;
+
+            $OPT_3) echo ""
+	                echo "Starting $CLONE_NAME ..."
+                    ~/itops-scripts/bare-metal/vm-on.sh "$CLONE_NAME"
+                    ;;                    
+
+            esac
+
         fi        
+
         shift
+
     done
-        if [ $RESTART_VM -eq 1 ]
-        then
-            # Start the virtual machine cloned
-            echo ""
-	    echo "Starting $VM ..."
-            ~/itops-scripts/bare-metal/vm-on.sh "$VM"
-        else
-            echo ""
-            echo "WARNING! Keeping $VM virtual machine stopped!"
-        fi
-        echo ""
+
+    echo ""
+
 fi

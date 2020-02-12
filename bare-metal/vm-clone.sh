@@ -29,12 +29,13 @@ else
     ~/itops-scripts/bare-metal/vm-off.sh "$VM"
 
     # Clone virtual machine
-    vboxmanage clonevm "$VM" --register --name "$CLONE_NAME" 2>>/dev/null
+    vboxmanage clonevm "$VM" --register --name "$CLONE_NAME" # 2>/dev/null
 
     if [ $? -ne 0 ]
     then
-         echo ""
-         echo "ERROR! Unable to clone $VM virtual machine, please check whether the clone name already exist ..."
+        echo ""
+        echo "ERROR! Unable to clone $VM virtual machine, please check whether the clone name already exists ..."
+    fi
     
     # Check and execute arguments
     while test $# -gt 0
@@ -46,16 +47,22 @@ else
 
             $OPT_1) echo ""
                     echo "WARNING! Keeping $VM and $CLONE_NAME virtual machines stopped!"
+                    echo ""
+                    exit 0
                     ;;
 
             $OPT_2) echo ""
 	                echo "Starting $VM ..."
                     ~/itops-scripts/bare-metal/vm-on.sh "$VM"
+                    echo ""
+                    exit 0
                     ;;
 
             $OPT_3) echo ""
 	                echo "Starting $CLONE_NAME ..."
                     ~/itops-scripts/bare-metal/vm-on.sh "$CLONE_NAME"
+                    echo ""
+                    exit 0
                     ;;                    
 
             esac
@@ -66,6 +73,9 @@ else
 
     done
 
+    # If there are no arguments, restart the virtual machine
+    echo "Starting $VM ..."
+    ~/itops-scripts/bare-metal/vm-on.sh "$VM"
     echo ""
 
 fi

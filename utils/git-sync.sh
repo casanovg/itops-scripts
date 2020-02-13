@@ -26,6 +26,12 @@ GITHUBPWD="$(cat ~/.github-pwd | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')"
 TXT_COMMIT="Update scripts"
 TXT_NO_CHANGES="nothing to commit"
 
+CRON_DIR="cron"
+
+echo ""
+echo "Saving $(hostname -s) crontab settings ..."
+crontab -l > ~/"$GIT_REP/$CRON_DIR/$(hostname -s).crontab"
+
 echo ""
 echo "Synchronizing the "$GIT_REP" repository ..."
 echo

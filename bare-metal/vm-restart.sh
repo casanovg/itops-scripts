@@ -11,7 +11,7 @@ EXIT_CODE=0
 if [ $# -eq 0 ] || [ -z "$1" ]
 then
     echo ""
-    echo "Usage: vm-restart <VIRTUAL-MACHINE>"
+    echo "Usage: vm-restart.sh <VIRTUAL-MACHINE>"
 else
 
 	if [ ! -z "$VM" ]; then

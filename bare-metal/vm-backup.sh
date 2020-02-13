@@ -1,10 +1,8 @@
 #!/bin/sh
 
-#
-# VBoxBkpSingleVM
-# ===========================
-# 2018-06-04 Gustavo Casanova
-#
+# Backup a single virtual machine
+# ...........................................
+# 2020-02-13 gcasanov@hellermanntyton.com.ar
 
 VM=$1
 BackupDir='/data/VirtualBox-Exports'
@@ -13,9 +11,9 @@ LogFile='/data/VirtualBox-Exports/Log/vboxbackup.log'
 
 if [ -z $1 ]; then
 	echo ""
-	echo "Usage: vboxbkpsinglevm <VirtualBox VM Name>"
+	echo "Usage: vm-backup.sh <VirtualBox VM Name>"
 	echo ""
-	echo " i.e.: vboxbkpsinglevm \"HTA-NetPal\""
+	echo " i.e.: vm-backup.sh \"HTA-NetPal\""
 	echo ""
 	exit 1
 else

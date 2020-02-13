@@ -12,7 +12,6 @@ if [ $# -eq 0 ] || [ -z "$1" ]
 then
     echo ""
     echo "Usage: vm-restart <VIRTUAL-MACHINE>"
-    echo ""
 else
 
 	if [ ! -z "$VM" ]; then
@@ -48,7 +47,6 @@ else
 	else
 		echo ""
 		echo ""$1" virtual machine not found!"
-		echo ""
 		EXIT_CODE=2
 	fi
 fi

@@ -30,21 +30,17 @@ else
 				sleep 1
 			done
 			echo ""
-		else
-			echo ""
-			echo ""$VM" virtual machine not active ..."
-			echo ""
-			#EXIT_CODE=1
 		fi
 		echo "$VM virtual machine stopped!"
 		echo ""
-		echo -n "."
-		sleep 1
-		echo -n "."
-		sleep 1
-		echo -n "."
-		sleep 1
+		# Three-second delay
+		for (( i=0; i<3; i++ ));
+		do
+			echo -n "."
+			sleep 1
+		done
 		# Start virtual machine
+		echo ""
 		echo ""
 		echo Starting "$VM virtual machine ..."
 		echo ""

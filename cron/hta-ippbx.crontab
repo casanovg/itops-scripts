@@ -1,0 +1,7 @@
+
+0 0 * * * /usr/sbin/fwconsole certificates --updateall -q 2>&1 >/dev/null
+* * * * * [ -x /var/www/html/admin/modules/dashboard/scheduler.php ] && /var/www/html/admin/modules/dashboard/scheduler.php > /dev/null 2>&1
+59 * * * * /var/lib/asterisk/bin/freepbx-cron-scheduler.php
+36 * * * * /usr/sbin/fwconsole util cleanplaybackcache -q
+@weekly ID=freepbx_backup_1 /var/lib/asterisk/bin/backup.php --id=1 >/dev/null 2>&1
+* * * * * [ -x /var/lib/asterisk/bin/schedtc.php ] && /var/lib/asterisk/bin/schedtc.php

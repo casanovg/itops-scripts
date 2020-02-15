@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# Backup Seafile MySQL (MariaDB) databases and system files
-# ..........................................................
+# Restore Seafile MySQL (MariaDB) databases and system files
+# ...........................................................
 # 2020-02-15 gcasanova@hellermanntyton.com.ar
 
 SYSTEM_DIR="/opt/seafile"
@@ -11,6 +11,16 @@ BACKUP_DATABASE="/data/seafile-data/backup-database"
 BKP_USR="netbackup"
 BKP_GRP="wheel"
 
+read  -n 1 -p "Please enter \"restore\" to continue:" USER_INPUT
+
+if [ "$USER_INPUT" -eq "restore" ] || [ "$USER_INPUT" -eq "Restore" ] [ "$USER_INPUT" -eq "RESTORE" ]; then
+    echo ""
+    echo "OK, YOY'VE BEEN WARNED!"
+    echo ""
+else
+    exit
+fi
+
 # Stop Seafile services
 echo ""
 echo "Stopping Seafile services ..."
@@ -19,15 +29,8 @@ echo "Stopping Seafile services ..."
 
 DB_SERVICE_STATUS="$(systemctl is-active mariadb)"
 
-# Backup Seafile databases
+# Restore Seafile databases
 if [ "$DB_SERVICE_STATUS" = "active" ]; then
-
-    # Checking backup destination directory
-    if [ ! -d "$BACKUP_DATABASE" ]; then
-        echo ""
-        echo "Directory $BACKUP_DATABASE DOES NOT exists, creating it ..." 
-        mkdir -p $BACKUP_DATABASE
-    fi
 
     echo ""
     echo "Backing Seafile databases up ..."

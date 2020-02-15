@@ -49,25 +49,19 @@ DB_SERVICE_STATUS="$(systemctl is-active mariadb)"
 if [ "$DB_SERVICE_STATUS" = "active" ]; then
 
     echo ""
-    echo "Restoring Seafile databases ..."
+    echo "Starting Seafile database restore ..."
 
-    # Delete previous ccnet_db
-    rm -rf $BACKUP_DATABASE/ccnet_db*
-    # Backup updated ccnet_db
-    echo "Backing ccnet_db up ..."
-    mysqldump -h localhost -uroot -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" --opt ccnet_db > $BACKUP_DATABASE/ccnet_db.sql."$(date +"%Y-%m-%d_%H-%M-%S")"
+    # Restore updated ccnet_db
+    echo "Restoring ccnet_db ..."
+    mysql -h localhost -u root -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" ccnet_db < "$(ls $BACKUP_DATABASE/ccnet_db.sql.*)"
 
-    # Delete previous seafile_db
-    rm -rf $BACKUP_DATABASE/seafile_db*
-    # Backup updated seafile_db
-    echo "Backing seafile_db up ..."
-    mysqldump -h localhost -uroot -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" --opt seafile_db > $BACKUP_DATABASE/seafile_db.sql."$(date +"%Y-%m-%d_%H-%M-%S")"
+    # Restore updated seafile_db
+    echo "Restoring seafile_db ..."
+    mysql -h localhost -u root -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" seafile_db < "$(ls $BACKUP_DATABASE/seafile_db.sql.*)"
 
-    # Delete previous seahub_db
-    rm -rf $BACKUP_DATABASE/seahub_db*
-    # Backup updated seahub_db
-    echo "Backing seahub_db up ..."
-    mysqldump -h localhost -uroot -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" --opt seahub_db > $BACKUP_DATABASE/seahub_db.sql."$(date +"%Y-%m-%d_%H-%M-%S")"
+    # Restore updated seahub_db
+    echo "Restoring seahub_db ..."
+    mysql -h localhost -u root -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" seahub_db < "$(ls $BACKUP_DATABASE/seahub_db.sql.*)"
 
 else
     echo ""

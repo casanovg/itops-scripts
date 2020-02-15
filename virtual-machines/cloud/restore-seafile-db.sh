@@ -49,38 +49,37 @@ DB_SERVICE_STATUS="$(systemctl is-active mariadb)"
 if [ "$DB_SERVICE_STATUS" = "active" ]; then
 
     echo ""
-    echo "Restoring Seafile databases ..."
+    echo "Seafile database restore ..."
 
-    # Delete previous ccnet_db
-    rm -rf $BACKUP_DATABASE/ccnet_db*
-    # Backup updated ccnet_db
-    echo "Backing ccnet_db up ..."
-    mysqldump -h localhost -uroot -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" --opt ccnet_db > $BACKUP_DATABASE/ccnet_db.sql."$(date +"%Y-%m-%d_%H-%M-%S")"
+    # Restore updated ccnet_db
+    echo "Restoring ccnet_db ..."
+    mysql -h localhost -u root -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" ccnet_db < "$(ls $BACKUP_DATABASE/ccnet_db.sql.*)"
 
-    # Delete previous seafile_db
-    rm -rf $BACKUP_DATABASE/seafile_db*
-    # Backup updated seafile_db
-    echo "Backing seafile_db up ..."
-    mysqldump -h localhost -uroot -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" --opt seafile_db > $BACKUP_DATABASE/seafile_db.sql."$(date +"%Y-%m-%d_%H-%M-%S")"
+    # Restore updated seafile_db
+    echo "Restoring seafile_db ..."
+    mysql -h localhost -u root -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" seafile_db < "$(ls $BACKUP_DATABASE/seafile_db.sql.*)"
 
-    # Delete previous seahub_db
-    rm -rf $BACKUP_DATABASE/seahub_db*
-    # Backup updated seahub_db
-    echo "Backing seahub_db up ..."
-    mysqldump -h localhost -uroot -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" --opt seahub_db > $BACKUP_DATABASE/seahub_db.sql."$(date +"%Y-%m-%d_%H-%M-%S")"
+    # Restore updated seahub_db
+    echo "Restoring seahub_db ..."
+    mysql -h localhost -u root -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" seahub_db < "$(ls $BACKUP_DATABASE/seahub_db.sql.*)"
 
 else
     echo ""
-    echo "WARNING! MariaDB not running, unable to back the Seafile databases up!"
+    echo "WARNING! MariaDB not running, unable to restore the Seafile databases!"
 
 fi
 
-# Backup Seafile system files
+# Restore Seafile system files
 echo ""
-echo "Backing Seafile system files up ..."
-sudo rsync -r -a $SYSTEM_DIR $BACKUP_SYSTEM
-sudo rsync -r -a $SYSTEM_USR $BACKUP_SYSTEM
-sudo chown -R $BKP_USR:$BKP_GRP $BACKUP_SYSTEM
+echo -en "Restore also Seafile system files? (Y/N): "
+read USER_INPUT
+if [ "$USER_INPUT" = "Y" ] || [ "$USER_INPUT" = "y" ] || [ "$USER_INPUT" = "yes" ] || [ "$USER_INPUT" = "Yes" ] || [ "$USER_INPUT" = "YES" ]
+then
+    echo ""
+    echo "Restoring Seafile system files ..."
+    sudo rsync -r -a $BACKUP_SYSTEM/* /opt/.
+    sudo chown -R root:wheel /opt/seafile.my.cnf
+fi
 
 # Start Seafile services
 echo ""

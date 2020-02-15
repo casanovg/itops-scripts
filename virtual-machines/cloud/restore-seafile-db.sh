@@ -49,7 +49,7 @@ DB_SERVICE_STATUS="$(systemctl is-active mariadb)"
 if [ "$DB_SERVICE_STATUS" = "active" ]; then
 
     echo ""
-    echo "Starting Seafile database restore ..."
+    echo "Seafile database restore ..."
 
     # Restore updated ccnet_db
     echo "Restoring ccnet_db ..."
@@ -65,16 +65,21 @@ if [ "$DB_SERVICE_STATUS" = "active" ]; then
 
 else
     echo ""
-    echo "WARNING! MariaDB not running, unable to back the Seafile databases up!"
+    echo "WARNING! MariaDB not running, unable to restore the Seafile databases!"
 
 fi
 
-# Backup Seafile system files
+# Restore Seafile system files
 echo ""
-echo "Backing Seafile system files up ..."
-sudo rsync -r -a $SYSTEM_DIR $BACKUP_SYSTEM
-sudo rsync -r -a $SYSTEM_USR $BACKUP_SYSTEM
-sudo chown -R $BKP_USR:$BKP_GRP $BACKUP_SYSTEM
+echo -en "Restore also Seafile system files? (Y/N): "
+read USER_INPUT
+if [ "$USER_INPUT" = "Y" ] || [ "$USER_INPUT" = "y" ] || [ "$USER_INPUT" = "yes" ] || [ "$USER_INPUT" = "Yes" ] || [ "$USER_INPUT" = "YES" ]
+then
+    echo ""
+    echo "Restoring Seafile system files ..."
+    sudo rsync -r -a $BACKUP_SYSTEM/* /opt/.
+    sudo chown -R root:wheel /opt/seafile.my.cnf
+fi
 
 # Start Seafile services
 echo ""

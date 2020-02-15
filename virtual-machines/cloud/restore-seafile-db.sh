@@ -11,13 +11,29 @@ BACKUP_DATABASE="/data/seafile-data/backup-database"
 BKP_USR="netbackup"
 BKP_GRP="wheel"
 
-read  -n 1 -p "Please enter \"restore\" to continue:" USER_INPUT
+clear
+echo ""
+echo " **********************************************"
+echo " *     WARNING!     WARNING!     WARNING!     *"
+echo " * .......................................... *"
+echo " *   If you continue the Seafile file sync    *"
+echo " *   service could be severely damaged and    *"
+echo " *   become useless. If you are not a system  *"
+echo " *   administrator or you do not know what    *"
+echo " *   this database restore implies, please    *"
+echo " *   exit now!                                *"
+echo " **********************************************"
+echo ""
+echo -en "Please enter \e[38;2;255;0;0mrestore\e[0m to continue, or any key to \e[38;2;0;255;0mexit\e[0m: "
+read USER_INPUT
 
-if [ "$USER_INPUT" -eq "restore" ] || [ "$USER_INPUT" -eq "Restore" ] [ "$USER_INPUT" -eq "RESTORE" ]; then
+if [ "$USER_INPUT" = "restore" ] || [ "$USER_INPUT" = "Restore" ] || [ "$USER_INPUT" = "RESTORE" ]; then
     echo ""
-    echo "OK, YOY'VE BEEN WARNED!"
-    echo ""
+    echo "Ok, Seafile databases restore starting ..."
 else
+    echo ""
+    echo "Exiting ..."
+    echo ""
     exit
 fi
 
@@ -33,7 +49,7 @@ DB_SERVICE_STATUS="$(systemctl is-active mariadb)"
 if [ "$DB_SERVICE_STATUS" = "active" ]; then
 
     echo ""
-    echo "Backing Seafile databases up ..."
+    echo "Restoring Seafile databases ..."
 
     # Delete previous ccnet_db
     rm -rf $BACKUP_DATABASE/ccnet_db*

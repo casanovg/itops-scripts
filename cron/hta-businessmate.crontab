@@ -29,7 +29,8 @@
   0 */6 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh "HTA-Firewall"
   0 */6 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh "HTA-NetPal"
 
-# Restart access control and surveillance virtual machine (Every Sunday at 19:00 PM)
+# Restart access control and surveillance virtual machine (After every host restart)
 # -----------------------------------------------------------------------------------
-  0  19 *  *  sun   ~/itops-scripts/bare-metal/vm-restart.sh "HTA-ACC"
+  0  16 *  *  sun   ~/itops-scripts/bare-metal/vm-restart.sh "HTA-ACC"
+  30 23 *  *  wed   ~/itops-scripts/bare-metal/vm-restart.sh "HTA-ACC"
 

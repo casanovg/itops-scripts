@@ -1,13 +1,13 @@
 #!/bin/sh
 
-# Synchronize git repository *
-# ...........................................
+# Synchronize git repository
+# ............................................
 # NOTES: Use git-update-id.sh to create or
 # *****  update your GitHub credentials.
-#        You also may need run:
+#        You also may need running:
 # git config --global credential.helper store
 #        before using this script 
-# ...........................................
+# ............................................
 # 2019-12-31 gcasanova@hellermanntyton.com.ar
 
 source ~/itops-scripts/common/set-env.sh

@@ -28,5 +28,5 @@
 # -----------------------------------------------------------------------------------
 # 0 */6 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh "HTA-Firewall"
 # 0 */6 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh "HTA-NetPal"
-# 0 */6 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh "NB-Hibou"
+  0 */6 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh "NB-Hibou"
 

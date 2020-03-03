@@ -12,10 +12,11 @@ stty_orig=$(stty -g)
 stty -echo
 read pwd 1>/dev/null
 stty $stty_orig
-#echo "$pwd" | openssl aes-256-cbc -a -salt -pass pass:' ' > ~/fs-usr
-echo "$pwd" | openssl aes-256-cbc -pbkdf2 -pass pass:' ' > ~/fs-usr
+#echo "$pwd" | openssl aes-256-cbc -a -salt -pass pass:' ' > ~/.fs-usr
+echo "$pwd" | openssl aes-256-cbc -pbkdf2 -pass pass:' ' > ~/.fs-usr
 echo ""
 echo "#############################################################################"
 echo "# ATTENTION! The new administrator's password is:" $pwd
 echo "#############################################################################"
 echo ""
+

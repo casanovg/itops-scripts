@@ -4,7 +4,7 @@
 # ...........................................
 # 2019-12-09 gcasanova@hellermanntyton.com.ar
 
-pwd=$(cat ~/fs-usr | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')
+pwd=$(cat ~/.fs-usr | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')
 echo "Joining HTARGENTINA Domain"
 echo "--------------------------"
 echo "Windows domain administrator password required ..."

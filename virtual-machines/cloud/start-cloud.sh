@@ -10,6 +10,10 @@ TARGET_CLOUD="iqn.2020-01.lan.htargentina:hta-mothership.cloud"
 DEV_CLOUD="sdb1"
 SERVER_CLOUD="10.6.17.40"
 
+TARGET_MATTERMOST="iqn.2020-03.lan.htargentina:hta-mothership.mattermost"
+DEV_MATTERMOST="sdb2"
+SERVER_MATTERMOST="10.6.17.40"
+
 SHARE_WARNING="SHARE_NOT_MOUNTED"
 ISCSI_WARNING="DISK_NOT_MOUNTED"
 
@@ -27,6 +31,18 @@ if [ "$(cat /proc/partitions | grep -w "$DEV_CLOUD")" ]; then
     fi
 fi
 
+# Connect HTA mattermost iscsi target
+if [ ! "$(cat /proc/partitions | grep -w "$DEV_MATTERMOST")" ]; then
+    sudo iscsiadm -m node --targetname $TARGET_MATTERMOST -p $SERVER_MATTERMOST --login
+    sleep 1
+fi
+# Mount HTA Mattermost storage
+if [ "$(cat /proc/partitions | grep -w "$DEV_MATTERMOST")" ]; then
+    if [ ! -z "$(ls -1 $CL_DIR | grep $ISCSI_WARNING)" ]; then
+        sudo mount /dev/$DEV_MATTERMOST $CL_DIR
+    fi
+fi
+
 sleep 5
 
 # Start cloud services
@@ -39,9 +55,10 @@ for SERVICE in seafile seahub nginx; do
     fi
 done
 
-# Services restart
-# for ACTION in stop start ; do
-#     for SERVICE in seafile seahub nginx; do
-#       systemctl ${ACTION} ${SERVICE}
-#     done
-# done
+# Start Mattermost service
+if [ $(systemctl is-active mattermost.service) == "inactive" ]; then
+    echo "Starting Mattermost ..."
+    sudo systemctl start mattermost.service
+else
+    echo "Service Mattermost already running ..."
+fi

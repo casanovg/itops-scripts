@@ -10,6 +10,9 @@ SERVER_CLOUD="10.6.17.40"
 SERVER_MATTERMOST="10.6.17.40"
 
 echo ""
+iscsiadm -m discovery -t sendtargets -p $SERVER_CLOUD
+
+echo ""
 # Connect Seafile cloud iscsi target
 sudo iscsiadm -m node --targetname $TARGET_CLOUD -p $SERVER_CLOUD --login
 # Connect Mattermost iscsi target

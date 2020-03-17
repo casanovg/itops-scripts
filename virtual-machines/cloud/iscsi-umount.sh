@@ -7,7 +7,7 @@
 # Unmount HTA cloud iscsi disk
 sudo umount /data/seafile-data;
 # Unmount Mattermost iscsi disk
-sudo umount /data/mattermost-disk;
+sudo umount /data/mattermost-data;
 echo;
 # Disconnect HTA files and users shares iscsi target
 sudo iscsiadm -m node --targetname iqn.2020-01.lan.htargentina:hta-mothership.cloud -p 10.6.17.40 --logout;

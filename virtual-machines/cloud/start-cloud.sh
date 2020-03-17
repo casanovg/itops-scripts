@@ -58,8 +58,8 @@ done
 
 # Start Mattermost service
 if [ $(systemctl is-active mattermost.service) == "inactive" ]; then
-    echo "Starting Mattermost ..."
+    echo "Starting mattermost ..."
     sudo systemctl start mattermost.service
 else
-    echo "Service Mattermost already running ..."
+    echo "Service mattermost already running ..."
 fi

@@ -9,15 +9,16 @@
 
 # After reboot, wait 15 seconds and start file services
 # -----------------------------------------------------------------------------------
-#  @reboot sleep 15 && ~/itops-scripts/virtual-machines/cloud/start-cloud.sh
+  @reboot sleep 15 && ~/itops-scripts/virtual-machines/cloud/start-cloud.sh
 
 # Virtual machine operating system update (Every Thursday at 22:00 PM)
 # -----------------------------------------------------------------------------------
   0  23 *  *  sun   ~/itops-scripts/virtual-machines/cloud/update-os.sh
 
-# Seafile MySQL (MariaDB) databases backup (Every day 01:55 PM)
+# Seafile & Mattormost MySQL (MariaDB) databases backup (Every day 01:55 & 01:45 PM)
 # -----------------------------------------------------------------------------------
-#  55 01 *  *  *     ~/itops-scripts/virtual-machines/cloud/backup-seafile-db.sh
+  55 01 *  *  *     ~/itops-scripts/virtual-machines/cloud/backup-seafile-db.sh
+  45 01 *  *  *     ~/itops-scripts/virtual-machines/cloud/backup-mattermost-db.sh
 
 # Synchronize IT Operations GitHub repository every 1 hour
 # -----------------------------------------------------------------------------------
@@ -25,5 +26,5 @@
 
 # Verify every hour that Seafile cloud services are up
 # -----------------------------------------------------------------------------------
-#  0  *  *  *  *     ~/itops-scripts/virtual-machines/cloud/start-cloud.sh
+  0  *  *  *  *     ~/itops-scripts/virtual-machines/cloud/start-cloud.sh
 

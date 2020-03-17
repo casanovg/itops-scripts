@@ -4,6 +4,9 @@
 # ............................................
 # 2019-12-09 gcasanova@hellermanntyton.com.ar
 
+echo ""
+iscsiadm -m discovery -t sendtargets -p 10.6.17.40
+
 # Connect HTA cloud iscsi target
 sudo iscsiadm -m node --targetname iqn.2020-01.lan.htargentina:hta-mothership.cloud -p 10.6.17.40 --login;
 # Connect Mattermost iscsi target

@@ -20,6 +20,9 @@ ISCSI_WARNING="DISK_NOT_MOUNTED"
 CL_DIR="/data/seafile-data"
 MM_DIR="/data/mattermost-data"
 
+echo ""
+iscsiadm -m discovery -t sendtargets -p $SERVER_CLOUD
+
 # Connect HTA cloud iscsi target
 if [ ! "$(cat /proc/partitions | grep -w "$DEV_CLOUD")" ]; then
     sudo iscsiadm -m node --targetname $TARGET_CLOUD -p $SERVER_CLOUD --login
@@ -57,6 +60,7 @@ for SERVICE in seafile seahub nginx; do
 done
 
 # Start Mattermost service
+echo ""
 if [ $(systemctl is-active mattermost.service) == "inactive" ]; then
     echo "Starting mattermost ..."
     sudo systemctl start mattermost.service

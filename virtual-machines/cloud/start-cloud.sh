@@ -11,13 +11,14 @@ DEV_CLOUD="sdb1"
 SERVER_CLOUD="10.6.17.40"
 
 TARGET_MATTERMOST="iqn.2020-03.lan.htargentina:hta-mothership.mattermost"
-DEV_MATTERMOST="sdb2"
+DEV_MATTERMOST="sdc1"
 SERVER_MATTERMOST="10.6.17.40"
 
 SHARE_WARNING="SHARE_NOT_MOUNTED"
 ISCSI_WARNING="DISK_NOT_MOUNTED"
 
 CL_DIR="/data/seafile-data"
+MM_DIR="/data/mattermost-data"
 
 # Connect HTA cloud iscsi target
 if [ ! "$(cat /proc/partitions | grep -w "$DEV_CLOUD")" ]; then
@@ -38,8 +39,8 @@ if [ ! "$(cat /proc/partitions | grep -w "$DEV_MATTERMOST")" ]; then
 fi
 # Mount HTA Mattermost storage
 if [ "$(cat /proc/partitions | grep -w "$DEV_MATTERMOST")" ]; then
-    if [ ! -z "$(ls -1 $CL_DIR | grep $ISCSI_WARNING)" ]; then
-        sudo mount /dev/$DEV_MATTERMOST $CL_DIR
+    if [ ! -z "$(ls -1 $MM_DIR | grep $ISCSI_WARNING)" ]; then
+        sudo mount /dev/$DEV_MATTERMOST $MM_DIR
     fi
 fi
 

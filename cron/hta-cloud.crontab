@@ -26,5 +26,5 @@
 
 # Verify every hour that Seafile cloud services are up
 # -----------------------------------------------------------------------------------
-  0  *  *  *  *     ~/itops-scripts/virtual-machines/cloud/start-cloud.sh
+# 0  *  *  *  *     ~/itops-scripts/virtual-machines/cloud/start-cloud.sh
 

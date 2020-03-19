@@ -15,8 +15,13 @@ iscsiadm -m discovery -t sendtargets -p $SERVER_CLOUD
 echo ""
 # Connect Seafile cloud iscsi target
 sudo iscsiadm -m node --targetname $TARGET_CLOUD -p $SERVER_CLOUD --login
+
+sleep 2
+
 # Connect Mattermost iscsi target
 sudo iscsiadm -m node --targetname $TARGET_MATTERMOST -p $SERVER_MATTERMOST --login
+
+sleep 2
 
 echo ""
 cat /proc/partitions

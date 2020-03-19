@@ -7,11 +7,11 @@
 #
 
 TARGET_CLOUD="iqn.2020-01.lan.htargentina:hta-mothership.cloud"
-DEV_CLOUD="sdb1"
+DEV_CLOUD_UUID="7736fa41-9671-4cfe-88ca-5dd13497eaee" # blkid
 SERVER_CLOUD="10.6.17.40"
 
 TARGET_MATTERMOST="iqn.2020-03.lan.htargentina:hta-mothership.mattermost"
-DEV_MATTERMOST="sdc1"
+DEV_MATTERMOST_UUID="e096e751-9598-40ac-83a8-833faddea058" # blkid
 SERVER_MATTERMOST="10.6.17.40"
 
 SHARE_WARNING="SHARE_NOT_MOUNTED"
@@ -24,6 +24,8 @@ echo ""
 iscsiadm -m discovery -t sendtargets -p $SERVER_CLOUD
 
 # Connect HTA cloud iscsi target
+if [ ! -z "$(blkid | grep "eaee")" ]; then
+
 if [ ! "$(cat /proc/partitions | grep -w "$DEV_CLOUD")" ]; then
     sudo iscsiadm -m node --targetname $TARGET_CLOUD -p $SERVER_CLOUD --login
     sleep 1

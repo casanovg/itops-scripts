@@ -17,9 +17,9 @@ cat /proc/partitions;
 echo;
 
 # Mount HTA cloud iscsi disk
-sudo mount /dev/sdb1 /data/seafile-data;
+sudo mount /dev/disk/by-uuid/7736fa41-9671-4cfe-88ca-5dd13497eaee /data/seafile-data;
 # Mount Mattermost iscsi disk
-sudo mount /dev/sdc1 /data/mattermost-data;
+sudo mount /dev/disk/by-uuid/e096e751-9598-40ac-83a8-833faddea058 /data/mattermost-data;
 
 ls -l /data/seafile-data;
 echo;

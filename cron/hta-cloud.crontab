@@ -9,7 +9,7 @@
 
 # After reboot, wait 15 seconds and start file services
 # -----------------------------------------------------------------------------------
-  @reboot sleep 15 && ~/itops-scripts/virtual-machines/cloud/start-cloud.sh
+# @reboot sleep 15 && ~/itops-scripts/virtual-machines/cloud/start-cloud.sh
 
 # Virtual machine operating system update (Every Thursday at 22:00 PM)
 # -----------------------------------------------------------------------------------

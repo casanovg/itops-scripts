@@ -47,7 +47,7 @@ if [ ! -z "$(sudo blkid | grep "$DEV_MATTERMOST_UUID")" ]; then
     fi
 fi
 
-sleep 3
+sleep 5
 
 # Start cloud services
 echo ""

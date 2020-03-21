@@ -7,7 +7,7 @@
 # |  |  |  |  |
 # *  *  *  *  * user-name  command to be executed
 
-# After reboot, wait 15 seconds and start file services
+# After reboot, wait 15 seconds and start cloud services
 # -----------------------------------------------------------------------------------
   @reboot sleep 15 && ~/itops-scripts/virtual-machines/cloud/start-cloud.sh
 

@@ -80,7 +80,7 @@ echo ""
 echo "Initializing HTA Seafile cloud sync service"
 echo "..........................................."
 for SERVICE in seafile seahub nginx; do
-    if [ $(sudo systemctl is-active ${SERVICE}) == "inactive" ]; then
+    if [ $(sudo systemctl is-active ${SERVICE}) != "active" ]; then
         echo "Starting ${SERVICE} ..."
         sudo systemctl start ${SERVICE}
     else
@@ -93,7 +93,7 @@ done
 echo ""
 echo "Initializing HTA Mattermost messaging service"
 echo "............................................."
-if [ $(systemctl is-active mattermost.service) == "inactive" ]; then
+if [ $(sudo systemctl is-active mattermost.service) != "active" ]; then
     echo "Starting mattermost ..."
     sudo systemctl start mattermost.service
 else

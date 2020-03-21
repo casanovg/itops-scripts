@@ -32,7 +32,6 @@ echo "Connecting iSCSI disks and mounting directories"
 echo "..............................................."
 
 # Connect HTA cloud iscsi target
-echo ""
 if [ -z "$(sudo blkid | grep "$DEV_CLOUD_UUID")" ]; then
     echo "Connecting \"$TARGET_CLOUD\" iSCSI disk ..." 
     sudo iscsiadm -m node --targetname $TARGET_CLOUD -p $SERVER_CLOUD --login
@@ -42,28 +41,36 @@ else
 fi
 
 # Mount HTA cloud Seafile storage
-echo ""
 if [ ! -z "$(sudo blkid | grep "$DEV_CLOUD_UUID")" ]; then
     if [ ! -z "$(ls -1 $CL_DIR | grep $ISCSI_WARNING)" ]; then
-	echo "Mounting \"$CL_DIR\" directory ..."
+	    echo "Mounting \"$CL_DIR\" directory ..."
         sudo mount /dev/disk/by-uuid/$DEV_CLOUD_UUID $CL_DIR
     else
-	echo "\"$CL_DIR\" directory already mounted ..."
+	    echo "\"$CL_DIR\" directory already mounted ..."
     fi
 else
-    echo "Unable to mount \"$CL_DI\", target iSCSI disconected!"
+    echo "Unable to mount \"$CL_DIR\", target iSCSI disconected!"
 fi
 
 # Connect HTA mattermost iscsi target
 if [ -z "$(sudo blkid | grep "$DEV_MATTERMOST_UUID")" ]; then
+    echo "Connecting \"$TARGET_MATTERMOST\" iSCSI disk ..." 
     sudo iscsiadm -m node --targetname $TARGET_MATTERMOST -p $SERVER_MATTERMOST --login
     sleep 2
+else
+    echo "\"$TARGET_MATTERMOST\" iSCSI disk already connected ..."
 fi
+
 # Mount HTA Mattermost storage
 if [ ! -z "$(sudo blkid | grep "$DEV_MATTERMOST_UUID")" ]; then
     if [ ! -z "$(ls -1 $MM_DIR | grep $ISCSI_WARNING)" ]; then
+        echo "Mounting \"$MM_DIR\" directory ..."
         sudo mount /dev/disk/by-uuid/$DEV_MATTERMOST_UUID $MM_DIR
+    else
+        echo "\"$MM_DIR\" directory already mounted ..."
     fi
+else
+    echo "Unable to mount \"$MM_DIR\", target iSCSI disconected!"
 fi
 
 sleep 5
@@ -79,6 +86,7 @@ for SERVICE in seafile seahub nginx; do
     else
         echo "Service ${SERVICE} already running ..."
     fi
+    sleep 1
 done
 
 # Start Mattermost service
@@ -92,4 +100,3 @@ else
     echo "Service mattermost already running ..."
 fi
 echo ""
-

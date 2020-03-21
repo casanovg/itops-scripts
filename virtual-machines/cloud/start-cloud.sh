@@ -20,19 +20,38 @@ ISCSI_WARNING="DISK_NOT_MOUNTED"
 CL_DIR="/data/seafile-data"
 MM_DIR="/data/mattermost-data"
 
+# Start cloud services
 echo ""
+echo "Discovering available iSCSI targets disks on $SERVER_CLOUD"
+echo "......................................................."
+
 sudo iscsiadm -m discovery -t sendtargets -p $SERVER_CLOUD
 
+echo ""
+echo "Connecting iSCSI disks and mounting directories"
+echo "..............................................."
+
 # Connect HTA cloud iscsi target
+echo ""
 if [ -z "$(sudo blkid | grep "$DEV_CLOUD_UUID")" ]; then
+    echo "Connecting \"$TARGET_CLOUD\" iSCSI disk ..." 
     sudo iscsiadm -m node --targetname $TARGET_CLOUD -p $SERVER_CLOUD --login
     sleep 2
+else
+    echo "\"$TARGET_CLOUD\" iSCSI disk already connected ..." 
 fi
+
 # Mount HTA cloud Seafile storage
+echo ""
 if [ ! -z "$(sudo blkid | grep "$DEV_CLOUD_UUID")" ]; then
     if [ ! -z "$(ls -1 $CL_DIR | grep $ISCSI_WARNING)" ]; then
+	echo "Mounting \"$CL_DIR\" directory ..."
         sudo mount /dev/disk/by-uuid/$DEV_CLOUD_UUID $CL_DIR
+    else
+	echo "\"$CL_DIR\" directory already mounted ..."
     fi
+else
+    echo "Unable to mount \"$CL_DI\", target iSCSI disconected!"
 fi
 
 # Connect HTA mattermost iscsi target

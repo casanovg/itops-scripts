@@ -26,24 +26,41 @@ TP_DIR="/data/taxpy-disk"
 if [ ! "$(cat /proc/partitions | grep -w "$DEV_ALEPH")" ]; then
     sudo iscsiadm -m node --targetname $TARGET_ALEPH -p $SERVER_ALEPH --login
     sleep 1
+else
+    echo ""
+    echo "\"$TARGET_ALEPH\" already connected ..."
 fi
+
 # Mount HTA files and users shares
 if [ "$(cat /proc/partitions | grep -w "$DEV_ALEPH")" ]; then
     if [ ! -z "$(ls -1 $FS_DIR | grep $ISCSI_WARNING)" ]; then
         sudo mount /dev/$DEV_ALEPH $FS_DIR
+    else
+	echo ""
+	echo "\"$FS_DIR\" already mounted ..."
     fi
+else
+    echo ""
+    echo "Unable to maunt \"$FS_DIR\" iSCSI disk diconnected ..."
 fi
 
 # Connect finance tax payers records iscsi target
 if [ ! "$(cat /proc/partitions | grep -w "$DEV_TAXPY")" ]; then
     sudo iscsiadm -m node --targetname $TARGET_TAXPY -p $SERVER_TAXPY --login
     sleep 1
+else
+    echo ""
+    echo "\"$TARGET_TAXPY\" already connected ..."
 fi
+
 # Mount finance tax payers records share
 if [ "$(cat /proc/partitions | grep -w "$DEV_TAXPY")" ]; then
     if [ ! -z "$(ls -1 $TP_DIR | grep $ISCSI_WARNING)" ]; then
         sudo mount /dev/$DEV_TAXPY $TP_DIR
     fi
+else
+    echo ""
+    echo "Unable to maunt \"$TP_DIR\" iSCSI disk diconnected ..."
 fi
 
 # Mount bare-metal server shares to back them up with Back-in-Time
@@ -54,21 +71,22 @@ for SHARE in $(ls -1 $BKP_DIR); do
             echo "Mounting $SHARE ..."
             mount $BKP_DIR/"$SHARE"
             echo ""
-            #else
-            #echo "$SHARE already mounted!"
-            #echo ""
+            else
+            echo "$SHARE already mounted!"
+            echo ""
         fi
     fi
 done
 
 # Authenticate with AD domain controller and start Samba shares
-if [ ! "$(wbinfo --ping-dc 2>>/dev/null | grep -w "succeeded")" ]; then
+if [ ! "$(sudo wbinfo --ping-dc 2>>/dev/null | grep -w "succeeded")" ]; then
    ~/itops-scripts/virtual-machines/fileserver/fs-start.sh
    sleep 1
    ~/itops-scripts/virtual-machines/fileserver/fs-stop.sh
    sleep 1
    ~/itops-scripts/virtual-machines/fileserver/fs-start.sh
-#else
-    #echo "Samba already on!"
+else
+    echo "Samba service already active!"
 fi
+echo ""
 

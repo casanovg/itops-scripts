@@ -31,7 +31,7 @@ echo ""
 echo "Connecting iSCSI disks and mounting directories"
 echo "..............................................."
 
-# Connect HTA cloud iscsi target
+# Connect HTA Seafile cloud iscsi target
 if [ -z "$(sudo blkid | grep "$DEV_CLOUD_UUID")" ]; then
     echo "Connecting \"$TARGET_CLOUD\" iSCSI disk ..." 
     sudo iscsiadm -m node --targetname $TARGET_CLOUD -p $SERVER_CLOUD --login
@@ -40,7 +40,7 @@ else
     echo "\"$TARGET_CLOUD\" iSCSI disk already connected ..." 
 fi
 
-# Mount HTA cloud Seafile storage
+# Mount HTA Seafile cloud storage
 if [ ! -z "$(sudo blkid | grep "$DEV_CLOUD_UUID")" ]; then
     if [ ! -z "$(ls -1 $CL_DIR | grep $ISCSI_WARNING)" ]; then
 	    echo "Mounting \"$CL_DIR\" directory ..."
@@ -52,7 +52,7 @@ else
     echo "Unable to mount \"$CL_DIR\", target iSCSI disconected!"
 fi
 
-# Connect HTA mattermost iscsi target
+# Connect HTA Mattermost iscsi target
 if [ -z "$(sudo blkid | grep "$DEV_MATTERMOST_UUID")" ]; then
     echo "Connecting \"$TARGET_MATTERMOST\" iSCSI disk ..." 
     sudo iscsiadm -m node --targetname $TARGET_MATTERMOST -p $SERVER_MATTERMOST --login

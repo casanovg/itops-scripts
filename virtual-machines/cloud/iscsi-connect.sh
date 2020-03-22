@@ -10,19 +10,19 @@ SERVER_CLOUD="10.6.17.40"
 SERVER_MATTERMOST="10.6.17.40"
 
 echo ""
-iscsiadm -m discovery -t sendtargets -p $SERVER_CLOUD
+sudo scsiadm -m discovery -t sendtargets -p $SERVER_CLOUD
 
 echo ""
-# Connect Seafile cloud iscsi target
+# Connect HTA Seafile cloud iscsi target
 sudo iscsiadm -m node --targetname $TARGET_CLOUD -p $SERVER_CLOUD --login
 
 sleep 2
 
-# Connect Mattermost iscsi target
+# Connect HTA Mattermost iscsi target
 sudo iscsiadm -m node --targetname $TARGET_MATTERMOST -p $SERVER_MATTERMOST --login
 
 sleep 2
 
 echo ""
-cat /proc/partitions
+sudo cat /proc/partitions
 echo ""

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # HTA iscsi disks disconnect
-# ...........................................
+# ............................................
 # 2019-12-30 gcasanova@hellermanntyton.com.ar
 
 TARGET_CLOUD="iqn.2020-01.lan.htargentina:hta-mothership.cloud"
@@ -10,9 +10,9 @@ SERVER_CLOUD="10.6.17.40"
 SERVER_MATTERMOST="10.6.17.40"
 
 echo ""
-# Disconnect Seafile cloud iscsi target
+# Disconnect HTA Seafile cloud iscsi target
 sudo iscsiadm -m node --targetname $TARGET_CLOUD -p $SERVER_CLOUD --logout
-# Disconnect Mattermost iscsi target
+# Disconnect HTA Mattermost iscsi target
 sudo iscsiadm -m node --targetname $TARGET_MATTERMOST -p $SERVER_MATTERMOST --logout
 
 echo ""

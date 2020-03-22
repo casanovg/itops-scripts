@@ -5,9 +5,11 @@
 # 2019-12-09 gcasanova@hellermanntyton.com.ar
 
 pwd=$(sudo cat ~/.fs-usr | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')
+
+echo""
 echo "Joining HTARGENTINA Domain"
 echo "--------------------------"
-echo "Windows domain administrator password required ..."
+echo "Using \"fs-usr\" domain administrator password ..."
 sudo net ads join -U administrator%$pwd -S hta-pdc.htargentina.lan -I 10.6.17.45
 sudo winbindd
 sudo smbd
@@ -17,4 +19,4 @@ sudo getent group "HTARGENTINA\\Domain Users"
 # chown "HTARGENTINA\domain admins:HTARGENTINA\domain users" /data/aleph-disk/
 sudo net rpc rights grant "HTARGENTINA\Domain Admins" SeDiskOperatorPrivilege -U "HTARGENTINA\administrator%$pwd"
 sudo net rpc rights list privileges SeDiskOperatorPrivilege -U "HTARGENTINA\administrator%$pwd"
-
+echo ""

@@ -11,4 +11,5 @@ sleep 3
 echo ""
 echo "Rebooting ..."
 sudo shutdown -r now
+echo ""
 

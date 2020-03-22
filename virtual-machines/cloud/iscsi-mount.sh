@@ -5,7 +5,7 @@
 # 2019-12-09 gcasanova@hellermanntyton.com.ar
 
 echo ""
-iscsiadm -m discovery -t sendtargets -p 10.6.17.40
+sudo iscsiadm -m discovery -t sendtargets -p 10.6.17.40
 
 # Connect HTA Seafile cloud iscsi target
 sudo iscsiadm -m node --targetname iqn.2020-01.lan.htargentina:hta-mothership.cloud -p 10.6.17.40 --login;
@@ -13,7 +13,7 @@ sudo iscsiadm -m node --targetname iqn.2020-01.lan.htargentina:hta-mothership.cl
 sudo iscsiadm -m node --targetname iqn.2020-03.lan.htargentina:hta-mothership.mattermost -p 10.6.17.40 --login;
 
 sleep 5;
-cat /proc/partitions;
+sudo cat /proc/partitions;
 echo;
 
 # Mount HTA Seafile cloud iscsi disk
@@ -25,3 +25,4 @@ ls -l /data/seafile-data;
 echo;
 ls -l /data/mattermost-data;
 echo;
+

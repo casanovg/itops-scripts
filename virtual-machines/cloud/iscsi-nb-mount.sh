@@ -5,13 +5,13 @@
 # 2020-03-22 gcasanova@hellermanntyton.com.ar
 
 echo ""
-iscsiadm -m discovery -t sendtargets -p 10.6.17.70
+sudo iscsiadm -m discovery -t sendtargets -p 10.6.17.70
 
 # Connect Hibou cloud iscsi target
 sudo iscsiadm -m node --targetname iqn.2020-02.lan.htargentina:hta-freenas:hibou -p 10.6.17.70 --login;
 
 sleep 5;
-cat /proc/partitions;
+sudo cat /proc/partitions;
 echo;
 
 # Mount Hibou cloud iscsi disk

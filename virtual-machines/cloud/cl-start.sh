@@ -7,6 +7,7 @@
 #
 
 # Start cloud services
+echo ""
 for SERVICE in seafile seahub nginx; do
     SERVICE_STATUS="$(sudo systemctl is-active $SERVICE)"
     if [ "$SERVICE_STATUS" != "active" ]; then
@@ -17,3 +18,5 @@ for SERVICE in seafile seahub nginx; do
         echo "Service $SERVICE already running ..."
     fi
 done
+echo ""
+

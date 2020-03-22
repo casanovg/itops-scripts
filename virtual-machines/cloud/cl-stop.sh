@@ -7,7 +7,7 @@
 #
 
 # Stop cloud services
-
+echo ""
 for SERVICE in nginx.service seahub.service seafile.service; do
     SERVICE_STATUS="$(sudo systemctl is-active $SERVICE)"
     if [ "$SERVICE_STATUS" = "active" ]; then
@@ -18,3 +18,5 @@ for SERVICE in nginx.service seahub.service seafile.service; do
         echo "Service $SERVICE already stopped ..."
     fi
 done
+echo ""
+

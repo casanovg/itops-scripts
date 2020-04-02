@@ -38,7 +38,7 @@ for INTERNET in "HTA-NetPal" "HTA-Firewall"; do
 		echo ""$INTERNET" virtual machine not found!"
 		EXIT_CODE=2
 	fi
-	sleep 1
+	sleep 3
 
 done
 

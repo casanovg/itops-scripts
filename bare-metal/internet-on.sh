@@ -9,25 +9,31 @@
 
 source ~/itops-scripts/common/set-env.sh
 
+<<<<<<< HEAD
 for INTERNET in "HTA-Firewall G" "HTA-NetPal X"; do
+=======
+for INTERNET in "HTA-Firewall" "HTA-NetPal"; do
+
+>>>>>>> 4de246279451fc56f681e5570882521e11cb0787
 	EXIT_CODE=0
-	if [ ! -z "$INTERNET" ]; then
-		RUNNING_VM=$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$INTERNET$")
+	VM=$(vboxmanage list vms | gawk -F\" '{print $(NF-1)}' | grep -w "^$INTERNET$")
+	if [ ! -z "$VM" ]; then
+		RUNNING_VM=$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$VM$")
 		if [ -z "$RUNNING_VM" ]; then
 			echo ""
-			echo "$INTERNET virtual machine inactive, trying to power it on ..."
-			vboxmanage startvm "$INTERNET" --type headless
+			echo "$VM virtual machine inactive, trying to power it on ..."
+			vboxmanage startvm "$VM" --type headless
 		else
 			echo ""
-			echo "$INTERNET virtual machine already active!"
+			echo "$RUNNING_VM virtual machine already active!"
 			EXIT_CODE=1
 		fi
 	else
 		echo ""
-		echo "$1 virtual machine not found!"
+		echo "$INTERNET virtual machine not found!"
 		EXIT_CODE=2
 	fi
-	sleep 5
+	sleep 3
 done
 
 echo ""

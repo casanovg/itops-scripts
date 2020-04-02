@@ -30,7 +30,6 @@ for INTERNET in HTA-NetPal HTA-Firewall; do
 		else
 			echo ""
 			echo ""$INTERNET" virtual machine not active!"
-			echo ""
 			EXIT_CODE=1
 		fi
 	else
@@ -42,5 +41,6 @@ for INTERNET in HTA-NetPal HTA-Firewall; do
 
 done
 
+echo ""
 exit $EXIT_CODE
 

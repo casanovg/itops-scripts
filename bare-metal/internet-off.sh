@@ -13,9 +13,8 @@ EXIT_CODE=0
 for INTERNET in "HTA-NetPal" "HTA-Firewall 2"; do
 
 	VM=$(vboxmanage list vms | gawk -F\" '{print $(NF-1)}' | grep -w "^$INTERNET$")
-	echo --- $VM
 	if [ ! -z "$VM" ]; then
-		RUNNING_VM=$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "$VM")
+		RUNNING_VM=$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$VM$")
 		if [ ! -z "$RUNNING_VM" ]; then
 			echo ""
 			echo ""$RUNNING_VM" virtual machine active, sending shutdown signal ..."
@@ -31,12 +30,12 @@ for INTERNET in "HTA-NetPal" "HTA-Firewall 2"; do
 			echo ""
 		else
 			echo ""
-			echo ""$RUNNING_VM" virtual machine not active!"
+			echo ""$VM" virtual machine not active!"
 			EXIT_CODE=1
 		fi
 	else
 		echo ""
-		echo "\"$VM\" virtual machine not found!"
+		echo ""$INTERNET" virtual machine not found!"
 		EXIT_CODE=2
 	fi
 	sleep 1

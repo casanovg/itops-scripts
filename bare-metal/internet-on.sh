@@ -9,14 +9,10 @@
 
 source ~/itops-scripts/common/set-env.sh
 
-#VM=$(vboxmanage list vms | gawk -F\" '{print $(NF-1)}' | grep -w "^$1$")
-
 for INTERNET in HTA-Firewall HTA-NetPal; do
-
 	EXIT_CODE=0
-
 	if [ ! -z "$INTERNET" ]; then
-		RUNNING_VM=$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$INTERNET")
+		RUNNING_VM=$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$INTERNET$")
 		if [ -z "$RUNNING_VM" ]; then
 			echo ""
 			echo "$INTERNET virtual machine inactive, trying to power it on ..."
@@ -31,7 +27,7 @@ for INTERNET in HTA-Firewall HTA-NetPal; do
 		echo "$1 virtual machine not found!"
 		EXIT_CODE=2
 	fi
-
+	sleep 5
 done
 
 echo ""

@@ -9,7 +9,7 @@
 
 source ~/itops-scripts/common/set-env.sh
 
-for INTERNET in HTA-Firewall HTA-NetPal; do
+for INTERNET in "HTA-Firewall G" "HTA-NetPal X"; do
 	EXIT_CODE=0
 	if [ ! -z "$INTERNET" ]; then
 		RUNNING_VM=$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$INTERNET$")

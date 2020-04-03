@@ -1,8 +1,8 @@
 # FIREWALL_VM="HTA-Firewall"
 # OPENVPN_VM="HTA-NetPal"
 
-FIREWALL_VM="HTA-Cloudd"
-OPENVPN_VM="NB-Hibous"
+FIREWALL_VM="HTA-Cloud"
+OPENVPN_VM="NB-Hibou"
 
 # Am I running the internet basic services?
 FIREWALL_RUNNING=$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$FIREWALL_VM$")
@@ -10,15 +10,15 @@ OPENVPN_RUNNING=$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | gre
 
 echo ""
 if [ $FIREWALL_RUNNING ]; then
-    echo "Firewall: "$FIREWALL_RUNNING" VM running on this server ($(hostname -s))..."
+    echo "Firewall: "$FIREWALL_RUNNING" running on this machine ($(hostname -s))..."
 else
-    echo "Firewall: "$FIREWALL_VM" VM NOT running on this server ($(hostname -s))..."
+    echo "Firewall: "$FIREWALL_VM" NOT running on this machine ($(hostname -s))..."
 fi
 
 if [ $OPENVPN_RUNNING ]; then
-    echo " OpenVPN: "$OPENVPN_RUNNING" VM running on this server ($(hostname -s))..."
+    echo " OpenVPN: "$OPENVPN_RUNNING" running on this machine ($(hostname -s))..."
 else
-    echo " OpenVPN: "$OPENVPN_VM" VM NOT running on this server ($(hostname -s))..."
+    echo " OpenVPN: "$OPENVPN_VM" NOT running on this machine ($(hostname -s))..."
 fi
 echo ""
 

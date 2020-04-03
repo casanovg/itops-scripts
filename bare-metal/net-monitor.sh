@@ -1,7 +1,8 @@
 declare -i TARGETS=0
-declare -i TESTED=0
+declare -i NO_ANS=0
 declare -i SEC=0
 declare -i MIN=0
+declare -i JOT=0
 
 INTERNET_TARGET_1="10.6.17.36"
 LOCAL_TARGET_1="10.6.17.1"
@@ -18,32 +19,29 @@ echo "Targets to test: $TARGETS"
 echo ""
 
 # Check internet
-while ! ping -c1 -w2 "$INTERNET_TARGET_1" &>/dev/null; do
+for TGT in $INTERNET_TARGET_1 2 3 10.6.17.37 5; do
+  while ! ping -c1 -w2 "$TGT" &>/dev/null; do
 
-  echo "Total downtime: " $MIN:$SEC
-
-  if [ $MIN == 0 ] && [ $SEC == 10 ]; then
+    echo "Total downtime: " $MIN:$SEC
+    
     echo ""
-    echo "  WOW! Target failed ..."
+    if [ $MIN == 0 ] && [ $SEC == 10 ]; then
+      echo "  WOW! Target $TGT failed ..."
+      NO_ANS=NO_ANS+1
+      break
+    fi
     echo ""
-    TESTED=2**TARGETS
-    break
-  fi
 
-  sleep 10
+    sleep 10
 
-  SEC=SEC+10
+    SEC=SEC+10
 
-  if [ $SEC == 60 ]; then
-    SEC=0
-    MIN=MIN+1
-  fi
+    if [ $SEC == 60 ]; then
+      SEC=0
+      MIN=MIN+1
+    fi
 
+  done
 done
 
-echo " Sarasa starting: $TESTED ..."
-echo ""
-
-declare -i JOT=TESTED & 16
-
-echo "Lalucha: $JOT"
+echo " Hosts no aswering: $NO_ANS ..."

@@ -4,7 +4,7 @@ declare -i TARGETS=0
 declare -i SEC=0
 declare -i MIN=0
 
-INTERNET_TARGET_1="10.6.17.37"
+INTERNET_TARGET_1="10.6.17.36"
 LOCAL_TARGET_1="10.6.17.1"
 LOCAL_TARGET_2="10.6.17.41"
 
@@ -18,8 +18,8 @@ echo ""
 
 
 # Check internet
-#while ! ping -c1 -w2 "$INTERNET_TARGET_1" &> /dev/null; do
-while [ "$(ping -c1 -w2 "$INTERNET_TARGET_1")" ]; do
+while ! ping -c1 -w2 "$INTERNET_TARGET_1" &> /dev/null; do
+
   echo " Total downtime: " $MIN:$SEC
 
   if [ $MIN == 3 ] && [ $SEC == 30 ]; then

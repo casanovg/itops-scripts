@@ -1,10 +1,8 @@
 # FIREWALL_VM="HTA-Firewall"
 # OPENVPN_VM="HTA-NetPal"
 
-FIREWALL_VM="HTA-Cloud"
-# OPENVPN_VM="NB-Hibou"
+FIREWALL_VM="NB-Hibou"
 FIREWALL_HERE=0
-# OPENVPN_HERE=0
 INTERNET_TARGET="8.8.8.6"
 FIREWALL_TARGET="10.6.17.86"
 INTERNET_REACHED=0
@@ -12,10 +10,12 @@ FIREWALL_REACHED=0
 INTERNET_PING_RETRIES=5
 FIREWALL_PING_RETRIES=5
 PING_TIMEOUT=2
-PING_RESULT=0
+BARE_METAL_1=10.6.17.30
+BARE_METAL_2=10.6.17.40
+BARE_METAL_3=10.6.17.50
 
 echo ""
-echo "$(date -I --date='now'): Pinging network targets ..."
+echo "$(date +%F" "%T) ($(hostname -s)): Pinging network targets ..."
 echo ""
 
 # Are basic internet services running on this machine?
@@ -33,7 +33,7 @@ fi
 # echo ""
 # echo "Checking whether a well-known internet target ($INTERNET_TARGET) is reachable ..."
 # echo ""
-echo -n "Internet: "
+echo -n "Internet target -> "
 while [ "$INTERNET_PING_RETRIES" -gt 0 ]; do
     if ping -c 1 -w $PING_TIMEOUT $INTERNET_TARGET &>/dev/null; then
         echo -n ". "
@@ -48,8 +48,8 @@ echo ""
 # Check whether the local firewall is reachable
 # echo ""
 # echo "Checking whether the local firewall ($FIREWALL_TARGET) is reachable ..."
-# echo ""
-echo -n "LAN target: "
+echo ""
+echo -n "Firewall on LAN -> "
 while [ "$FIREWALL_PING_RETRIES" -gt 0 ]; do
     if ping -c 1 -w $PING_TIMEOUT $FIREWALL_TARGET &>/dev/null; then
         echo -n ". "
@@ -64,30 +64,37 @@ echo ""
 
 if [ $INTERNET_REACHED == 1 ]; then
     echo ""
-    echo "$(date -I --date='now'): Internet target reached, it is all right, finishing ..."
+    echo "$(date +%F" "%T) ($(hostname -s)): Internet target reached, it is all right, finishing ..."
+    echo ""
     exit 0
 else
     echo ""
-    echo "$(date -I --date='now'): Internet target NOT reached, checking the firewall LAN interface ..."
+    echo "$(date +%F" "%T) ($(hostname -s)): Internet target NOT reached, checking the firewall LAN interface ..."
     if [ $FIREWALL_REACHED == 1 ]; then
         echo ""
-        echo "$(date -I --date='now'): The firewall appears active on local LAN, maybe there is a temporal internet failure, finishing ..."
+        echo "$(date +%F" "%T) ($(hostname -s)): The firewall appears active on local LAN, maybe there is a temporal internet failure, finishing ..."
+        echo ""
         exit 1
-
     else
         echo ""
-        echo "$(date -I --date='now'): The Firewall does NOT reply to ping on local LAN, checking whether is running on this machine ..."
+        echo "$(date +%F" "%T) ($(hostname -s)): The Firewall does NOT reply to ping on local LAN, checking whether is running on this machine ..."
+        sleep 1
         if [ $FIREWALL_HERE == 1 ]; then
             echo ""
-            echo "$(date -I --date='now'): $FIREWALL_VM is running on this machine ($(hostname -s)) but it does not respond"
-            echo "to ping on LAN, maybe there is a local VirtualBox hypervisor failure ..."
+            echo "$(date +%F" "%T) ($(hostname -s)): $FIREWALL_VM is running on this machine but it does not respond"
+            echo "                                      to ping on LAN, maybe there is a local VirtualBox hypervisor failure ..."
+            sleep 1
             echo ""
-            echo "$(date -I --date='now'): Stopping Firewall and OpenVPN in the hope that another machine takes over the services ..."
+            echo "$(date +%F" "%T) ($(hostname -s)): Stopping Firewall and OpenVPN in the hope that another machine takes over the services ..."
+            sleep 1
             # ~/itops-scripts/bare-metal/internet-off.sh
+            ~/itops-scripts/bare-metal/vm-off.sh $FIREWALL_VM
         else
             echo ""
-            echo "$(date -I --date='now'): $FIREWALL_VM NOT present on LAN, starting internet services on this machine ($(hostname -s))!"
+            echo "$(date +%F" "%T) ($(hostname -s)): Firewall NOT present on LAN, starting internet services on this machine!"
+            sleep 1
             # ~/itops-scripts/bare-metal/internet-on.sh
+            ~/itops-scripts/bare-metal/vm-on.sh $FIREWALL_VM
         fi        
     fi
 fi

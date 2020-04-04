@@ -13,9 +13,11 @@ PING_TIMEOUT=2
 BARE_METAL_1=10.6.17.30
 BARE_METAL_2=10.6.17.40
 BARE_METAL_3=10.6.17.50
+THIS_BARE_METAL=$(hostname -s | tr a-z A-Z)
+THIS_BARE_METAL_IP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | grep -v '192.')
 
 echo ""
-echo "$(date +%F" "%T) ($(hostname -s)): Pinging network targets ..."
+echo "$(date +%F" "%T) ($THIS_BARE_METAL $THIS_BARE_METAL_IP): Pinging network targets ..."
 echo ""
 
 # Are basic internet services running on this machine?
@@ -64,34 +66,35 @@ echo ""
 
 if [ $INTERNET_REACHED == 1 ]; then
     echo ""
-    echo "$(date +%F" "%T) ($(hostname -s)): Internet target reached, it is all right, finishing ..."
+    echo "$(date +%F" "%T) ($THIS_BARE_METAL): Internet target reached, it is all right, finishing ..."
     echo ""
     exit 0
 else
     echo ""
-    echo "$(date +%F" "%T) ($(hostname -s)): Internet target NOT reached, checking the firewall LAN interface ..."
+    echo "$(date +%F" "%T) ($THIS_BARE_METAL): Internet target NOT reached, checking the firewall LAN interface ..."
     if [ $FIREWALL_REACHED == 1 ]; then
         echo ""
-        echo "$(date +%F" "%T) ($(hostname -s)): The firewall appears active on local LAN, maybe there is a temporal internet failure, finishing ..."
+        echo "$(date +%F" "%T) ($THIS_BARE_METAL): The firewall appears active on local LAN, maybe there is a temporal internet failure, finishing ..."
         echo ""
         exit 1
     else
         echo ""
-        echo "$(date +%F" "%T) ($(hostname -s)): The Firewall does NOT reply to ping on local LAN, checking whether is running on this machine ..."
+        echo "$(date +%F" "%T) ($THIS_BARE_METAL): The Firewall does NOT reply to ping on local LAN, checking whether is running on this machine ..."
         sleep 1
         if [ $FIREWALL_HERE == 1 ]; then
             echo ""
-            echo "$(date +%F" "%T) ($(hostname -s)): $FIREWALL_VM is running on this machine but it does not respond"
-            echo "                                      to ping on LAN, maybe there is a local VirtualBox hypervisor failure ..."
+            echo "$(date +%F" "%T) ($THIS_BARE_METAL): $FIREWALL_VM is running on this machine but it does not respond to ping"
+            echo "                                      on LAN, maybe there is a local VirtualBox hypervisor failure ..."
             sleep 1
             echo ""
-            echo "$(date +%F" "%T) ($(hostname -s)): Stopping Firewall and OpenVPN in the hope that another machine takes over the services ..."
+            echo "$(date +%F" "%T) ($THIS_BARE_METAL): Stopping Firewall and OpenVPN in the hope that another machine takes over the services ..."
             sleep 1
             # ~/itops-scripts/bare-metal/internet-off.sh
             ~/itops-scripts/bare-metal/vm-off.sh $FIREWALL_VM
+            echo "$(date +%F" "%T) ($THIS_BARE_METAL): Firewall and OpenVPN should be stopped by now, finishing ..."
         else
             echo ""
-            echo "$(date +%F" "%T) ($(hostname -s)): Firewall NOT present on LAN, starting internet services on this machine!"
+            echo "$(date +%F" "%T) ($THIS_BARE_METAL): Firewall NOT present on LAN, starting internet services on this machine!"
             sleep 1
             # ~/itops-scripts/bare-metal/internet-on.sh
             ~/itops-scripts/bare-metal/vm-on.sh $FIREWALL_VM

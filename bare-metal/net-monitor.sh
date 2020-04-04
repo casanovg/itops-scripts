@@ -10,9 +10,9 @@ FIREWALL_REACHED=0
 INTERNET_PING_RETRIES=5
 FIREWALL_PING_RETRIES=5
 PING_TIMEOUT=2
-BARE_METAL_1=10.6.17.30
+BARE_METAL_1=10.6.17.130
 BARE_METAL_2=10.6.17.40
-BARE_METAL_3=10.6.17.50
+BARE_METAL_3=10.6.17.150
 BARE_METALS_ACTIVE=0
 THIS_BARE_METAL=$(hostname -s | tr a-z A-Z)
 THIS_BARE_METAL_IP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | grep -v '192.')
@@ -38,7 +38,6 @@ for BARE_METAL in $BARE_METAL_1 $BARE_METAL_2 $BARE_METAL_3; do
         fi
     fi
 done
-echo "Other bare-metal servers active: $BARE_METALS_ACTIVE"
 
 echo ""
 echo "$(date +%F" "%T) ($THIS_BARE_METAL $THIS_BARE_METAL_IP): Pinging network targets ..."
@@ -116,15 +115,14 @@ else
                 sleep 1
                 # ~/itops-scripts/bare-metal/internet-off.sh
                 ~/itops-scripts/bare-metal/vm-off.sh $FIREWALL_VM
+                echo "$(date +%F" "%T) ($THIS_BARE_METAL): Firewall and OpenVPN should be stopped by now, finishing ..."
             else
                 echo "$(date +%F" "%T) ($THIS_BARE_METAL): There are no other bare-metal machines active!"
                 echo ""
-                echo "$(date +%F" "%T) ($THIS_BARE_METAL): Attempting a last-resource server reboot ..."
+                echo "$(date +%F" "%T) ($THIS_BARE_METAL): Stopping all services and attempting a server last resort reboot, Bye!"
                 sleep 1
             # ~/itops-scripts/bare-metal/stop-and-reboot.sh
-            fi
-
-            echo "$(date +%F" "%T) ($THIS_BARE_METAL): Firewall and OpenVPN should be stopped by now, finishing ..."
+            fi     
         else
             echo ""
             echo "$(date +%F" "%T) ($THIS_BARE_METAL): Firewall NOT present on LAN, starting internet services on this machine!"

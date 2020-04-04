@@ -2,9 +2,9 @@
 # OPENVPN_VM="HTA-NetPal"
 
 FIREWALL_VM="HTA-Cloud"
-OPENVPN_VM="NB-Hibou"
+# OPENVPN_VM="NB-Hibou"
 FIREWALL_HERE=0
-OPENVPN_HERE=0
+# OPENVPN_HERE=0
 INTERNET_TARGET="8.8.8.6"
 FIREWALL_TARGET="10.6.17.86"
 INTERNET_REACHED=0
@@ -14,31 +14,26 @@ FIREWALL_PING_RETRIES=5
 PING_TIMEOUT=2
 PING_RESULT=0
 
+echo ""
+echo "$(date -I --date='now'): Pinging network targets ..."
+echo ""
+
 # Are basic internet services running on this machine?
-echo ""
-echo "Checking whether the firewall VM is running on this machine ..."
-echo ""
+# echo ""
+# echo "Checking whether the firewall VM is running on this machine ..."
+# echo ""
 if [ "$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$FIREWALL_VM$")" ]; then
     FIREWALL_HERE=1
-    echo "Firewall running here ..."
-else
-    echo "Firewall NOT running here ..."
-fi
-
-echo ""
-echo "Checking whether the OpenVPN VM is running on this machine ..."
-echo ""
-if [ "$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$OPENVPN_VM$")" ]; then
-    OPENVPN_HERE=1
-    echo "OpenVPN running here ..."
-else
-    echo "OpenVPN NOT running here ..."
+    # echo "Firewall running here ..."
+#else
+    # echo "Firewall NOT running here ..."
 fi
 
 # Check whether a well-known internet target is reachable
-echo ""
-echo "Checking whether a well-known internet target ($INTERNET_TARGET) is reachable ..."
-echo ""
+# echo ""
+# echo "Checking whether a well-known internet target ($INTERNET_TARGET) is reachable ..."
+# echo ""
+echo -n "Internet: "
 while [ "$INTERNET_PING_RETRIES" -gt 0 ]; do
     if ping -c 1 -w $PING_TIMEOUT $INTERNET_TARGET &>/dev/null; then
         echo -n ". "
@@ -51,9 +46,10 @@ done
 echo ""
 
 # Check whether the local firewall is reachable
-echo ""
-echo "Checking whether the local firewall ($FIREWALL_TARGET) is reachable ..."
-echo ""
+# echo ""
+# echo "Checking whether the local firewall ($FIREWALL_TARGET) is reachable ..."
+# echo ""
+echo -n "LAN target: "
 while [ "$FIREWALL_PING_RETRIES" -gt 0 ]; do
     if ping -c 1 -w $PING_TIMEOUT $FIREWALL_TARGET &>/dev/null; then
         echo -n ". "
@@ -68,44 +64,30 @@ echo ""
 
 if [ $INTERNET_REACHED == 1 ]; then
     echo ""
-    echo "Internet target reached, nothing left to do, exiting now ..."
+    echo "$(date -I --date='now'): Internet target reached, it is all right, finishing ..."
     exit 0
 else
     echo ""
-    echo "Internet target NOT reached, checking the local firewall LAN interface ..."
+    echo "$(date -I --date='now'): Internet target NOT reached, checking the firewall LAN interface ..."
     if [ $FIREWALL_REACHED == 1 ]; then
         echo ""
-        echo "The firewall appears active on local LAN, maybe there is a temporal internet failure, exiting ..."
+        echo "$(date -I --date='now'): The firewall appears active on local LAN, maybe there is a temporal internet failure, finishing ..."
         exit 1
 
     else
         echo ""
-        echo "The Firewall does NOT reply to ping on local LAN, checking whether is running on this machine ..."
+        echo "$(date -I --date='now'): The Firewall does NOT reply to ping on local LAN, checking whether is running on this machine ..."
         if [ $FIREWALL_HERE == 1 ]; then
             echo ""
-            echo "$FIREWALL_VM is running on this machine ($(hostname -s)) but it does not respond"
-            echo "to ping, maybe there is a local VirtualBox hypervisor failure ..."
+            echo "$(date -I --date='now'): $FIREWALL_VM is running on this machine ($(hostname -s)) but it does not respond"
+            echo "to ping on LAN, maybe there is a local VirtualBox hypervisor failure ..."
             echo ""
-            echo "Stopping Firewall VM in the hope that another server takes over the service ..."
-            # ~/itops-scripts/bare-metal/vm-off $FIREWALL_VM
-            if [ $OPENVPN_HERE == 1 ]; then
-                echo ""
-                echo "$OPENVPN_VM is running on this machine ($(hostname -s)), stopping it..."
-            # ~/itops-scripts/bare-metal/vm-off $OPENVPN_VM                
-            fi
-
+            echo "$(date -I --date='now'): Stopping Firewall and OpenVPN in the hope that another machine takes over the services ..."
+            # ~/itops-scripts/bare-metal/internet-off.sh
         else
             echo ""
-            echo "$FIREWALL_VM NOT present on LAN, starting it on this machine ($(hostname -s))!"
-            # ~/itops-scripts/bare-metal/vm-on $FIREWALL_VM
-            if [ $OPENVPN_HERE == 1 ]; then
-                echo ""
-                echo "$OPENVPN_VM running on this machine ($(hostname -s)), leaving it ..."
-            else
-                echo ""
-                echo "$OPENVPN_VM NOT running on this machine ($(hostname -s)), starting it!..."
-                # ~/itops-scripts/bare-metal/vm-on $OPENVPN_VM
-            fi            
+            echo "$(date -I --date='now'): $FIREWALL_VM NOT present on LAN, starting internet services on this machine ($(hostname -s))!"
+            # ~/itops-scripts/bare-metal/internet-on.sh
         fi        
     fi
 fi

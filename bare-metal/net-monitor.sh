@@ -1,10 +1,17 @@
-# FIREWALL_VM="HTA-Firewall"
-# OPENVPN_VM="HTA-NetPal"
+#!/bin/sh
 
-FIREWALL_VM="NB-Hibou"
+# ****************************************************************
+# * Script to check and manage basic essential internet services *
+# * ============================================================ *
+# * 2020-04-04 Gustavo Casanova                                  *
+# * gcasanova@hellermanntyton.com.ar                             *
+# ****************************************************************
+
+# FIREWALL_VM="HTA-Firewall"
+FIREWALL_VM="HTA-Elementary"
 FIREWALL_HERE=0
 INTERNET_TARGET="8.8.8.6"
-FIREWALL_TARGET="10.6.17.1"
+FIREWALL_TARGET="10.6.17.86"
 INTERNET_REACHED=0
 FIREWALL_REACHED=0
 INTERNET_PING_RETRIES=5
@@ -98,18 +105,16 @@ else
     echo "$(date +%F" "%T) ($THIS_BARE_METAL): Internet target NOT reached, checking the firewall LAN interface ..."
     if [ $FIREWALL_REACHED == 1 ]; then
         echo ""
-        echo "$(date +%F" "%T) ($THIS_BARE_METAL): The firewall appears active on local LAN, maybe there is a momentary internet connection break up, finishing ..."
+        echo "$(date +%F" "%T) ($THIS_BARE_METAL): The firewall appears active on LAN, maybe there is a momentary internet connection break-up, finishing ..."
         echo ""
         exit 1
     else
         echo ""
-        echo "$(date +%F" "%T) ($THIS_BARE_METAL): The Firewall does NOT reply to ping on local LAN,"
-        echo "                                      checking whether is running on this machine ..."
+        echo "$(date +%F" "%T) ($THIS_BARE_METAL): The Firewall does NOT reply to ping on local LAN, checking whether is running on this machine ..."
         sleep 1
         if [ $FIREWALL_HERE == 1 ]; then
             echo ""
-            echo "$(date +%F" "%T) ($THIS_BARE_METAL): $FIREWALL_VM is running on this machine but it does not respond to ping"
-            echo "                                      on LAN, maybe there is a local VirtualBox hypervisor failure ..."
+            echo "$(date +%F" "%T) ($THIS_BARE_METAL): $FIREWALL_VM is running on this machine but it does not respond to ping on LAN, maybe there is a local VirtualBox hypervisor failure ..."
             sleep 1
 
             echo ""
@@ -135,7 +140,8 @@ else
         fi
     fi
 fi
-
+echo ""
+echo "@@@@@@@@@@ @@@@@@@@@@ @@@@@@@@@@ @@@@@@@@@@ @@@@@@@@@@"
 echo ""
 
 # declare -i TARGETS=0

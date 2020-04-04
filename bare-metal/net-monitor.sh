@@ -3,24 +3,36 @@
 
 FIREWALL_VM="HTA-Cloud"
 OPENVPN_VM="NB-Hibou"
+FIREWALL_HERE=0
+OPENVPN_HERE=0
+INTERNET_TARGET="8.8.8.8"
+INTERNET_TARGET="6.6.6.6"
+PING_RETRIES=5
+PING_TIMEOUT=2
 
-# Am I running the internet basic services?
-FIREWALL_RUNNING=$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$FIREWALL_VM$")
-OPENVPN_RUNNING=$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$OPENVPN_VM$")
-
+# Are basic internet services running on this machine?
 echo ""
-if [ $FIREWALL_RUNNING ]; then
-    echo "Firewall: "$FIREWALL_RUNNING" running on this machine ($(hostname -s))..."
+if [ $(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$FIREWALL_VM$") ]; then
+    echo "$FIREWALL_VM running on this machine ($(hostname -s))..."
+    FIREWALL_HERE=1
 else
-    echo "Firewall: "$FIREWALL_VM" NOT running on this machine ($(hostname -s))..."
+    echo "$FIREWALL_VM NOT running on this machine ($(hostname -s))..."
 fi
 
-if [ $OPENVPN_RUNNING ]; then
-    echo " OpenVPN: "$OPENVPN_RUNNING" running on this machine ($(hostname -s))..."
+if [ $(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$OPENVPN_VM$") ]; then
+    echo "$OPENVPN_VM running on this machine ($(hostname -s))..."
+    OPENVPN_HERE=1
 else
-    echo " OpenVPN: "$OPENVPN_VM" NOT running on this machine ($(hostname -s))..."
+    echo "$OPENVPN_VM NOT running on this machine ($(hostname -s))..."
 fi
 echo ""
+
+# Check whether a well-known internet target is reachable
+if [ "$(ping -c$PING_RETRIES -w$PING_TIMEOUT "$INTERNET_TARGET")" ]; then
+    echo "OKAPA"
+else
+    echo "NO PING"
+fi
 
 # declare -i TARGETS=0
 # declare -i NO_ANS=0

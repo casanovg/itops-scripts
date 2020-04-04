@@ -13,8 +13,31 @@ PING_TIMEOUT=2
 BARE_METAL_1=10.6.17.30
 BARE_METAL_2=10.6.17.40
 BARE_METAL_3=10.6.17.50
+BARE_METALS_ACTIVE=0
 THIS_BARE_METAL=$(hostname -s | tr a-z A-Z)
 THIS_BARE_METAL_IP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | grep -v '192.')
+
+echo ""
+echo "$(date +%F" "%T) ($THIS_BARE_METAL $THIS_BARE_METAL_IP): Starting essential network services check routine ..."
+
+echo ""
+echo "$(date +%F" "%T) ($THIS_BARE_METAL $THIS_BARE_METAL_IP): Checking active bare-metal servers ..."
+echo ""
+
+for BARE_METAL in $BARE_METAL_1 $BARE_METAL_2 $BARE_METAL_3; do
+    echo -n "Bare-metal server "
+    if [ $BARE_METAL == $THIS_BARE_METAL_IP ]; then
+        echo "$BARE_METAL ($THIS_BARE_METAL) This is me!"
+    else
+        echo -n "$BARE_METAL "
+        if ping -c 1 -w $PING_TIMEOUT $BARE_METAL &>/dev/null; then
+            BARE_METALS_ACTIVE=$((BARE_METALS_ACTIVE + 1))
+            echo "active!"
+        else
+            echo "inactive ..."
+        fi
+    fi
+done
 
 echo ""
 echo "$(date +%F" "%T) ($THIS_BARE_METAL $THIS_BARE_METAL_IP): Pinging network targets ..."
@@ -27,7 +50,7 @@ echo ""
 if [ "$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$FIREWALL_VM$")" ]; then
     FIREWALL_HERE=1
     # echo "Firewall running here ..."
-#else
+    #else
     # echo "Firewall NOT running here ..."
 fi
 
@@ -43,7 +66,7 @@ while [ "$INTERNET_PING_RETRIES" -gt 0 ]; do
     else
         echo -n "x "
     fi
-    INTERNET_PING_RETRIES=$((INTERNET_PING_RETRIES-1))
+    INTERNET_PING_RETRIES=$((INTERNET_PING_RETRIES - 1))
 done
 echo ""
 
@@ -59,10 +82,9 @@ while [ "$FIREWALL_PING_RETRIES" -gt 0 ]; do
     else
         echo -n "x "
     fi
-    FIREWALL_PING_RETRIES=$((FIREWALL_PING_RETRIES-1))
+    FIREWALL_PING_RETRIES=$((FIREWALL_PING_RETRIES - 1))
 done
 echo ""
-
 
 if [ $INTERNET_REACHED == 1 ]; then
     echo ""
@@ -98,7 +120,7 @@ else
             sleep 1
             # ~/itops-scripts/bare-metal/internet-on.sh
             ~/itops-scripts/bare-metal/vm-on.sh $FIREWALL_VM
-        fi        
+        fi
     fi
 fi
 

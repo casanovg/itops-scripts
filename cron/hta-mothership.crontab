@@ -26,7 +26,7 @@
 # Verify every 12 hours that essential network services are running. This schedule
 # is to prevent a virtual machine from restarting while it is being backed up
 # -----------------------------------------------------------------------------------
-# 0 1-23/12 *  *  *  ~/itops-scripts/bare-metal/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
+  0 1-23/12 *  *  *  ~/itops-scripts/bare-metal/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
 
 # Hibou seafile service
 # -----------------------------------------------------------------------------------

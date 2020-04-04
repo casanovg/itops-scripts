@@ -1,7 +1,14 @@
-# FIREWALL_VM="HTA-Firewall"
-# OPENVPN_VM="HTA-NetPal"
+#!/bin/sh
 
-FIREWALL_VM="NB-Hibou"
+# ****************************************************************
+# * Script to check and manage basic essential internet services *
+# * ============================================================ *
+# * 2020-04-04 Gustavo Casanova                                  *
+# * gcasanova@hellermanntyton.com.ar                             *
+# ****************************************************************
+
+# FIREWALL_VM="HTA-Firewall"
+FIREWALL_VM="HTA-Elementary"
 FIREWALL_HERE=0
 INTERNET_TARGET="8.8.8.6"
 FIREWALL_TARGET="10.6.17.86"
@@ -10,9 +17,9 @@ FIREWALL_REACHED=0
 INTERNET_PING_RETRIES=5
 FIREWALL_PING_RETRIES=5
 PING_TIMEOUT=2
-BARE_METAL_1=10.6.17.130
+BARE_METAL_1=10.6.17.30
 BARE_METAL_2=10.6.17.40
-BARE_METAL_3=10.6.17.150
+BARE_METAL_3=10.6.17.50
 BARE_METALS_ACTIVE=0
 THIS_BARE_METAL=$(hostname -s | tr a-z A-Z)
 THIS_BARE_METAL_IP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | grep -v '192.')
@@ -58,7 +65,7 @@ fi
 # echo ""
 # echo "Checking whether a well-known internet target ($INTERNET_TARGET) is reachable ..."
 # echo ""
-echo -n "Internet target -> "
+echo -n "Internet target ($INTERNET_TARGET) -> "
 while [ "$INTERNET_PING_RETRIES" -gt 0 ]; do
     if ping -c 1 -w $PING_TIMEOUT $INTERNET_TARGET &>/dev/null; then
         echo -n ". "
@@ -73,22 +80,24 @@ echo ""
 # Check whether the local firewall is reachable
 # echo ""
 # echo "Checking whether the local firewall ($FIREWALL_TARGET) is reachable ..."
-echo ""
-echo -n "Firewall on LAN -> "
-while [ "$FIREWALL_PING_RETRIES" -gt 0 ]; do
-    if ping -c 1 -w $PING_TIMEOUT $FIREWALL_TARGET &>/dev/null; then
-        echo -n ". "
-        FIREWALL_REACHED=1
-    else
-        echo -n "x "
-    fi
-    FIREWALL_PING_RETRIES=$((FIREWALL_PING_RETRIES - 1))
-done
-echo ""
+if [ $INTERNET_REACHED != 1 ]; then
+    echo ""
+    echo -n "Firewall on LAN ($FIREWALL_TARGET) -> "
+    while [ "$FIREWALL_PING_RETRIES" -gt 0 ]; do
+        if ping -c 1 -w $PING_TIMEOUT $FIREWALL_TARGET &>/dev/null; then
+            echo -n ". "
+            FIREWALL_REACHED=1
+        else
+            echo -n "x "
+        fi
+        FIREWALL_PING_RETRIES=$((FIREWALL_PING_RETRIES - 1))
+    done
+    echo ""
+fi
 
 if [ $INTERNET_REACHED == 1 ]; then
     echo ""
-    echo "$(date +%F" "%T) ($THIS_BARE_METAL): Internet target reached, it is all right, finishing ..."
+    echo "$(date +%F" "%T) ($THIS_BARE_METAL): Internet target reached, check succeeded, finishing ..."
     echo ""
     exit 0
 else
@@ -96,7 +105,7 @@ else
     echo "$(date +%F" "%T) ($THIS_BARE_METAL): Internet target NOT reached, checking the firewall LAN interface ..."
     if [ $FIREWALL_REACHED == 1 ]; then
         echo ""
-        echo "$(date +%F" "%T) ($THIS_BARE_METAL): The firewall appears active on local LAN, maybe there is a temporal internet failure, finishing ..."
+        echo "$(date +%F" "%T) ($THIS_BARE_METAL): The firewall appears active on LAN, maybe there is a momentary internet connection break-up, finishing ..."
         echo ""
         exit 1
     else
@@ -105,8 +114,7 @@ else
         sleep 1
         if [ $FIREWALL_HERE == 1 ]; then
             echo ""
-            echo "$(date +%F" "%T) ($THIS_BARE_METAL): $FIREWALL_VM is running on this machine but it does not respond to ping"
-            echo "                                      on LAN, maybe there is a local VirtualBox hypervisor failure ..."
+            echo "$(date +%F" "%T) ($THIS_BARE_METAL): $FIREWALL_VM is running on this machine but it does not respond to ping on LAN, maybe there is a local VirtualBox hypervisor failure ..."
             sleep 1
 
             echo ""
@@ -119,7 +127,7 @@ else
             else
                 echo "$(date +%F" "%T) ($THIS_BARE_METAL): There are no other bare-metal machines active!"
                 echo ""
-                echo "$(date +%F" "%T) ($THIS_BARE_METAL): Stopping all services and attempting a server last resort reboot, Bye!"
+                echo "$(date +%F" "%T) ($THIS_BARE_METAL): Stopping all services and attempting a server last-resort reboot, Bye!"
                 sleep 1
             # ~/itops-scripts/bare-metal/stop-and-reboot.sh
             fi     
@@ -132,7 +140,8 @@ else
         fi
     fi
 fi
-
+echo ""
+echo "@@@@@@@@@@ @@@@@@@@@@ @@@@@@@@@@ @@@@@@@@@@ @@@@@@@@@@"
 echo ""
 
 # declare -i TARGETS=0

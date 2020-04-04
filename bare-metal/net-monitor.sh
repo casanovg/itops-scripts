@@ -18,21 +18,21 @@ PING_RESULT=0
 echo ""
 echo "Checking whether the firewall VM is running on this machine ..."
 echo ""
-if [ $(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$FIREWALL_VM$") ]; then
+if [ "$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$FIREWALL_VM$")" ]; then
     FIREWALL_HERE=1
-    echo "Firewall found ..."
+    echo "Firewall running here ..."
 else
-    echo "Firewall NOT found ..."
+    echo "Firewall NOT running here ..."
 fi
 
 echo ""
 echo "Checking whether the OpenVPN VM is running on this machine ..."
 echo ""
-if [ $(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$OPENVPN_VM$") ]; then
+if [ "$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$OPENVPN_VM$")" ]; then
     OPENVPN_HERE=1
-    echo "OpenVPN found ..."
+    echo "OpenVPN running here ..."
 else
-    echo "openVPN NOT found ..."
+    echo "OpenVPN NOT running here ..."
 fi
 
 # Check whether a well-known internet target is reachable
@@ -65,38 +65,52 @@ while [ "$FIREWALL_PING_RETRIES" -gt 0 ]; do
 done
 echo ""
 
-echo ""
+
 if [ $INTERNET_REACHED == 1 ]; then
-    echo "Internet target reached: "$INTERNET_REACHED
+    echo ""
+    echo "Internet target reached, nothing left to do, exiting now ..."
+    exit 0
 else
-    echo "Internet target NOT reached: "$INTERNET_REACHED
+    echo ""
+    echo "Internet target NOT reached, checking the local firewall LAN interface ..."
+    if [ $FIREWALL_REACHED == 1 ]; then
+        echo ""
+        echo "The firewall appears active on local LAN, maybe there is a temporal internet failure, exiting ..."
+        exit 1
+
+    else
+        echo ""
+        echo "The Firewall does NOT reply to ping on local LAN, checking whether is running on this machine ..."
+        if [ $FIREWALL_HERE == 1 ]; then
+            echo ""
+            echo "$FIREWALL_VM running on this machine ($(hostname -s)) but it does not respond"
+            echo "to ping, maybe there is a local VirtualBox hypervisor failure ..."
+            echo ""
+            echo "Stopping Firewall VM in the hope that another server takes over the service ..."
+            # ~/itops-scripts/bare-metal/vm-off $FIREWALL_VM
+            if [ $OPENVPN_HERE == 1 ]; then
+                echo ""
+                echo "$OPENVPN_VM running on this machine ($(hostname -s)), stopping it..."
+            # ~/itops-scripts/bare-metal/vm-off $OPENVPN_VM                
+            fi
+
+        else
+            echo ""
+            echo "$FIREWALL_VM NOT present on LAN, starting it on this machine ($(hostname -s))!"
+            # ~/itops-scripts/bare-metal/vm-on $FIREWALL_VM
+            if [ $OPENVPN_HERE == 1 ]; then
+                echo ""
+                echo "$OPENVPN_VM running on this machine ($(hostname -s)), leaving it ..."
+            else
+                echo ""
+                echo "$OPENVPN_VM NOT running on this machine ($(hostname -s)), starting it!..."
+                # ~/itops-scripts/bare-metal/vm-on $OPENVPN_VM
+            fi            
+        fi        
+    fi
 fi
 
 echo ""
-if [ $FIREWALL_REACHED == 1 ]; then
-    echo "Firewall reached: "$FIREWALL_REACHED
-else
-    echo "Firewall NOT reached: "$FIREWALL_REACHED
-fi
-
-echo ""
-if [ $FIREWALL_HERE == 1 ]; then
-    echo "$FIREWALL_VM running on this machine ($(hostname -s))..."
-else
-    echo "$FIREWALL_VM NOT running on this machine ($(hostname -s))..."
-fi
-
-echo ""
-if [ $OPENVPN_HERE == 1 ]; then
-    echo "$OPENVPN_VM running on this machine ($(hostname -s))..."
-else
-    echo "$OPENVPN_VM NOT running on this machine ($(hostname -s))..."
-fi
-echo ""
-
-#echo "Unable to reach a well-known internet target, checking whether the local firewall replies ..."
-#echo "Firewall VM running but it does not respond to ping, maybe there is a local VirtualBox hypervisor problem ..."
-
 
 # declare -i TARGETS=0
 # declare -i NO_ANS=0

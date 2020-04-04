@@ -38,6 +38,7 @@ for BARE_METAL in $BARE_METAL_1 $BARE_METAL_2 $BARE_METAL_3; do
         fi
     fi
 done
+echo "Other bare-metal servers active: $BARE_METALS_ACTIVE"
 
 echo ""
 echo "$(date +%F" "%T) ($THIS_BARE_METAL $THIS_BARE_METAL_IP): Pinging network targets ..."
@@ -108,11 +109,21 @@ else
             echo "$(date +%F" "%T) ($THIS_BARE_METAL): $FIREWALL_VM is running on this machine but it does not respond to ping"
             echo "                                      on LAN, maybe there is a local VirtualBox hypervisor failure ..."
             sleep 1
+
             echo ""
-            echo "$(date +%F" "%T) ($THIS_BARE_METAL): Stopping Firewall and OpenVPN in the hope that another machine takes over the services ..."
-            sleep 1
-            # ~/itops-scripts/bare-metal/internet-off.sh
-            ~/itops-scripts/bare-metal/vm-off.sh $FIREWALL_VM
+            if [ $BARE_METALS_ACTIVE -ge 1 ]; then
+                echo "$(date +%F" "%T) ($THIS_BARE_METAL): Stopping Firewall and OpenVPN in the hope that another machine takes over the services ..."
+                sleep 1
+                # ~/itops-scripts/bare-metal/internet-off.sh
+                ~/itops-scripts/bare-metal/vm-off.sh $FIREWALL_VM
+            else
+                echo "$(date +%F" "%T) ($THIS_BARE_METAL): There are no other bare-metal machines active!"
+                echo ""
+                echo "$(date +%F" "%T) ($THIS_BARE_METAL): Attempting a last-resource server reboot ..."
+                sleep 1
+            # ~/itops-scripts/bare-metal/stop-and-reboot.sh
+            fi
+
             echo "$(date +%F" "%T) ($THIS_BARE_METAL): Firewall and OpenVPN should be stopped by now, finishing ..."
         else
             echo ""

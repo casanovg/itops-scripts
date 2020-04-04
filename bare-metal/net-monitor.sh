@@ -83,14 +83,14 @@ else
         echo "The Firewall does NOT reply to ping on local LAN, checking whether is running on this machine ..."
         if [ $FIREWALL_HERE == 1 ]; then
             echo ""
-            echo "$FIREWALL_VM running on this machine ($(hostname -s)) but it does not respond"
+            echo "$FIREWALL_VM is running on this machine ($(hostname -s)) but it does not respond"
             echo "to ping, maybe there is a local VirtualBox hypervisor failure ..."
             echo ""
             echo "Stopping Firewall VM in the hope that another server takes over the service ..."
             # ~/itops-scripts/bare-metal/vm-off $FIREWALL_VM
             if [ $OPENVPN_HERE == 1 ]; then
                 echo ""
-                echo "$OPENVPN_VM running on this machine ($(hostname -s)), stopping it..."
+                echo "$OPENVPN_VM is running on this machine ($(hostname -s)), stopping it..."
             # ~/itops-scripts/bare-metal/vm-off $OPENVPN_VM                
             fi
 

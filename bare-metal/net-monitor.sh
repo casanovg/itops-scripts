@@ -6,9 +6,10 @@ OPENVPN_VM="NB-Hibou"
 FIREWALL_HERE=0
 OPENVPN_HERE=0
 INTERNET_TARGET="8.8.8.8"
-INTERNET_TARGET="6.6.6.6"
+INTERNET_REACHED=0
 PING_RETRIES=5
 PING_TIMEOUT=2
+PING_RESULT=0
 
 # Are basic internet services running on this machine?
 echo ""
@@ -28,11 +29,27 @@ fi
 echo ""
 
 # Check whether a well-known internet target is reachable
-if [ "$(ping -c$PING_RETRIES -w$PING_TIMEOUT "$INTERNET_TARGET")" ]; then
-    echo "OKAPA"
-else
-    echo "NO PING"
-fi
+#PING_RESULT=$(ping -c$PING_RETRIES -w$PING_TIMEOUT $INTERNET_TARGET)
+#ping -c$PING_RETRIES -w$PING_TIMEOUT $INTERNET_TARGET
+#PING_RESULT=$?
+#echo "PR: $PING_RESULT"
+#if [ $PING_RESULT != 0 ]; then
+while [ "$PING_RETRIES" -gt 0 ]; do
+    if ping -c 1 -w $PING_TIMEOUT $INTERNET_TARGET &>/dev/null; then
+        echo -n ". "
+        INTERNET_REACHED=1
+    else
+        echo -n "x "
+    fi
+    PING_RETRIES=$((PING_RETRIES-1))
+done
+echo ""
+echo ""
+echo "Al final: "$INTERNET_REACHED
+echo ""
+
+
+
 
 # declare -i TARGETS=0
 # declare -i NO_ANS=0

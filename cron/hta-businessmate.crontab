@@ -27,11 +27,14 @@
 # is to prevent a virtual machine from restarting while it is being backed up
 # -----------------------------------------------------------------------------------
   0 */6 *  *  *     ~/itops-scripts/bare-metal/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
-  0  10 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh "HTA-Firewall"
-  0  10 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh "HTA-NetPal"
+# 0  10 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh "HTA-Firewall"
+# 0  10 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh "HTA-NetPal"
 
 # Restart access control and surveillance virtual machine (After every host restart)
 # -----------------------------------------------------------------------------------
   0  16 *  *  sun   ~/itops-scripts/bare-metal/vm-restart.sh "HTA-ACC"
 # 30 23 *  *  wed   ~/itops-scripts/bare-metal/vm-restart.sh "HTA-ACC"
+
+  58 0  *  *  sun   ~/itops-scripts/bare-metal/vm-off.sh "HTA-Firewall"
+  58 0  *  *  sun   ~/itops-scripts/bare-metal/vm-off.sh "HTA-NetPal"
 

@@ -11,9 +11,9 @@
 # -----------------------------------------------------------------------------------
   @reboot sleep 90 && ~/itops-scripts/bare-metal/vboxall-on.sh
 
-# Server operating system update (Every Wednesday at 21:15 PM)
+# Server operating system update (Every Monday at 21:15 PM)
 # -----------------------------------------------------------------------------------
-  15 21 *  *  wed   ~/itops-scripts/bare-metal/update-os.sh
+  15 21 *  *  mon   ~/itops-scripts/bare-metal/update-os.sh
 
 # VirtualBox full virtual machines backup (Every Sunday at 07:00 AM)
 # -----------------------------------------------------------------------------------

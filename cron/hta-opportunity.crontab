@@ -23,9 +23,8 @@
 # -----------------------------------------------------------------------------------
   0  *  *  *  *     ~/itops-scripts/utils/git-sync.sh
 
-# Verify every 6 hours that essential network services are running. This schedule
+# Verify every 12 hours that essential network services are running. This schedule
 # is to prevent a virtual machine from restarting while it is being backed up
 # -----------------------------------------------------------------------------------
-# 0 */6 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh "HTA-Firewall"
-# 0 */6 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh "HTA-NetPal"
+  0 3-23/12 *  *  *  ~/itops-scripts/bare-metal/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
 

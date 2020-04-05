@@ -11,9 +11,9 @@
 # -----------------------------------------------------------------------------------
   @reboot sleep 90 && ~/itops-scripts/bare-metal/vboxall-on.sh
 
-# Server operating system update (Every Wednesday at 21:15 PM)
+# Server operating system update (Every Monday at 21:15 PM)
 # -----------------------------------------------------------------------------------
-  15 21 *  *  wed   ~/itops-scripts/bare-metal/update-os.sh
+  15 21 *  *  mon   ~/itops-scripts/bare-metal/update-os.sh
 
 # VirtualBox full virtual machines backup (Every Sunday at 07:00 AM)
 # -----------------------------------------------------------------------------------
@@ -26,8 +26,9 @@
 # Verify every 6 hours that essential network services are running. This schedule
 # is to prevent a virtual machine from restarting while it is being backed up
 # -----------------------------------------------------------------------------------
-  0 */6 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh "HTA-Firewall"
-  0 */6 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh "HTA-NetPal"
+  0 */6 *  *  *     ~/itops-scripts/bare-metal/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
+  0  10 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh "HTA-Firewall"
+  0  10 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh "HTA-NetPal"
 
 # Restart access control and surveillance virtual machine (After every host restart)
 # -----------------------------------------------------------------------------------

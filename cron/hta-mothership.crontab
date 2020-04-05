@@ -32,5 +32,3 @@
 # -----------------------------------------------------------------------------------
   0 */6 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh "NB-Hibou"
 
-  58 14 *  *  sun   ~/itops-scripts/bare-metal/internet-off.sh
-

@@ -28,5 +28,3 @@
 # -----------------------------------------------------------------------------------
   0 3-23/12 *  *  *  ~/itops-scripts/bare-metal/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
 
-  58 17 *  *  sun   ~/itops-scripts/bare-metal/internet-off.sh
-

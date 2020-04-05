@@ -27,4 +27,5 @@
 # is to prevent a virtual machine from restarting while it is being backed up
 # -----------------------------------------------------------------------------------
   0 3-23/12 *  *  *  ~/itops-scripts/bare-metal/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
+35 1  *  *  *  ~/itops-scripts/bare-metal/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
 

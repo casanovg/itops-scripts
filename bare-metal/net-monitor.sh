@@ -7,7 +7,6 @@
 # * gcasanova@hellermanntyton.com.ar                             *
 # ****************************************************************
 
-# FIREWALL_VM="HTA-Firewall"
 FIREWALL_VM="HTA-Firewall"
 FIREWALL_HERE=0
 INTERNET_TARGET="8.8.8.8"

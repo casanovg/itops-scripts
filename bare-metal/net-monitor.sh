@@ -88,7 +88,6 @@ if [ $INTERNET_REACHED == 1 ]; then
     echo ""
     echo "$(date +%F" "%T) ($THIS_BARE_METAL): Internet target reached, check succeeded, finishing ..."
     echo ""
-    exit 0
 else
     echo ""
     echo "$(date +%F" "%T) ($THIS_BARE_METAL): Internet target NOT reached, checking the firewall LAN interface ..."
@@ -96,7 +95,6 @@ else
         echo ""
         echo "$(date +%F" "%T) ($THIS_BARE_METAL): The firewall appears active on LAN, maybe there is a momentary internet connection break-up, finishing ..."
         echo ""
-        exit 1
     else
         echo ""
         echo "$(date +%F" "%T) ($THIS_BARE_METAL): The Firewall does NOT reply to ping on local LAN, checking whether is running on this machine ..."

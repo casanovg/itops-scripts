@@ -120,7 +120,7 @@ else
             fi     
         else
             echo ""
-            echo "$(date +%F" "%T) ($THIS_BARE_METAL): Firewall NOT present on LAN, starting internet services on this machine!"
+            echo "$(date +%F" "%T) ($THIS_BARE_METAL): Firewall NOT present on LAN nor is running on this machine, starting internet services on this machine!"
             sleep 1
             ~/itops-scripts/bare-metal/internet-on.sh
             # --- ~/itops-scripts/bare-metal/vm-on.sh $FIREWALL_VM

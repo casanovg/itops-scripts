@@ -36,5 +36,3 @@
   0  16 *  *  sun   ~/itops-scripts/bare-metal/vm-restart.sh "HTA-ACC"
 # 30 23 *  *  mon   ~/itops-scripts/bare-metal/vm-restart.sh "HTA-ACC"
 
-  58 12 *  *  sun   ~/itops-scripts/bare-metal/internet-off.sh
-

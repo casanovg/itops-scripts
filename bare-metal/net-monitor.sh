@@ -1,11 +1,11 @@
 #!/bin/sh
 
-# ****************************************************************
-# * Script to check and manage basic essential internet services *
-# * ============================================================ *
-# * 2020-04-04 Gustavo Casanova                                  *
-# * gcasanova@hellermanntyton.com.ar                             *
-# ****************************************************************
+# **************************************************************
+# * Script to check and manage essential internet connectivity *
+# * ========================================================== *
+# * 2020-04-04 Gustavo Casanova                                *
+# * gcasanova@hellermanntyton.com.ar                           *
+# **************************************************************
 
 FIREWALL_VM="HTA-Firewall"
 FIREWALL_HERE=0

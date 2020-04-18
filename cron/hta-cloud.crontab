@@ -22,7 +22,7 @@
 
 # Synchronize IT Operations GitHub repository every 1 hour
 # -----------------------------------------------------------------------------------
-  0  *  *  *  *     ~/itops-scripts/utils/git-sync.sh
+  35 *  *  *  *     ~/itops-scripts/utils/git-sync.sh
 
 # Verify every hour that Seafile cloud services are up
 # -----------------------------------------------------------------------------------

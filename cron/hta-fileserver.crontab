@@ -17,7 +17,7 @@
 
 # Synchronize IT Operations GitHub repository every 1 hour
 # -----------------------------------------------------------------------------------
-  0  *  *  *  *     ~/itops-scripts/utils/git-sync.sh
+  40 *  *  *  *     ~/itops-scripts/utils/git-sync.sh
 
 # Verify every 5 minutes that essential file services are up
 # -----------------------------------------------------------------------------------

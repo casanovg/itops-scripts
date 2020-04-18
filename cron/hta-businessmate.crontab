@@ -28,8 +28,9 @@
 # -----------------------------------------------------------------------------------
   0 */6 *  *  *     ~/itops-scripts/bare-metal/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
 
-# Restart access control and surveillance virtual machine (After every host restart)
+# Restart access control and surveillance virtual machine (Several times a week)
 # -----------------------------------------------------------------------------------
   0  16 *  *  sun   ~/itops-scripts/bare-metal/vm-restart.sh "HTA-ACC"
-# 30 23 *  *  mon   ~/itops-scripts/bare-metal/vm-restart.sh "HTA-ACC"
+  30 23 *  *  mon   ~/itops-scripts/bare-metal/vm-restart.sh "HTA-ACC"
+  30 1  *  *  thu   ~/itops-scripts/bare-metal/vm-restart.sh "HTA-ACC"
 

@@ -6,7 +6,7 @@
 
 echo ""
 echo "················································"
-echo "· Please enter the domain admin's new password ·"
+echo "· Please enter the NEW domain admin password ·"
 echo "················································"
 stty_orig=$(stty -g)
 stty -echo

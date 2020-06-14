@@ -4,8 +4,7 @@
 # .............................................................
 # 2020-06-13 gcasanova@hellermanntyton.com.ar
 
-SYSTEM_DIR="/opt/seafile"
-SYSTEM_USR="/opt/seafile.my.cnf"
+SYSTEM_DIR="/opt/mattermost"
 BACKUP_SYSTEM="/data/mattermost-data/backup-system"
 BACKUP_DATABASE="/data/mattermost-data/backup-database"
 BKP_USR="netbackup"
@@ -16,7 +15,7 @@ echo ""
 echo " **********************************************"
 echo " *     WARNING!     WARNING!     WARNING!     *"
 echo " * .......................................... *"
-echo " *   If you continue the Seafile file sync    *"
+echo " *   If you continue the HTA Mattermost team  *"
 echo " *   service could be severely damaged and    *"
 echo " *   become useless. If you are not a system  *"
 echo " *   administrator or you do not know what    *"
@@ -29,7 +28,7 @@ read USER_INPUT
 
 if [ "$USER_INPUT" = "restore" ] || [ "$USER_INPUT" = "Restore" ] || [ "$USER_INPUT" = "RESTORE" ]; then
     echo ""
-    echo "Ok, Seafile databases restore starting ..."
+    echo "Ok, Mattermost database restore starting ..."
 else
     echo ""
     echo "Exiting ..."
@@ -37,53 +36,45 @@ else
     exit
 fi
 
-# Stop Seafile services
+# Stop Mattermost services
 echo ""
-echo "Stopping Seafile services ..."
-#sudo systemctl stop nginx seahub seafile
-~/itops-scripts/virtual-machines/cloud/cl-stop.sh
+echo "Stopping Mattermost services ..."
+sudo systemctl stop nginx.service
+sudo systemctl stop mattermost.service
 
 DB_SERVICE_STATUS="$(systemctl is-active mariadb)"
 
-# Restore Seafile databases
+# Restore Mattermost database
 if [ "$DB_SERVICE_STATUS" = "active" ]; then
 
     echo ""
-    echo "Seafile database restore ..."
+    echo "Mattermost database restore ..."
 
-    # Restore updated ccnet_db
-    echo "Restoring ccnet_db ..."
-    mysql -h localhost -u root -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" ccnet_db < "$(ls $BACKUP_DATABASE/ccnet_db.sql.*)"
-
-    # Restore updated seafile_db
-    echo "Restoring seafile_db ..."
-    mysql -h localhost -u root -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" seafile_db < "$(ls $BACKUP_DATABASE/seafile_db.sql.*)"
-
-    # Restore updated seahub_db
-    echo "Restoring seahub_db ..."
-    mysql -h localhost -u root -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" seahub_db < "$(ls $BACKUP_DATABASE/seahub_db.sql.*)"
+    # Restore updated mattermost
+    echo "Restoring mattermost ..."
+    mysql -h localhost -u root -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" mattermost < "$(ls $BACKUP_DATABASE/mattermost.sql.*)"
 
 else
     echo ""
-    echo "WARNING! MariaDB not running, unable to restore the Seafile databases!"
+    echo "WARNING! MariaDB not running, unable to restore the Mattermost database!"
 
 fi
 
-# Restore Seafile system files
-echo ""
-echo -en "Restore also Seafile system files? (Y/N): "
-read USER_INPUT
-if [ "$USER_INPUT" = "Y" ] || [ "$USER_INPUT" = "y" ] || [ "$USER_INPUT" = "yes" ] || [ "$USER_INPUT" = "Yes" ] || [ "$USER_INPUT" = "YES" ]
-then
-    echo ""
-    echo "Restoring Seafile system files ..."
-    sudo rsync -r -a $BACKUP_SYSTEM/* /opt/.
-    sudo chown -R root:wheel /opt/seafile.my.cnf
-fi
+## Restore Mattermost system files
+#echo ""
+#echo -en "Restore also Mattermost system files? (Y/N): "
+#read USER_INPUT
+#if [ "$USER_INPUT" = "Y" ] || [ "$USER_INPUT" = "y" ] || [ "$USER_INPUT" = "yes" ] || [ "$USER_INPUT" = "Yes" ] || [ "$USER_INPUT" = "YES" ]
+#then
+#    echo ""
+#    echo "Restoring Mattermost system files ..."
+#    sudo rsync -r -a $BACKUP_SYSTEM/* /opt/.
+#    #--- NO ---sudo chown -R root:wheel /opt/seafile.my.cnf
+#fi
 
-# Start Seafile services
+# Start Mattermost services
 echo ""
-echo "Starting Seafile services ..."
-#sudo systemctl start seafile seahub nginx
-~/itops-scripts/virtual-machines/cloud/cl-start.sh
+echo "Starting Mattermost services ..."
+sudo systemctl start mattermost.service
+sudo systemctl start nginx.service
 echo ""

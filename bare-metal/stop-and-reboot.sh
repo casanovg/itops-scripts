@@ -10,7 +10,7 @@ source ~/itops-scripts/common/set-vm-lists.sh
 # Stop all virtual machines
 echo ""
 echo "Stopping virtual machines ..."
-~/"$GIT_REP"/"$PHY_SVR_SCRIPTS"/vmall-off.sh
+~/"$GIT_REP"/"$PHY_SVR_SCRIPTS"/vboxall-off.sh
 # Stopping essential net services
 echo "Stopping $ESSENTIAL_NET_SERVICE essential network services, Bye!"
 echo ""
@@ -24,4 +24,4 @@ sudo shutdown -r now
 sleep 180
 echo ""
 echo "Starting virtual machines ..."
-~/"$GIT_REP"/"$PHY_SVR_SCRIPTS"/vmall-on.sh
+~/"$GIT_REP"/"$PHY_SVR_SCRIPTS"/vboxall-on.sh

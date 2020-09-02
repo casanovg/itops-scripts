@@ -13,7 +13,7 @@
 
 # Server operating system update (Every Wednesday at 22:00 PM)
 # -----------------------------------------------------------------------------------
-  0  22 *  *  wed   ~/itops-scripts/bare-metal/update-os.sh
+# 0  22 *  *  wed   ~/itops-scripts/bare-metal/update-os.sh
 
 # VirtualBox full virtual machines backup (Every Sunday at 07:00 AM)
 # -----------------------------------------------------------------------------------

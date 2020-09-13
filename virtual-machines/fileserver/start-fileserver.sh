@@ -71,11 +71,12 @@ for SHARE in $(ls -1 $BKP_DIR); do
             echo "Mounting $SHARE ..."
             mount $BKP_DIR/"$SHARE"
             echo ""
-            else
+        else
             echo "$SHARE already mounted!"
             echo ""
         fi
     fi
+    sleep 2
 done
 
 # Authenticate with AD domain controller and start Samba shares

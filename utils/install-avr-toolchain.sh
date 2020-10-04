@@ -86,7 +86,7 @@ cd avr-obj
 make
 sudo make install
 cd ../..
-# rm -rf binutils-$AVR_BINUTILS_VER
+rm -rf binutils-$AVR_BINUTILS_VER
 
 echo
 echo "Configuring, making and installing AVR-GCC ..."
@@ -99,8 +99,8 @@ cd ../bld-gcc
 make
 sudo make install
 cd ..
-# rm -rf bld-gcc
-# rm gcc-$AVR_GCC_VER
+rm -rf bld-gcc
+rm gcc-$AVR_GCC_VER
 
 echo
 echo "Configuring, making and installing AVR-LiC ..."
@@ -110,7 +110,7 @@ cd avr-libc-$AVR_LIBC_VER
 make
 sudo make install
 cd ..
-# rm -rf avr-libc-$AVR_LIBC_VER
+rm -rf avr-libc-$AVR_LIBC_VER
 
 echo
 echo "Checking AVR-GCC version ..."

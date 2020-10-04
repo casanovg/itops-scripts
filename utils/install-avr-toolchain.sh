@@ -78,34 +78,37 @@ tar -xvf avr-libc-$AVR_LIBC_VER.tar.bz2
 
 echo
 echo "Configuring, making and installing AVR Binutils ..."
+echo
 cd binutils-$AVR_BINUTILS_VER
 mkdir avr-obj
 cd avr-obj
 ../configure --prefix=$AVR_PREFIX --target=avr --disable-nls
 make
-make install
+sudo make install
 cd ../..
 # rm -rf binutils-$AVR_BINUTILS_VER
 
 echo
 echo "Configuring, making and installing AVR-GCC ..."
+echo
 mkdir bld-gcc
 cd gcc-$AVR_GCC_VER
 ./contrib/download_prerequisites
 cd ../bld-gcc
 ../gcc-$AVR_GCC_VER/configure --prefix=$AVR_PREFIX --target=avr --enable-languages=c,c++ --disable-nls --disable-libssp --with-dwarf2
 make
-make install
+sudo make install
 cd ..
 # rm -rf bld-gcc
 # rm gcc-$AVR_GCC_VER
 
 echo
 echo "Configuring, making and installing AVR-LiC ..."
+echo
 cd avr-libc-$AVR_LIBC_VER
 ./configure --prefix=$AVR_PREFIX --build=`./config.guess` --host=avr
 make
-make install
+sudo make install
 cd ..
 # rm -rf avr-libc-$AVR_LIBC_VER
 

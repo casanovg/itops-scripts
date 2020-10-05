@@ -4,6 +4,10 @@
 # ...........................................
 # 2020-10-05 gustavo.casanova@gmail.com
 
+
+# Install prerequisites
+sudo apt-get install wget make gcc g++ bzip2 git autoconf texinfo git
+
 # Installation path and environment setup
 export AVR_PREFIX=/opt/avr
 if [ -s $(env | grep 'PATH=$AVR_PREFIX') ] 1>>/dev/null 2>>/dev/null; then
@@ -127,8 +131,14 @@ echo
 # Add the AVR toolchain folders to the PATH environment
 if [ -z $(cat ~/.bashrc | grep $AVR_PREFIX/bin) ]; then
     echo >> ~/.bashrc
+    echo "........................................................" >> ~/.bashrc
+    echo "Start of section added during AVR toolchain installation" >> ~/.bashrc
+    echo >> ~/.bashrc
     echo "PATH=$AVR_PREFIX/bin:$PATH" >> ~/.bashrc
     echo "export PATH" >> ~/.bashrc
+    echo >> ~/.bashrc
+    echo "End of section added during AVR toolchain installation  " >> ~/.bashrc
+    echo "........................................................" >> ~/.bashrc
     echo >> ~/.bashrc
 fi
 
@@ -140,3 +150,5 @@ echo "export PATH"
 echo
 echo "This will no longer be necessary on your next login as these lines were added to your profile .bashrc file."
 echo
+
+

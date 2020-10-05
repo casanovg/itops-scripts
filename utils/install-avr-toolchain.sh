@@ -6,7 +6,7 @@
 
 # Installation path and environment setup
 export AVR_PREFIX=/opt/avr
-if [ -s $(env | grep 'PATH=$AVR_PREFIX') 1>>/dev/null 2>>/dev/null ]; then
+if [ -s $(env | grep 'PATH=$AVR_PREFIX') ] 1>>/dev/null 2>>/dev/null; then
     export PATH=$AVR_PREFIX/bin:$PATH
 fi
 
@@ -16,12 +16,10 @@ SRC_DIR="avr-src"
 AVR_GCC_VER=8.3.0
 AVR_BINUTILS_VER=2.29
 AVR_LIBC_VER=2.0.0
-#AVR-GCC 8.3.0 x64
-#AVR-Binutils 2.32 x64
-#AVR-LibC 2.0.0
-#AVRDUDE 6.3 x86
-#Make 4.2.1 x64
+# AVRDUDE_VER=6.3
+# MAKE_VER=4.2.1
 
+# Create download folders
 echo
 if [ -d $DOWNLOAD_DIR ]; then
     echo ""
@@ -34,6 +32,7 @@ else
     cd $HOME/$SRC_DIR
 fi
 
+# Download AVR Binutils
 echo
 echo "AVR Binutils ..."
 echo
@@ -43,6 +42,7 @@ else
     echo "Already downloaded ..."
 fi
 
+# Download AVR-GCC
 echo
 echo "AVR-GCC ..."
 echo
@@ -52,6 +52,7 @@ else
     echo "Already downloaded ..."
 fi
 
+# Download AVR-LibC
 echo
 echo "AVR LibC ..."
 echo
@@ -61,21 +62,25 @@ else
     echo "Already downloaded ..."
 fi
 
+# Extract AVR Binutils
 echo
 echo "Extracting binutils-$AVR_BINUTILS_VER.tar.bz2 ..."
 echo
 tar -xvf binutils-$AVR_BINUTILS_VER.tar.bz2
 
+# Extract AVR-GCC
 echo
 echo "Extracting gcc-$AVR_GCC_VER.tar.xz ..."
 echo
 tar -xvf gcc-$AVR_GCC_VER.tar.xz
 
+# Extract AVR-LibC
 echo
 echo "Extracting avr-libc-$AVR_LIBC_VER.tar.bz2 ..."
 echo
 tar -xvf avr-libc-$AVR_LIBC_VER.tar.bz2
 
+# Configure, make and install AVR Binutils
 echo
 echo "Configuring, making and installing AVR Binutils ..."
 echo
@@ -88,22 +93,24 @@ sudo make install
 cd ../..
 rm -rf binutils-$AVR_BINUTILS_VER
 
+# Configure, make and install AVR-GCC
 echo
 echo "Configuring, making and installing AVR-GCC ..."
 echo
-mkdir bld-gcc
+mkdir gcc-build
 cd gcc-$AVR_GCC_VER
 ./contrib/download_prerequisites
-cd ../bld-gcc
+cd ../gcc-build
 ../gcc-$AVR_GCC_VER/configure --prefix=$AVR_PREFIX --target=avr --enable-languages=c,c++ --disable-nls --disable-libssp --with-dwarf2
 make
 sudo make install
 cd ..
-rm -rf bld-gcc
-rm gcc-$AVR_GCC_VER
+rm -rf gcc-build
+rm -rf gcc-$AVR_GCC_VER
 
+# Configure, make and install AVR-LibC
 echo
-echo "Configuring, making and installing AVR-LiC ..."
+echo "Configuring, making and installing AVR-LibC ..."
 echo
 cd avr-libc-$AVR_LIBC_VER
 ./configure --prefix=$AVR_PREFIX --build=`./config.guess` --host=avr
@@ -115,4 +122,21 @@ rm -rf avr-libc-$AVR_LIBC_VER
 echo
 echo "Checking AVR-GCC version ..."
 avr-gcc --version
+echo
+
+# Add the AVR toolchain folders to the PATH environment
+if [ -z $(cat ~/.bashrc | grep $AVR_PREFIX/bin) ]; then
+    echo >> ~/.bashrc
+    echo "PATH=$AVR_PREFIX/bin:$PATH" >> ~/.bashrc
+    echo "export PATH" >> ~/.bashrc
+    echo >> ~/.bashrc
+fi
+
+echo
+echo "Please run these commands to add the AVR toolchain folders to the PATH environment variable:"
+echo
+echo "PATH=$AVR_PREFIX/bin:\$PATH"
+echo "export PATH"
+echo
+echo "This will no longer be necessary on your next login as these lines were added to your profile .bashrc file."
 echo

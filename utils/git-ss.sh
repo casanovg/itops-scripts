@@ -57,9 +57,3 @@ else
     echo "Local branch is up to date with origin!"
 fi
 echo ""
-
-# Save this computer's cron settings
-echo ""
-echo "Saving $(hostname -s) crontab settings ..."
-crontab -l > ~/"$GIT_REP/$CRON_DIR/$(hostname -s).crontab"
-

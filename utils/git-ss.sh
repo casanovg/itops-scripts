@@ -42,7 +42,7 @@ git pull
 echo ""
 for DIR in $(ls -d -1 */); do
     #cd ~/"$GIT_REP"/"$DIR" || return
-    cd "${HERE%%/$(basename $(git rev-parse --show-toplevel))*}/$(basename $(git rev-parse --show-toplevel))" || return
+    cd "${HERE%%/$(basename $(git rev-parse --show-toplevel))*}/$(basename $(git rev-parse --show-toplevel))"/"$DIR" || return
     sleep 1
     echo "Looking for changes in $(pwd) ..."
     git add -A .

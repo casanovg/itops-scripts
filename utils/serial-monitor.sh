@@ -9,13 +9,13 @@ SERIAL_PORT=/dev/ttyUSB0
 
 clear
 
-if [ -f $SERIAL_PORT ]; then
+if [ -f "$SERIAL_PORT" ]; then
 	echo "Opening port";
 else
 	echo
 	echo "Port $SERIAL_PORT not found";
 	echo
-	exit 1;
+#	exit 1;
 fi
 
 echo

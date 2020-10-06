@@ -30,3 +30,7 @@ echo ""
 stty sane
 sleep 2
 clear
+
+# git config --global user.name casanovg
+# git config --global user.email gustavo.casanova@gmail.com
+

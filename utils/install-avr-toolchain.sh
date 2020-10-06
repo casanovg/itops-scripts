@@ -6,7 +6,7 @@
 
 
 # Install prerequisites
-sudo apt-get install wget make gcc g++ bzip2 git autoconf texinfo git
+sudo apt-get -y install wget make gcc g++ bzip2 git autoconf texinfo git
 
 # Installation path and environment setup
 export AVR_PREFIX=/opt/avr

@@ -21,6 +21,23 @@ read pwd 1>/dev/null
 stty $stty_orig
 echo "$pwd" | openssl aes-256-cbc -pbkdf2 -pass pass:' ' > ~/.github-pwd
 echo ""
+
+if [ -z $(git config --list | grep 'user.name') ]; then
+	echo "·······························"
+	echo "· Please enter your full name ·"
+	echo "·······························"
+	read fullname
+	git config --global user.name "$fullname"
+fi
+
+if [ -z $(git config --list | grep 'user.email') ]; then
+	echo "····························"
+	echo "· Please enter your e-mail ·"
+	echo "····························"
+	read email
+	git config --global user.email "$email"
+fi
+
 echo "#############################################################################"
 echo "# ATTENTION!"
 echo "# Your GitHub user name is: \"$usr\" and your new password: \"$pwd\""
@@ -30,7 +47,4 @@ echo ""
 stty sane
 sleep 2
 clear
-
-# git config --global user.name casanovg
-# git config --global user.email gustavo.casanova@gmail.com
 

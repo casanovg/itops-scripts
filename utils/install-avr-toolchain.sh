@@ -131,14 +131,14 @@ echo
 # Add the AVR toolchain folders to the PATH environment
 if [ -z $(cat ~/.bashrc | grep $AVR_PREFIX/bin) ]; then
     echo >> ~/.bashrc
-    echo "........................................................" >> ~/.bashrc
-    echo "Start of section added during AVR toolchain installation" >> ~/.bashrc
+    echo "# ........................................................" >> ~/.bashrc
+    echo "# Start of section added during AVR toolchain installation" >> ~/.bashrc
     echo >> ~/.bashrc
     echo "PATH=$AVR_PREFIX/bin:$PATH" >> ~/.bashrc
     echo "export PATH" >> ~/.bashrc
     echo >> ~/.bashrc
-    echo "End of section added during AVR toolchain installation  " >> ~/.bashrc
-    echo "........................................................" >> ~/.bashrc
+    echo "# End of section added during AVR toolchain installation  " >> ~/.bashrc
+    echo "# ........................................................" >> ~/.bashrc
     echo >> ~/.bashrc
 fi
 

@@ -9,18 +9,16 @@ SERIAL_PORT=/dev/ttyUSB0
 
 clear
 
-if [ -f "$SERIAL_PORT" ]; then
-	echo "Opening port";
+if [ ! -z "$(ls -l $SERIAL_PORT)" ]; then
+	echo
+	echo "Serial monitor starting at $SERIAL_BPS on port $SERIAL_PORT ..."
+	echo
 else
 	echo
 	echo "Port $SERIAL_PORT not found";
 	echo
 #	exit 1;
 fi
-
-echo
-echo "Serial monitor starting at $SERIAL_BPS on port $SERIAL_PORT ..."
-echo
 
 stty ospeed $SERIAL_BPS ispeed $SERIAL_BPS -F $SERIAL_PORT
 cat $SERIAL_PORT

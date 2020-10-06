@@ -151,3 +151,6 @@ echo
 echo "This will no longer be necessary on your next login as these lines were added to your profile .bashrc file."
 echo
 
+# git config --global user.name casanovg
+# git config --global user.email gustavo.casanova@gmail.com
+

@@ -26,6 +26,7 @@ fi
 
 DOWNLOAD_DIR="$HOME/Downloads"
 SRC_DIR="avr-src"
+PRF_PATH="/etc/profile.d/avr-toolchain.sh"
 
 AVR_GCC_VER=8.3.0
 AVR_BINUTILS_VER=2.29
@@ -160,18 +161,13 @@ avr-gcc --version
 echo
 
 # Add the AVR toolchain folders to the PATH environment
-if [ -z $(cat ~/.bashrc | grep $AVR_PREFIX/bin) ]; then
-    echo >> ~/.bashrc
-    echo "# ........................................................" >> ~/.bashrc
-    echo "# Start of section added during AVR toolchain installation" >> ~/.bashrc
-    echo >> ~/.bashrc
-    echo "PATH=$AVR_PREFIX/bin:$PATH" >> ~/.bashrc
-    echo "export PATH" >> ~/.bashrc
-    echo >> ~/.bashrc
-    echo "# End of section added during AVR toolchain installation  " >> ~/.bashrc
-    echo "# ........................................................" >> ~/.bashrc
-    echo >> ~/.bashrc
-fi
+echo "#!/bin/sh" > $PRF_PATH
+echo "#" >> $PRF_PATH
+echo "# AVR toolchain system-wide path" >> $PRF_PATH
+echo "#" >> $PRF_PATH
+echo "PATH=$AVR_PREFIX/bin:\$PATH" >> $PRF_PATH
+echo "export PATH" >> $PRF_PATH
+echo "" >> $PRF_PATH
 
 echo
 echo "Please run these commands to add the AVR toolchain folders to the PATH environment variable:"
@@ -179,6 +175,6 @@ echo
 echo "PATH=$AVR_PREFIX/bin:\$PATH"
 echo "export PATH"
 echo
-echo "This will no longer be necessary on your next login as these lines were added to your profile .bashrc file."
+echo "This will no longer be necessary on your next login as the path was added to \"$PRF_PATH\"."
 echo
 

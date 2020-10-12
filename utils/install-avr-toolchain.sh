@@ -7,7 +7,7 @@
 # Check required permissions
 if ! [ $(id -u) = 0 ]; then
    echo
-   echo "This script need to be run as root, please use \"sudo $(basename "$0")\"" >&2
+   echo "This script needs to run as root, please use \"sudo $(basename "$0")\"" >&2
    echo
    exit 1
 fi

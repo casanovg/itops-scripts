@@ -1,15 +1,25 @@
 #!/bin/sh
 
 # Build from source and install AVR toolchain
-# ...........................................
+# ............................................
 # 2020-10-05 gustavo.casanova@gmail.com
 
+# Check required permissions
+if ! [ $(id -u) = 0 ]; then
+   echo
+   echo "This script need to be run as root, please use \"sudo $(basename "$0")\"" >&2
+   echo
+   exit 1
+fi
 
 # Install prerequisites
-sudo apt-get -y install wget make gcc g++ bzip2 git autoconf texinfo git
+echo
+echo "Installing AVR toolchain prerequisites"
+echo
+apt-get -y install wget make gcc g++ bzip2 git autoconf texinfo git libtool
 
 # Installation path and environment setup
-export AVR_PREFIX=/opt/avr
+export AVR_PREFIX=$HOME/opt/avr
 if [ -s $(env | grep 'PATH=$AVR_PREFIX') ] 1>>/dev/null 2>>/dev/null; then
     export PATH=$AVR_PREFIX/bin:$PATH
 fi
@@ -20,6 +30,7 @@ SRC_DIR="avr-src"
 AVR_GCC_VER=8.3.0
 AVR_BINUTILS_VER=2.29
 AVR_LIBC_VER=2.0.0
+AVR_GDB_VER=9.2
 # AVRDUDE_VER=6.3
 # MAKE_VER=4.2.1
 
@@ -66,6 +77,16 @@ else
     echo "Already downloaded ..."
 fi
 
+# Download AVR GDB
+echo
+echo "AVR GDB ..."
+echo
+if [ ! -f gdb-$AVR_GDB_VER.tar.bz2 ]; then
+    wget https://ftpmirror.gnu.org/gdb/gdb-$AVR_GDB_VER.tar.xz
+else
+    echo "Already downloaded ..."
+fi
+
 # Extract AVR Binutils
 echo
 echo "Extracting binutils-$AVR_BINUTILS_VER.tar.bz2 ..."
@@ -84,16 +105,22 @@ echo "Extracting avr-libc-$AVR_LIBC_VER.tar.bz2 ..."
 echo
 tar -xvf avr-libc-$AVR_LIBC_VER.tar.bz2
 
+# Extract AVR-GDB
+echo
+echo "Extracting gdb-$AVR_GDB_VER.tar.xz ..."
+echo
+tar -xvf gdb-$AVR_GDB_VER.tar.xz
+
 # Configure, make and install AVR Binutils
 echo
 echo "Configuring, making and installing AVR Binutils ..."
 echo
 cd binutils-$AVR_BINUTILS_VER
-mkdir avr-obj
-cd avr-obj
-../configure --prefix=$AVR_PREFIX --target=avr --disable-nls
+mkdir obj-avr
+cd obj-avr
+../configure --prefix=$AVR_PREFIX --target=avr --disable-nls --disable-werror
 make
-sudo make install
+make install
 cd ../..
 rm -rf binutils-$AVR_BINUTILS_VER
 
@@ -101,15 +128,17 @@ rm -rf binutils-$AVR_BINUTILS_VER
 echo
 echo "Configuring, making and installing AVR-GCC ..."
 echo
-mkdir gcc-build
 cd gcc-$AVR_GCC_VER
+echo "Downloading avr-gcc prerequisites ..."
+echo
 ./contrib/download_prerequisites
-cd ../gcc-build
-../gcc-$AVR_GCC_VER/configure --prefix=$AVR_PREFIX --target=avr --enable-languages=c,c++ --disable-nls --disable-libssp --with-dwarf2
+mkdir obj-avr
+cd obj-avr
+../configure --prefix=$AVR_PREFIX --target=avr --enable-languages=c,c++ --disable-nls --disable-libssp --with-dwarf2
+#../configure --prefix=$AVR_PREFIX --target=avr --enable-languages=c,c++ --disable-nls --disable-libssp --disable-libada --with-dwarf2 --disable-shared --enable-static --enable --enable-mingw-wildcard --enable-plugin --with-gnu-as
 make
-sudo make install
-cd ..
-rm -rf gcc-build
+make install
+cd ../..
 rm -rf gcc-$AVR_GCC_VER
 
 # Configure, make and install AVR-LibC
@@ -117,10 +146,12 @@ echo
 echo "Configuring, making and installing AVR-LibC ..."
 echo
 cd avr-libc-$AVR_LIBC_VER
-./configure --prefix=$AVR_PREFIX --build=`./config.guess` --host=avr
+mkdir obj-avr
+cd obj-avr
+../configure --prefix=$AVR_PREFIX --build=`./config.guess` --host=avr
 make
-sudo make install
-cd ..
+make install
+cd ../..
 rm -rf avr-libc-$AVR_LIBC_VER
 
 echo

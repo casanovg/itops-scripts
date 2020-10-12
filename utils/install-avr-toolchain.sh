@@ -86,13 +86,15 @@ else
 fi
 
 # Download AVR GDB
-echo
-echo "AVR GDB ..."
-echo
-if [ ! -f gdb-$AVR_GDB_VER.tar.bz2 ]; then
-    wget https://ftpmirror.gnu.org/gdb/gdb-$AVR_GDB_VER.tar.xz
-else
-    echo "Already downloaded ..."
+if [ $BUILD_GDB -eq 1 ]; then
+    echo
+    echo "AVR GDB ..."
+    echo
+    if [ ! -f gdb-$AVR_GDB_VER.tar.bz2 ]; then
+        wget https://ftpmirror.gnu.org/gdb/gdb-$AVR_GDB_VER.tar.xz
+    else
+        echo "Already downloaded ..."
+    fi
 fi
 
 # Extract AVR Binutils
@@ -167,19 +169,35 @@ echo "Checking AVR-GCC version ..."
 avr-gcc --version
 echo
 
-
-# Configure, make and install AVR-GDB
-echo
-echo "Configuring, making and installing AVR-GDB ..."
-echo
-cd gdb-$AVR_GDB_VER
-mkdir obj-avr
-cd obj-avr
-../configure --prefix=$AVR_PREFIX --target=avr
-make
-make install
-cd ../..
-rm -rf avr-libc-$AVR_GDB_VER
+# Download, extract, configure, make and install AVR-GDB
+if [ $BUILD_GDB -eq 1 ]; then
+    # Download 
+    echo
+    echo "AVR GDB ..."
+    echo
+    if [ ! -f gdb-$AVR_GDB_VER.tar.bz2 ]; then
+        wget https://ftpmirror.gnu.org/gdb/gdb-$AVR_GDB_VER.tar.xz
+    else
+        echo "Already downloaded ..."
+    fi
+    # Extract
+    echo
+    echo "Extracting gdb-$AVR_GDB_VER.tar.xz ..."
+    echo
+    tar -xvf gdb-$AVR_GDB_VER.tar.xz
+    # Configure, make and install
+    echo
+    echo "Configuring, making and installing AVR-GDB ..."
+    echo
+    cd gdb-$AVR_GDB_VER
+    mkdir obj-avr
+    cd obj-avr
+    ../configure --prefix=$AVR_PREFIX --target=avr
+    make
+    make install
+    cd ../..
+    rm -rf avr-libc-$AVR_GDB_VER
+fi
 
 # Add the AVR toolchain folders to the PATH environment
 echo "#!/bin/sh" > $PRF_PATH

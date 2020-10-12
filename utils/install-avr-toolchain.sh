@@ -18,22 +18,29 @@ echo "Installing AVR toolchain prerequisites"
 echo
 apt-get -y install wget make gcc g++ bzip2 git autoconf texinfo git libtool
 
-# Installation path and environment setup
-export AVR_PREFIX=$HOME/opt/avr
-if [ -s $(env | grep 'PATH=$AVR_PREFIX') ] 1>>/dev/null 2>>/dev/null; then
-    export PATH=$AVR_PREFIX/bin:$PATH
-fi
-
 DOWNLOAD_DIR="$HOME/Downloads"
 SRC_DIR="avr-src"
 PRF_PATH="/etc/profile.d/avr-toolchain.sh"
 
+AVR_PREFIX="/opt/avr"
 AVR_GCC_VER=8.3.0
 AVR_BINUTILS_VER=2.29
 AVR_LIBC_VER=2.0.0
 AVR_GDB_VER=9.2
-# AVRDUDE_VER=6.3
-# MAKE_VER=4.2.1
+AVRDUDE_VER=6.3
+#SIMULAVR_VER=1.0.0
+#MAKE_VER=4.2.1
+
+# Optional components selection
+BUILD_GDB=0
+BUILD_AVRDUDE=0
+BUILD_SIMULAVR=0
+
+# Installation path and environment setup
+export AVR_PREFIX
+if [ -s $(env | grep 'PATH=$AVR_PREFIX') ] 1>>/dev/null 2>>/dev/null; then
+    export PATH=$AVR_PREFIX/bin:$PATH
+fi
 
 # Create download folders
 echo
@@ -159,6 +166,20 @@ echo
 echo "Checking AVR-GCC version ..."
 avr-gcc --version
 echo
+
+
+# Configure, make and install AVR-GDB
+echo
+echo "Configuring, making and installing AVR-GDB ..."
+echo
+cd gdb-$AVR_GDB_VER
+mkdir obj-avr
+cd obj-avr
+../configure --prefix=$AVR_PREFIX --target=avr
+make
+make install
+cd ../..
+rm -rf avr-libc-$AVR_GDB_VER
 
 # Add the AVR toolchain folders to the PATH environment
 echo "#!/bin/sh" > $PRF_PATH

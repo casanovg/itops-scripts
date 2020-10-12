@@ -17,7 +17,7 @@ echo
 echo "Installing AVR toolchain prerequisites"
 echo
 apt-get -y install wget make gcc g++ bzip2 git autoconf texinfo git libtool
-# apt-get install libelf libusb-dev libusb-1.0-0-dev libftdi-dev libftdi1-dev libhidapi-dev 
+apt-get install gawk libelf libusb-dev libusb-1.0-0-dev libftdi-dev libftdi1-dev libhidapi-dev 
 
 # Folder settings
 TMP_DIR="/tmp"
@@ -30,7 +30,7 @@ AVR_PREFIX="/opt/avr"
 BUILD_BINUTILS=0
 BUILD_AVR_GCC=0
 BUILD_AVR_LIBC=0
-BUILD_GDB=0
+BUILD_GDB=1
 BUILD_AVRDUDE=1
 BUILD_SIMULAVR=0
 
@@ -38,7 +38,7 @@ BUILD_SIMULAVR=0
 AVR_GCC_VER=8.3.0
 AVR_BINUTILS_VER=2.29
 AVR_LIBC_VER=2.0.0
-AVR_GDB_VER=9.2
+GDB_VER=9.2
 AVRDUDE_VER=6.3
 #SIMULAVR_VER=1.0.0
 # System MAKE version used: v4.2.1
@@ -169,37 +169,37 @@ else
     echo
 fi
 
-# Install AVR GDB
+# Install GDB
 if [ $BUILD_GDB -eq 1 ]; then
     # Download
     echo
-    echo "Downloading AVR-GDB source ..."
+    echo "Downloading GDB source ..."
     echo
-    if [ ! -f gdb-$AVR_GDB_VER.tar.bz2 ]; then
-        wget https://ftpmirror.gnu.org/gdb/gdb-$AVR_GDB_VER.tar.xz
+    if [ ! -f gdb-$GDB_VER.tar.bz2 ]; then
+        wget https://ftpmirror.gnu.org/gdb/gdb-$GDB_VER.tar.xz
     else
-        echo "AVR-GDB already downloaded ..."
+        echo "GDB already downloaded ..."
     fi
     # Extract
     echo
-    echo "Extracting gdb-$AVR_GDB_VER.tar.xz ..."
+    echo "Extracting gdb-$GDB_VER.tar.xz ..."
     echo
-    tar -xvf gdb-$AVR_GDB_VER.tar.xz
+    tar -xvf gdb-$GDB_VER.tar.xz
     # Configure, make and install
     echo
-    echo "Configuring, making and installing AVR-GDB ..."
+    echo "Configuring, making and installing GDB ..."
     echo
-    cd gdb-$AVR_GDB_VER
+    cd gdb-$GDB_VER
     mkdir obj-avr
     cd obj-avr
     ../configure --prefix=$AVR_PREFIX --target=avr
     make
     make install
     cd ../..
-    rm -rf avr-libc-$AVR_GDB_VER
+    rm -rf avr-libc-$GDB_VER
 else
     echo
-    echo "Skipping AVR-GDB ..."
+    echo "Skipping GDB ..."
     echo
 fi   
 

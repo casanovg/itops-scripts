@@ -17,7 +17,7 @@ echo
 echo "Installing AVR toolchain prerequisites"
 echo
 apt-get -y install wget make gcc g++ bzip2 git autoconf texinfo git libtool
-apt-get install gawk libelf libusb-dev libusb-1.0-0-dev libftdi-dev libftdi1-dev libhidapi-dev 
+apt-get install gawk libelf libusb-dev libusb-1.0-0-dev libftdi-dev libftdi1-dev libhidapi-dev swig libbfd-dev 
 
 # Folder settings
 TMP_DIR="/tmp"
@@ -27,10 +27,10 @@ PRF_PATH="/etc/profile.d/avr-toolchain.sh"
 AVR_PREFIX="/opt/avr"
 
 # Optional components selection
-BUILD_BINUTILS=0
-BUILD_AVR_GCC=0
-BUILD_AVR_LIBC=0
-BUILD_GDB=1
+BUILD_BINUTILS=1
+BUILD_AVR_GCC=1
+BUILD_AVR_LIBC=1
+BUILD_AVR_GDB=1
 BUILD_AVRDUDE=1
 BUILD_SIMULAVR=0
 
@@ -38,9 +38,9 @@ BUILD_SIMULAVR=0
 AVR_GCC_VER=8.3.0
 AVR_BINUTILS_VER=2.29
 AVR_LIBC_VER=2.0.0
-GDB_VER=9.2
+AVR_GDB_VER=9.2
 AVRDUDE_VER=6.3
-#SIMULAVR_VER=1.0.0
+SIMULAVR_VER=1.0.0
 # System MAKE version used: v4.2.1
 
 # Installation path and environment setup
@@ -86,7 +86,7 @@ if [ $BUILD_BINUTILS -eq 1 ]; then
     cd binutils-$AVR_BINUTILS_VER
     mkdir obj-avr
     cd obj-avr
-    ../configure --prefix=$AVR_PREFIX --target=avr --disable-nls --disable-werror
+    ../configure --prefix=$AVR_PREFIX --target=avr --disable-nls --disable-werror --enable-install-libbfd
     make
     make install
     cd ../..
@@ -169,37 +169,37 @@ else
     echo
 fi
 
-# Install GDB
-if [ $BUILD_GDB -eq 1 ]; then
+# Install AVR-GDB
+if [ $BUILD_AVR_GDB -eq 1 ]; then
     # Download
     echo
-    echo "Downloading GDB source ..."
+    echo "Downloading AVR-GDB source ..."
     echo
-    if [ ! -f gdb-$GDB_VER.tar.bz2 ]; then
-        wget https://ftpmirror.gnu.org/gdb/gdb-$GDB_VER.tar.xz
+    if [ ! -f gdb-$AVR_GDB_VER.tar.bz2 ]; then
+        wget https://ftpmirror.gnu.org/gdb/gdb-$AVR_GDB_VER.tar.xz
     else
-        echo "GDB already downloaded ..."
+        echo "AVR-GDB already downloaded ..."
     fi
     # Extract
     echo
-    echo "Extracting gdb-$GDB_VER.tar.xz ..."
+    echo "Extracting gdb-$AVR_GDB_VER.tar.xz ..."
     echo
-    tar -xvf gdb-$GDB_VER.tar.xz
+    tar -xvf gdb-$AVR_GDB_VER.tar.xz
     # Configure, make and install
     echo
-    echo "Configuring, making and installing GDB ..."
+    echo "Configuring, making and installing AVR-GDB ..."
     echo
-    cd gdb-$GDB_VER
+    cd gdb-$AVR_GDB_VER
     mkdir obj-avr
     cd obj-avr
     ../configure --prefix=$AVR_PREFIX --target=avr
     make
     make install
     cd ../..
-    rm -rf avr-libc-$GDB_VER
+    rm -rf gdb-$AVR_GDB_VER
 else
     echo
-    echo "Skipping GDB ..."
+    echo "Skipping AVR-GDB ..."
     echo
 fi   
 
@@ -236,6 +236,41 @@ else
     echo "Skipping AVRDUDE ..."
     echo
 fi
+
+# Install SimulAVR
+if [ $BUILD_SIMULAVR -eq 1 ]; then
+    # Download
+    echo
+    echo "Downloading SimulAVR source ..."
+    echo
+    if [ ! -f avrdude-$SIMULAVR_VER.tar.gz ]; then
+        wget https://download.savannah.nongnu.org/releases/simulavr/simulavr-$SIMULAVR_VER.tar.gz
+    else
+        echo "SimulAVR already downloaded ..."
+    fi
+    # Extract
+    echo
+    echo "Extracting avrdude-$AVRDUDE_VER.tar.gz ..."
+    echo
+    tar -xvf simulavr-$SIMULAVR_VER.tar.gz
+    # Configure, make and install
+    echo
+    echo "Configuring, making and installing AVRDUDE ..."
+    echo
+    cd simulavr-$SIMULAVR_VER
+    mkdir obj-avr
+    cd obj-avr
+    ../configure --prefix=$AVR_PREFIX --with-bfd=/opt/avr/bin
+    make
+    make install
+    cd ../..
+    rm -rf asimulavr-$SIMULAVR_VER
+else
+    echo
+    echo "Skipping SimulAVR ..."
+    echo
+fi
+
 
 # Check AVR-GCC installation
 echo

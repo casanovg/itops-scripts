@@ -27,12 +27,12 @@ PRF_PATH="/etc/profile.d/avr-toolchain.sh"
 AVR_PREFIX="/opt/avr"
 
 # Optional components selection
-BUILD_BINUTILS=1
-BUILD_AVR_GCC=1
-BUILD_AVR_LIBC=1
-BUILD_AVR_GDB=1
-BUILD_AVRDUDE=1
-BUILD_SIMULAVR=0
+BUILD_BINUTILS=0
+BUILD_AVR_GCC=0
+BUILD_AVR_LIBC=0
+BUILD_AVR_GDB=0
+BUILD_AVRDUDE=0
+BUILD_SIMULAVR=1
 
 # Tools versions
 AVR_GCC_VER=8.3.0
@@ -80,14 +80,20 @@ if [ $BUILD_BINUTILS -eq 1 ]; then
     echo
     tar -xvf binutils-$AVR_BINUTILS_VER.tar.bz2
     # Configure, make and install 
-    echo
-    echo "Configuring, making and installing AVR Binutils ..."
-    echo
     cd binutils-$AVR_BINUTILS_VER
     mkdir obj-avr
     cd obj-avr
+    echo
+    echo "Configuring AVR Binutils ..."
+    echo
     ../configure --prefix=$AVR_PREFIX --target=avr --disable-nls --disable-werror --enable-install-libbfd
+    echo
+    echo "Building AVR Binutils ..."
+    echo
     make
+    echo
+    echo "Installing AVR Binutils ..."
+    echo
     make install
     cd ../..
     rm -rf binutils-$AVR_BINUTILS_VER
@@ -114,18 +120,24 @@ if [ $BUILD_AVR_GCC -eq 1 ]; then
     echo
     tar -xvf gcc-$AVR_GCC_VER.tar.xz
     # Configure, make and install
-    echo
-    echo "Configuring, making and installing AVR-GCC ..."
-    echo
     cd gcc-$AVR_GCC_VER
     echo "Downloading avr-gcc prerequisites ..."
     echo
     ./contrib/download_prerequisites
     mkdir obj-avr
     cd obj-avr
+    echo
+    echo "Configuring AVR-GCC ..."
+    echo
     ../configure --prefix=$AVR_PREFIX --target=avr --enable-languages=c,c++ --disable-nls --disable-libssp --with-dwarf2
     #../configure --prefix=$AVR_PREFIX --target=avr --enable-languages=c,c++ --disable-nls --disable-libssp --disable-libada --with-dwarf2 --disable-shared --enable-static --enable --enable-mingw-wildcard --enable-plugin --with-gnu-as
+    echo
+    echo "Building AVR-GCC ..."
+    echo
     make
+    echo
+    echo "Installing AVR-GCC ..."
+    echo
     make install
     cd ../..
     rm -rf gcc-$AVR_GCC_VER
@@ -152,14 +164,20 @@ if [ $BUILD_AVR_LIBC -eq 1 ]; then
     echo
     tar -xvf avr-libc-$AVR_LIBC_VER.tar.bz2
     # Configure, make and install
-    echo
-    echo "Configuring, making and installing AVR-LibC ..."
-    echo
     cd avr-libc-$AVR_LIBC_VER
     mkdir obj-avr
     cd obj-avr
+    echo
+    echo "Configuring AVR-LibC ..."
+    echo
     ../configure --prefix=$AVR_PREFIX --build=`./config.guess` --host=avr
+    echo
+    echo "Building AVR-LibC ..."
+    echo
     make
+    echo
+    echo "Installing AVR-LibC ..."
+    echo
     make install
     cd ../..
     rm -rf avr-libc-$AVR_LIBC_VER
@@ -186,14 +204,20 @@ if [ $BUILD_AVR_GDB -eq 1 ]; then
     echo
     tar -xvf gdb-$AVR_GDB_VER.tar.xz
     # Configure, make and install
-    echo
-    echo "Configuring, making and installing AVR-GDB ..."
-    echo
     cd gdb-$AVR_GDB_VER
     mkdir obj-avr
     cd obj-avr
+    echo
+    echo "Configuring AVR-GDB ..."
+    echo
     ../configure --prefix=$AVR_PREFIX --target=avr
+    echo
+    echo "Building AVR-GDB ..."
+    echo
     make
+    echo
+    echo "Installing AVR-GDB ..."
+    echo
     make install
     cd ../..
     rm -rf gdb-$AVR_GDB_VER
@@ -220,14 +244,20 @@ if [ $BUILD_AVRDUDE -eq 1 ]; then
     echo
     tar -xvf avrdude-$AVRDUDE_VER.tar.gz
     # Configure, make and install
-    echo
-    echo "Configuring, making and installing AVRDUDE ..."
-    echo
     cd avrdude-$AVRDUDE_VER
     mkdir obj-avr
     cd obj-avr
+    echo
+    echo "Configuring AVRDUDE ..."
+    echo
     ../configure --prefix=$AVR_PREFIX --enable-linuxgpio
+    echo
+    echo "Building AVRDUDE ..."
+    echo
     make
+    echo
+    echo "Installing AVRDUDE ..."
+    echo
     make install
     cd ../..
     rm -rf avrdude-$AVRDUDE_VER
@@ -254,14 +284,20 @@ if [ $BUILD_SIMULAVR -eq 1 ]; then
     echo
     tar -xvf simulavr-$SIMULAVR_VER.tar.gz
     # Configure, make and install
-    echo
-    echo "Configuring, making and installing AVRDUDE ..."
-    echo
     cd simulavr-$SIMULAVR_VER
     mkdir obj-avr
     cd obj-avr
+    echo
+    echo "Configuring SimulAVR ..."
+    echo
     ../configure --prefix=$AVR_PREFIX --with-bfd=/opt/avr/bin
+    echo
+    echo "Building SimulAVR ..."
+    echo
     make
+    echo
+    echo "Installing SimulAVR ..."
+    echo
     make install
     cd ../..
     rm -rf asimulavr-$SIMULAVR_VER
@@ -287,12 +323,15 @@ echo "PATH=$AVR_PREFIX/bin:\$PATH" >> $PRF_PATH
 echo "export PATH" >> $PRF_PATH
 echo "" >> $PRF_PATH
 
-echo ".................................................................................."
-echo " Please run these commands to add the AVR toolchain folders to the PATH variable:"
+echo "................................................................................"
+echo "Please run these commands to add the AVR toolchain folders to the PATH variable:"
 echo "     PATH=$AVR_PREFIX/bin:\$PATH"
 echo "     export PATH"
-echo " This will no longer be necessary on your next login as the path was added to:"
+echo "This will no longer be necessary after your next reboot as the path was added to:"
 echo "     \"$PRF_PATH\""
-echo "........................................................................,........."
+echo "................................................................................"
 echo
+
+date -u -d @"$diff" +'%-Mm %-Ss'
+echo "$(($diff / 3600)) hours, $((($diff / 60) % 60)) minutes and $(($diff % 60)) seconds elapsed."
 

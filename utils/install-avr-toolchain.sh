@@ -17,7 +17,7 @@ echo
 echo "Installing AVR toolchain prerequisites"
 echo
 apt-get -y install wget make gcc g++ bzip2 git autoconf texinfo git libtool
-apt-get install gawk libelf libusb-dev libusb-1.0-0-dev libftdi-dev libftdi1-dev libhidapi-dev swig libbfd-dev 
+apt-get install gawk libusb-dev libusb-1.0-0-dev libftdi-dev libftdi1-dev libhidapi-dev swig libbfd-dev 
 
 # Folder settings
 TMP_DIR="/tmp"

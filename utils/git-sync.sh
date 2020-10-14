@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-# Synchronize git repository === * ===
+# Synchronize git repository
 # ............................................
 # NOTES: Use git-update-id.sh to create or
 # *****  update your GitHub credentials.
@@ -8,7 +8,7 @@
 # git config --global credential.helper store
 #        before using this script 
 # ............................................
-# 2019-12-31 gcasanova@hellermanntyton.com.ar
+# 2020-10-13 gustavo.casanova@gmail.com
 
 if [ ! -z "$1" ]; then cd $1; fi
 

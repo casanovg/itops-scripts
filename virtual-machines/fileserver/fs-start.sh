@@ -4,7 +4,7 @@
 # ...........................................
 # 2019-12-09 gcasanova@hellermanntyton.com.ar
 
-pwd=$(sudo cat ~/.fs-usr | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')
+pwd=$(sudo cat ~/.fs-pwd | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')
 
 echo""
 echo "Joining HTARGENTINA Domain"

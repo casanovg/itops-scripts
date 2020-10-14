@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Synchronize git repository
+# Synchronize git repository ===
 # ............................................
 # NOTES: Use git-update-id.sh to create or
 # *****  update your GitHub credentials.

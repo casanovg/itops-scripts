@@ -20,7 +20,7 @@ echo
 echo "Installing AVR toolchain prerequisites"
 echo
 apt-get -y install wget make gcc g++ bzip2 git autoconf texinfo git libtool
-apt-get install gawk libusb-dev libusb-1.0-0-dev libftdi-dev libftdi1-dev libhidapi-dev swig libbfd-dev 
+apt-get -y install gawk libusb-dev libusb-1.0-0-dev libftdi-dev libftdi1-dev libhidapi-dev swig libbfd-dev 
 
 # Folder settings
 TMP_DIR="/tmp"
@@ -31,12 +31,12 @@ AVR_PREFIX="/opt/avr"
 SUMMARY_FILE="AVR-INSTALLATION-SUMMARY.txt"
 
 # Optional components selection
-BUILD_BINUTILS=0
-BUILD_AVR_GCC=0
-BUILD_AVR_LIBC=0
-BUILD_AVR_GDB=0
-BUILD_AVRDUDE=0
-BUILD_SIMULAVR=1
+BUILD_BINUTILS=1
+BUILD_AVR_GCC=1
+BUILD_AVR_LIBC=1
+BUILD_AVR_GDB=1
+BUILD_AVRDUDE=1
+BUILD_SIMULAVR=0
 
 # Tools versions
 AVR_GCC_VER=8.3.0
@@ -65,7 +65,6 @@ else
     mkdir -p $TMP_DIR/$SRC_DIR
     cd $TMP_DIR/$SRC_DIR
 fi
-echo
 
 # Download AVR Binutils
 if [ $BUILD_BINUTILS -eq 1 ]; then
@@ -75,7 +74,8 @@ if [ $BUILD_BINUTILS -eq 1 ]; then
     if [ ! -f binutils-$AVR_BINUTILS_VER.tar.bz2 ]; then
         wget http://ftp.gnu.org/gnu/binutils/binutils-$AVR_BINUTILS_VER.tar.bz2
     else
-        echo "AVR Binutils already downloaded ..."
+        echo "AVR Binutils source already downloaded ..."
+	echo
     fi
 fi
 
@@ -87,19 +87,21 @@ if [ $BUILD_AVR_GCC -eq 1 ]; then
     if [ ! -f gcc-$AVR_GCC_VER.tar.xz ]; then
         wget ftp://ftp.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$AVR_GCC_VER/gcc-$AVR_GCC_VER.tar.xz
     else
-        echo "AVR-GCC already downloaded ..."
+        echo "AVR-GCC source already downloaded ..."
+	echo
     fi
 fi
 
 # Download AVR-LibC
 if [ $BUILD_AVR_LIBC -eq 1 ]; then
     echo
-    echo "Downloading AVR LibC source ..."
+    echo "Downloading AVR-LibC source ..."
     echo
     if [ ! -f avr-libc-$AVR_LIBC_VER.tar.bz2 ]; then
         wget http://download.savannah.gnu.org/releases/avr-libc/avr-libc-$AVR_LIBC_VER.tar.bz2
     else
-        echo "AVR LibC already downloaded ..."
+        echo "AVR-LibC source already downloaded ..."
+	echo
     fi
 fi
 
@@ -112,7 +114,8 @@ if [ $BUILD_AVR_GDB -eq 1 ]; then
     if [ ! -f gdb-$AVR_GDB_VER.tar.bz2 ]; then
         wget https://ftpmirror.gnu.org/gdb/gdb-$AVR_GDB_VER.tar.xz
     else
-        echo "AVR-GDB already downloaded ..."
+        echo "AVR-GDB source already downloaded ..."
+	echo
     fi
 fi
 
@@ -125,7 +128,8 @@ if [ $BUILD_AVRDUDE -eq 1 ]; then
     if [ ! -f avrdude-$AVRDUDE_VER.tar.gz ]; then
         wget https://download.savannah.gnu.org/releases/avrdude/avrdude-$AVRDUDE_VER.tar.gz
     else
-        echo "AVRDUDE already downloaded ..."
+        echo "AVRDUDE source already downloaded ..."
+	echo
     fi
 fi
 
@@ -135,10 +139,11 @@ if [ $BUILD_SIMULAVR -eq 1 ]; then
     echo
     echo "Downloading SimulAVR source ..."
     echo
-    if [ ! -f avrdude-$SIMULAVR_VER.tar.gz ]; then
+    if [ ! -f simulavr-$SIMULAVR_VER.tar.gz ]; then
         wget https://download.savannah.nongnu.org/releases/simulavr/simulavr-$SIMULAVR_VER.tar.gz
     else
-        echo "SimulAVR already downloaded ..."
+        echo "SimulAVR source already downloaded ..."
+	echo
     fi
 fi
 
@@ -168,7 +173,6 @@ if [ $BUILD_BINUTILS -eq 1 ]; then
     cd ../..
     rm -rf binutils-$AVR_BINUTILS_VER
 else
-    echo
     echo "Skipping AVR Binutils ..."
     echo
 fi
@@ -203,7 +207,6 @@ if [ $BUILD_AVR_GCC -eq 1 ]; then
     cd ../..
     rm -rf gcc-$AVR_GCC_VER
 else
-    echo
     echo "Skipping AVR-GCC ..."
     echo
 fi
@@ -234,8 +237,7 @@ if [ $BUILD_AVR_LIBC -eq 1 ]; then
     cd ../..
     rm -rf avr-libc-$AVR_LIBC_VER
 else
-    echo
-    echo "Skipping AVR LibC ..."
+    echo "Skipping AVR-LibC ..."
     echo
 fi
 
@@ -265,7 +267,6 @@ if [ $BUILD_AVR_GDB -eq 1 ]; then
     cd ../..
     rm -rf gdb-$AVR_GDB_VER
 else
-    echo
     echo "Skipping AVR-GDB ..."
     echo
 fi   
@@ -296,7 +297,6 @@ if [ $BUILD_AVRDUDE -eq 1 ]; then
     cd ../..
     rm -rf avrdude-$AVRDUDE_VER
 else
-    echo
     echo "Skipping AVRDUDE ..."
     echo
 fi
@@ -325,9 +325,8 @@ if [ $BUILD_SIMULAVR -eq 1 ]; then
     echo
     make install
     cd ../..
-    rm -rf asimulavr-$SIMULAVR_VER
+    rm -rf simulavr-$SIMULAVR_VER
 else
-    echo
     echo "Skipping SimulAVR ..."
     echo
 fi
@@ -354,29 +353,30 @@ echo "     export PATH"
 echo "This will no longer be necessary after your next reboot as the path was added to:"
 echo "     \"$PRF_PATH\""
 echo "................................................................................"
-echo
 
 END_SEC=$(date -u +%s)
 END_TIME=$(date +"%H:%M - %B %d, %Y")
 
 TIME_LAPSE=$((END_SEC-START_SEC))
 
-echo | tee $SUMMARY_FILE
-echo "INSTALL AVR TOOLCHAIN" | tee -a $SUMMARY_FILE
-echo | tee -a $SUMMARY_FILE
-echo "Built tools:" | tee -a $SUMMARY_FILE
-echo "-----------------" | tee -a $SUMMARY_FILE
-if [ $BUILD_BINUTILS -eq 1 ];then echo "* AVR Binutils"; fi | tee -a $SUMMARY_FILE
-if [ $BUILD_AVR_GCC -eq 1 ];then echo "* AVR-GCC"; fi | tee -a $SUMMARY_FILE
-if [ $BUILD_AVR_LIBC -eq 1 ];then echo "* AVR-LibC"; fi | tee -a $SUMMARY_FILE
-if [ $BUILD_AVR_GDB -eq 1 ];then echo "* AVR-GDB"; fi | tee -a $SUMMARY_FILE
-if [ $BUILD_AVRDUDE -eq 1 ];then echo "* AVRDUDE"; fi | tee -a $SUMMARY_FILE
-if [ $BUILD_SIMULAVR -eq 1 ];then echo "* SimulAVR"; fi | tee -a $SUMMARY_FILE
+echo > $SUMMARY_FILE
+echo "INSTALL AVR TOOLCHAIN" >> $SUMMARY_FILE
+echo >> $SUMMARY_FILE
+echo "Built tools:" >> $SUMMARY_FILE
+echo "------------" >> $SUMMARY_FILE
+if [ $BUILD_BINUTILS -eq 1 ];then echo "* AVR Binutils"; fi >> $SUMMARY_FILE
+if [ $BUILD_AVR_GCC -eq 1 ];then echo "* AVR-GCC"; fi >> $SUMMARY_FILE
+if [ $BUILD_AVR_LIBC -eq 1 ];then echo "* AVR-LibC"; fi >> $SUMMARY_FILE
+if [ $BUILD_AVR_GDB -eq 1 ];then echo "* AVR-GDB"; fi >> $SUMMARY_FILE
+if [ $BUILD_AVRDUDE -eq 1 ];then echo "* AVRDUDE"; fi >> $SUMMARY_FILE
+if [ $BUILD_SIMULAVR -eq 1 ];then echo "* SimulAVR"; fi >> $SUMMARY_FILE
 
-echo | tee -a $SUMMARY_FILE
-echo "Start time: $START_TIME" | tee -a $SUMMARY_FILE
-echo "  End time: $END_TIME" | tee -a $SUMMARY_FILE
-echo | tee -a $SUMMARY_FILE
-echo "Running time: $(($TIME_LAPSE / 3600)) hours, $((($TIME_LAPSE / 60) % 60)) minutes and $(($TIME_LAPSE % 60)) seconds." | tee -a $SUMMARY_FILE
-echo | tee -a $SUMMARY_FILE
+echo >> $SUMMARY_FILE
+echo "Start time: $START_TIME" >> $SUMMARY_FILE
+echo "  End time: $END_TIME" >> $SUMMARY_FILE
+echo >> $SUMMARY_FILE
+echo "Running time: $(($TIME_LAPSE / 3600)) hours, $((($TIME_LAPSE / 60) % 60)) minutes and $(($TIME_LAPSE % 60)) seconds." >> $SUMMARY_FILE
+echo >> $SUMMARY_FILE
+
+cat $SUMMARY_FILE
 

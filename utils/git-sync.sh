@@ -69,3 +69,4 @@ else
     echo "Local branch is up to date with origin!"
 fi
 echo ""
+

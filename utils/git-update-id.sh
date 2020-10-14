@@ -38,6 +38,26 @@ if [ -z $(git config --list | grep 'user.email') ]; then
 	git config --global user.email "$email"
 fi
 
+
+SGUS="Gustavo Adrian Casanova"
+LGUS=${#SGUS}
+SHOW=$(( LGUS * 1 / 3 ))
+
+echo $SHOW
+
+
+for (( i=0; i<${#SGUS}; i++ )); do
+        if [ $i -lt $((LGUS-$SHOW)) ]; then
+                echo -n "*"
+        else
+                echo -n "${SGUS:$i:1}";
+        fi
+done;
+echo
+
+
+
+
 echo "#############################################################################"
 echo "# ATTENTION!"
 echo "# Your GitHub user name is: \"$usr\" and your new password: \"$pwd\""

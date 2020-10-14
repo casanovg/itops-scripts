@@ -2,7 +2,7 @@
 
 # Update GitHub user and password ***
 # ...........................................
-# 2020-01-03 gcasanova@hellermanntyton.com.ar
+# 2020-10-13 gustavo.casanova@gmail.com
 
 clear
 

@@ -10,11 +10,7 @@
 # ............................................
 # 2019-12-31 gcasanova@hellermanntyton.com.ar
 
-if [ ! -z "$1" ]; then
-    cd $1
-else
-    echo "No argument supplied"
-fi
+if [ ! -z "$1" ]; then cd $1; fi
 
 if [ ! $(git rev-parse --is-inside-work-tree 2>>/dev/null) ]; then
     echo

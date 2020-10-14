@@ -10,11 +10,17 @@
 # ............................................
 # 2019-12-31 gcasanova@hellermanntyton.com.ar
 
+if [ ! -z "$1" ]; then
+    cd $1
+else
+    echo "No argument supplied"
+fi
+
 if [ ! $(git rev-parse --is-inside-work-tree 2>>/dev/null) ]; then
-	echo
-	echo "You're NOT inside a git repository!"
-	echo
-	exit 1
+    echo
+    echo "You're NOT inside a git repository!"
+    echo
+    exit 1
 fi
 
 HERE="$(pwd)"

@@ -35,16 +35,20 @@ if [ -z "$GIT_USER_NAME" ]; then
         echo "·······························"
         echo "· Please enter your full name ·"
         echo "·······························"
+        echo -n " > "
         read FULLNAME
         git config --global user.name "$FULLNAME"
+        GIT_USER_NAME="$(git config --list | grep 'user.name')"
 fi
 
 if [ -z "$GIT_USER_EMAIL" ]; then
         echo "····························"
         echo "· Please enter your e-mail ·"
         echo "····························"
+        echo -n " > "
         read EMAIL
         git config --global user.email "$EMAIL"
+        GIT_USER_EMAIL="$(git config --list | grep 'user.email')"
 fi
 
 clear

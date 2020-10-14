@@ -14,7 +14,10 @@ if [ ! -z "$1" ]; then cd $1; fi
 
 if [ ! $(git rev-parse --is-inside-work-tree 2>>/dev/null) ]; then
     echo
-    echo "You're NOT inside a git repository!"
+    echo "You are NOT inside a git repository! Please change the current"
+    echo "directory to a git folder or specify its path as follows:"
+    echo
+    echo "git-sync.sh /my-repos/my-git-project-folder"
     echo
     exit 1
 fi

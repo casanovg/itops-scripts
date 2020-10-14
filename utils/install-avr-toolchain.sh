@@ -4,6 +4,9 @@
 # ............................................
 # 2020-10-05 gustavo.casanova@gmail.com
 
+START_SEC=$(date -u +%s)
+START_TIME=$(date +"%H:%M - %B %d, %Y")
+
 # Check required permissions
 if ! [ $(id -u) = 0 ]; then
    echo
@@ -25,6 +28,7 @@ DOWNLOAD_DIR="$HOME/Downloads"
 SRC_DIR="avr-src"
 PRF_PATH="/etc/profile.d/avr-toolchain.sh"
 AVR_PREFIX="/opt/avr"
+SUMMARY_FILE="AVR-INSTALLATION-SUMMARY.txt"
 
 # Optional components selection
 BUILD_BINUTILS=0
@@ -352,6 +356,27 @@ echo "     \"$PRF_PATH\""
 echo "................................................................................"
 echo
 
-date -u -d @"$diff" +'%-Mm %-Ss'
-echo "$(($diff / 3600)) hours, $((($diff / 60) % 60)) minutes and $(($diff % 60)) seconds elapsed."
+END_SEC=$(date -u +%s)
+END_TIME=$(date +"%H:%M - %B %d, %Y")
+
+TIME_LAPSE=$((END_SEC-START_SEC))
+
+echo | tee $SUMMARY_FILE
+echo "INSTALL AVR TOOLCHAIN" | tee -a $SUMMARY_FILE
+echo | tee -a $SUMMARY_FILE
+echo "Built tools:" | tee -a $SUMMARY_FILE
+echo "-----------------" | tee -a $SUMMARY_FILE
+if [ $BUILD_BINUTILS -eq 1 ];then echo "* AVR Binutils"; fi | tee -a $SUMMARY_FILE
+if [ $BUILD_AVR_GCC -eq 1 ];then echo "* AVR-GCC"; fi | tee -a $SUMMARY_FILE
+if [ $BUILD_AVR_LIBC -eq 1 ];then echo "* AVR-LibC"; fi | tee -a $SUMMARY_FILE
+if [ $BUILD_AVR_GDB -eq 1 ];then echo "* AVR-GDB"; fi | tee -a $SUMMARY_FILE
+if [ $BUILD_AVRDUDE -eq 1 ];then echo "* AVRDUDE"; fi | tee -a $SUMMARY_FILE
+if [ $BUILD_SIMULAVR -eq 1 ];then echo "* SimulAVR"; fi | tee -a $SUMMARY_FILE
+
+echo | tee -a $SUMMARY_FILE
+echo "Start time: $START_TIME" | tee -a $SUMMARY_FILE
+echo "  End time: $END_TIME" | tee -a $SUMMARY_FILE
+echo | tee -a $SUMMARY_FILE
+echo "Running time: $(($TIME_LAPSE / 3600)) hours, $((($TIME_LAPSE / 60) % 60)) minutes and $(($TIME_LAPSE % 60)) seconds." | tee -a $SUMMARY_FILE
+echo | tee -a $SUMMARY_FILE
 

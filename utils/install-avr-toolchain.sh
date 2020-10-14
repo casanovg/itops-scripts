@@ -63,9 +63,8 @@ else
 fi
 echo
 
-# Install AVR Binutils
+# Download AVR Binutils
 if [ $BUILD_BINUTILS -eq 1 ]; then
-    # Download 
     echo
     echo "Downloading AVR Binutils source ..."
     echo
@@ -74,6 +73,73 @@ if [ $BUILD_BINUTILS -eq 1 ]; then
     else
         echo "AVR Binutils already downloaded ..."
     fi
+fi
+
+# Download AVR-GCC
+if [ $BUILD_AVR_GCC -eq 1 ]; then
+    echo
+    echo "Downloading AVR-GCC source ..."
+    echo
+    if [ ! -f gcc-$AVR_GCC_VER.tar.xz ]; then
+        wget ftp://ftp.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$AVR_GCC_VER/gcc-$AVR_GCC_VER.tar.xz
+    else
+        echo "AVR-GCC already downloaded ..."
+    fi
+fi
+
+# Download AVR-LibC
+if [ $BUILD_AVR_LIBC -eq 1 ]; then
+    echo
+    echo "Downloading AVR LibC source ..."
+    echo
+    if [ ! -f avr-libc-$AVR_LIBC_VER.tar.bz2 ]; then
+        wget http://download.savannah.gnu.org/releases/avr-libc/avr-libc-$AVR_LIBC_VER.tar.bz2
+    else
+        echo "AVR LibC already downloaded ..."
+    fi
+fi
+
+# Download AVR-GDB
+if [ $BUILD_AVR_GDB -eq 1 ]; then
+    
+    echo
+    echo "Downloading AVR-GDB source ..."
+    echo
+    if [ ! -f gdb-$AVR_GDB_VER.tar.bz2 ]; then
+        wget https://ftpmirror.gnu.org/gdb/gdb-$AVR_GDB_VER.tar.xz
+    else
+        echo "AVR-GDB already downloaded ..."
+    fi
+fi
+
+# Download AVRDUDE
+if [ $BUILD_AVRDUDE -eq 1 ]; then
+    
+    echo
+    echo "Downloading AVRDUDE source ..."
+    echo
+    if [ ! -f avrdude-$AVRDUDE_VER.tar.gz ]; then
+        wget https://download.savannah.gnu.org/releases/avrdude/avrdude-$AVRDUDE_VER.tar.gz
+    else
+        echo "AVRDUDE already downloaded ..."
+    fi
+fi
+
+# Download SimulAVR
+if [ $BUILD_SIMULAVR -eq 1 ]; then
+    
+    echo
+    echo "Downloading SimulAVR source ..."
+    echo
+    if [ ! -f avrdude-$SIMULAVR_VER.tar.gz ]; then
+        wget https://download.savannah.nongnu.org/releases/simulavr/simulavr-$SIMULAVR_VER.tar.gz
+    else
+        echo "SimulAVR already downloaded ..."
+    fi
+fi
+
+# Install AVR Binutils
+if [ $BUILD_BINUTILS -eq 1 ]; then
     # Extract
     echo
     echo "Extracting binutils-$AVR_BINUTILS_VER.tar.bz2 ..."
@@ -105,15 +171,6 @@ fi
 
 # Install AVR-GCC
 if [ $BUILD_AVR_GCC -eq 1 ]; then
-    # Download
-    echo
-    echo "Downloading AVR-GCC source ..."
-    echo
-    if [ ! -f gcc-$AVR_GCC_VER.tar.xz ]; then
-        wget ftp://ftp.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$AVR_GCC_VER/gcc-$AVR_GCC_VER.tar.xz
-    else
-        echo "AVR-GCC already downloaded ..."
-    fi
     # Extract
     echo
     echo "Extracting gcc-$AVR_GCC_VER.tar.xz ..."
@@ -149,15 +206,6 @@ fi
 
 # Install AVR-LibC
 if [ $BUILD_AVR_LIBC -eq 1 ]; then
-    # Download
-    echo
-    echo "Downloading AVR LibC source ..."
-    echo
-    if [ ! -f avr-libc-$AVR_LIBC_VER.tar.bz2 ]; then
-        wget http://download.savannah.gnu.org/releases/avr-libc/avr-libc-$AVR_LIBC_VER.tar.bz2
-    else
-        echo "AVR LibC already downloaded ..."
-    fi
     # Extract
     echo
     echo "Extracting avr-libc-$AVR_LIBC_VER.tar.bz2 ..."
@@ -189,15 +237,6 @@ fi
 
 # Install AVR-GDB
 if [ $BUILD_AVR_GDB -eq 1 ]; then
-    # Download
-    echo
-    echo "Downloading AVR-GDB source ..."
-    echo
-    if [ ! -f gdb-$AVR_GDB_VER.tar.bz2 ]; then
-        wget https://ftpmirror.gnu.org/gdb/gdb-$AVR_GDB_VER.tar.xz
-    else
-        echo "AVR-GDB already downloaded ..."
-    fi
     # Extract
     echo
     echo "Extracting gdb-$AVR_GDB_VER.tar.xz ..."
@@ -229,15 +268,6 @@ fi
 
 # Install AVRDUDE
 if [ $BUILD_AVRDUDE -eq 1 ]; then
-    # Download
-    echo
-    echo "Downloading AVRDUDE source ..."
-    echo
-    if [ ! -f avrdude-$AVRDUDE_VER.tar.gz ]; then
-        wget https://download.savannah.gnu.org/releases/avrdude/avrdude-$AVRDUDE_VER.tar.gz
-    else
-        echo "AVRDUDE already downloaded ..."
-    fi
     # Extract
     echo
     echo "Extracting avrdude-$AVRDUDE_VER.tar.gz ..."
@@ -269,15 +299,6 @@ fi
 
 # Install SimulAVR
 if [ $BUILD_SIMULAVR -eq 1 ]; then
-    # Download
-    echo
-    echo "Downloading SimulAVR source ..."
-    echo
-    if [ ! -f avrdude-$SIMULAVR_VER.tar.gz ]; then
-        wget https://download.savannah.nongnu.org/releases/simulavr/simulavr-$SIMULAVR_VER.tar.gz
-    else
-        echo "SimulAVR already downloaded ..."
-    fi
     # Extract
     echo
     echo "Extracting avrdude-$AVRDUDE_VER.tar.gz ..."
@@ -306,7 +327,6 @@ else
     echo "Skipping SimulAVR ..."
     echo
 fi
-
 
 # Check AVR-GCC installation
 echo

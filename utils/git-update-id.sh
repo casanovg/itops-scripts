@@ -6,6 +6,29 @@
 
 clear
 
+if [ ! -z $1 ]; then
+    if [ "$1" == "--unset" ] || [ "$1" == "-u" ]; then
+        echo
+    	echo "Clearing GitHub account settings ..."
+	echo
+	rm -f ~/.github-usr
+	rm -f ~/.github-pwd
+        git config --global --unset user.name
+        git config --global --unset user.email
+        exit 0
+    else
+        echo
+	echo "git-update-id: Invalid argument, valid options are ..."
+	echo
+	echo "   $ git-update-id.sh            * No arguments = set GitHub account"
+	echo "   $ git-update-id.sh --unset    * Clear GitHub account settings" 
+	echo "   $ git-update-id.sh -u         * Same as --unset"
+        echo
+	exit 1
+    fi
+
+fi
+
 echo ""
 echo "·····································"
 echo "· Please enter your GitHub username ·"

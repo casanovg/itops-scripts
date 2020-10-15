@@ -8,6 +8,20 @@ clear
 
 if [ ! -z $1 ]; then
     if [ "$1" == "--unset" ] || [ "$1" == "-u" ]; then
+    LOOP_CLEAR=1
+    while [ $LOOP_CLEAR -eq 1 ]; do
+	echo
+        read -p "Do you wish to clear current settings? " yn
+        case $yn in
+            [Yy]* ) LOOP_CLEAR=0;;
+            [Nn]* ) echo
+		    exit
+		    ;;
+            * ) echo "Please answer yes or no."
+	    	echo
+	    	;;
+        esac
+        done 
         echo
     	echo "Clearing GitHub account settings ..."
 	echo
@@ -36,11 +50,11 @@ if [ -f ~/.github-usr ] && [ -f ~/.github-pwd ] && [ -n "$GIT_USER_NAME" ] && [ 
     echo
     echo "WARNING: GitHub account settings found!"
     echo
-    LOOP=1
-    while [ $LOOP -eq 1 ]; do
+    LOOP_OVRW=1
+    while [ $LOOP_OVRW -eq 1 ]; do
         read -p "Do you wish to overwrite current settings? " yn
         case $yn in
-            [Yy]* ) LOOP=0;;
+            [Yy]* ) LOOP_OVRW=0;;
             [Nn]* ) echo
 		    exit
 		    ;;

@@ -18,15 +18,38 @@ if [ ! -z $1 ]; then
         exit 0
     else
         echo
-	echo "git-update-id: Invalid argument, valid options are ..."
+	echo "git-update-id.sh: valid options are ..."
 	echo
-	echo "   $ git-update-id.sh            * No arguments = set GitHub account"
-	echo "   $ git-update-id.sh --unset    * Clear GitHub account settings" 
-	echo "   $ git-update-id.sh -u         * Same as --unset"
+	echo "   $ git-update-id.sh            : No arguments = set GitHub account"
+	echo "   $ git-update-id.sh --unset    : Clear GitHub account settings" 
+	echo "   $ git-update-id.sh -u         : Same as --unset"
         echo
 	exit 1
     fi
 
+fi
+
+GIT_USER_NAME="$(git config --list | grep 'user.name')"
+GIT_USER_EMAIL="$(git config --list | grep 'user.email')"
+
+if [ -f ~/.github-usr ] && [ -f ~/.github-pwd ] && [ -n "$GIT_USER_NAME" ] && [ -n "$GIT_USER_EMAIL" ]; then
+    echo
+    echo "WARNING: GitHub account settings found!"
+    echo
+    LOOP=1
+    while [ $LOOP -eq 1 ]; do
+        read -p "Do you wish to overwrite current settings? " yn
+        case $yn in
+            [Yy]* ) LOOP=0;;
+            [Nn]* ) echo
+		    exit
+		    ;;
+            * ) echo "Please answer yes or no."
+		echo
+		;;
+	      
+        esac
+    done
 fi
 
 echo ""
@@ -51,8 +74,6 @@ echo ""
 
 stty sane
 
-GIT_USER_NAME="$(git config --list | grep 'user.name')"
-GIT_USER_EMAIL="$(git config --list | grep 'user.email')"
 
 if [ -z "$GIT_USER_NAME" ]; then
         echo "·······························"

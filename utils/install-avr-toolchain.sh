@@ -19,7 +19,7 @@ fi
 echo
 echo "Installing AVR toolchain prerequisites"
 echo
-apt-get -y install wget make gcc g++ bzip2 git autoconf texinfo git libtool
+apt-get -y install wget make gcc g++ bzip2 git autoconf texinfo git libtool bison flex
 apt-get -y install gawk libusb-dev libusb-1.0-0-dev libftdi-dev libftdi1-dev libhidapi-dev swig libbfd-dev 
 
 # Folder settings

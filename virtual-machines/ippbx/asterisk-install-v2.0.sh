@@ -352,7 +352,8 @@ echo "*****************************************";
 echo "* Installing Open Source G729 Codec ... *";
 echo "*****************************************";
 cd /usr/lib64/asterisk/modules;
-wget -O codec_g729.so https://www.dropbox.com/s/wg60pznkyjj0krf/codec_g729-ast130-gcc4-glibc-x86_64-core2-sse4.so?dl=0;
+#wget -O codec_g729.so https://www.dropbox.com/s/wg60pznkyjj0krf/codec_g729-ast130-gcc4-glibc-x86_64-core2-sse4.so?dl=0;
+wget -O codec_g729.so http://asterisk.hosting.lv/bin/codec_g729-ast130-gcc4-glibc-x86_64-core2-sse4.so
 chmod 755 ./codec_g729.so;
 echo ".";
 echo "***************************************";

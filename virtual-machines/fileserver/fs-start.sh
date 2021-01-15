@@ -10,8 +10,7 @@ echo""
 echo "Joining HTARGENTINA Domain"
 echo "--------------------------"
 echo "Using \"fs-usr\" domain administrator password ..."
-#sudo net ads join -U administrator%$pwd -S hta-pdc.htargentina.lan -I 10.6.17.45
-sudo net ads join -U administrator%$pwd -S hta-pdn.htargentina.lan -I 10.6.17.47
+sudo net ads join -U administrator%$pwd -S hta-pdc.htargentina.lan -I 10.6.17.45
 sudo winbindd
 sudo smbd
 sudo nmbd

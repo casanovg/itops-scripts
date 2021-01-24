@@ -9,5 +9,12 @@
 LETSENCRYPT="/etc/letsencrypt/archive"
 CERTIFICATE="$1"
 
-openssl pkcs12 -export -in $LETSENCRYPT/$CERTIFICATE/fullchain1.pem -inkey $LETSENCRYPT/$CERTIFICATE/privkey1.pem -out $CERTIFICATE.pfx
+sudo openssl pkcs12 -export -in $LETSENCRYPT/$CERTIFICATE/fullchain1.pem -inkey $LETSENCRYPT/$CERTIFICATE/privkey1.pem -out $CERTIFICATE.pfx
+
+if [ $? -eq 0 ]; then
+  echo success
+  sudo chown 
+else
+  echo failed
+fi
 

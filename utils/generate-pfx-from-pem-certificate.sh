@@ -12,9 +12,10 @@ CERTIFICATE="$1"
 sudo openssl pkcs12 -export -in $LETSENCRYPT/$CERTIFICATE/fullchain1.pem -inkey $LETSENCRYPT/$CERTIFICATE/privkey1.pem -out $CERTIFICATE.pfx
 
 if [ $? -eq 0 ]; then
-  echo success
-  sudo chown 
+  sudo chown $(whoami):$(id -gn $(whoami)) $CERTIFICATE.pfx 
 else
-  echo failed
+  echo
+  echo "PFX certificate generation failed, please review \"$LETSENCRYPT/$CERTIFICATE\" path ..."
+  echo
 fi
 

@@ -18,7 +18,7 @@ echo ""
 sleep 3
 # Reboot
 echo ""
-echo "Rebooting ..."
+echo "Shutting down ..."
 sudo shutdown now
 # Start all virtual machines (in case that reboot fails)
 sleep 180

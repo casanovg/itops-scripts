@@ -8,6 +8,7 @@
 
 
 OPT_1="--with-permissions"
+OPT_2="--show-errors"
 
 if [ $# -eq 0 ] || [ -z "$1" ] || [ "$1" == "$OPT_1" ]
 then
@@ -15,6 +16,7 @@ then
     echo "Usage: get-ownership.sh <PATH> [$OPT_1]"
     echo ""
 else
+
     if [ $# -ge 2 ] && [ "$2" != "$OPT_1" ]
     then
 	echo
@@ -22,6 +24,15 @@ else
 	echo
 	exit 1
     fi  
+
+    if [ $# -ge 3 ] && [ "$3" != "$OPT_2" ]
+    then
+	echo
+        echo " $2: option not found"
+	echo
+	exit 1
+    fi  
+
     if [ -d $1 ]
     then
         echo ""
@@ -39,5 +50,6 @@ else
         echo "$1: path not found"
         echo ""
     fi
+
 fi
 

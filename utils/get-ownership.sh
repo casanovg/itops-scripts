@@ -25,7 +25,7 @@ else
 	exit 1
     fi  
 
-    if [ $# -ge 3 ] && [ "$3" != "$OPT_1" ] || [ "$3" != "$OPT_2" ] ]
+    if [ $# -ge 3 ] && [ "$3" != "$OPT_1" ] && [ "$3" != "$OPT_2" ]
     then
 	echo
         echo " $3: option not found"

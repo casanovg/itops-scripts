@@ -30,7 +30,7 @@ echo
 echo Giving the server some time to shut down properly ...
 sleep 20
 echo
-
+if [ 1 == 2 ]; then
 # Check and repair libraries
 echo Seafile FSCK started ...
 sudo -u $SERVICE_USER $SEAFILE_PATH/seafile-server-latest/seaf-fsck.sh --repair
@@ -40,15 +40,15 @@ echo
 echo Seafile cleanup started ...
 sudo -u $SERVICE_USER $SEAFILE_PATH/seafile-server-latest/seaf-gc.sh
 echo
-
+fi
 # Clear expired session records
 echo Clear expired session records ...
-sudo -u $SERVICE_USER $SEAFILE_PATH/seafile-server-latest/seahub.sh python-env seahub/manage.py clearsessions
+sudo -u $SERVICE_USER $SEAFILE_PATH/seafile-server-latest/seahub.sh python-env $SEAFILE_PATH/seafile-server-latest/seahub/manage.py clearsessions
 echo
 
 # Clear outdated library records
 echo Clear outdated library records ...
-sudo -u $SERVICE_USER $SEAFILE_PATH/seafile-server-latest/seahub.sh python-env seahub/manage.py clear_invalid_repo_data
+sudo -u $SERVICE_USER $SEAFILE_PATH/seafile-server-latest/seahub.sh python-env $SEAFILE_PATH/seafile-server-latest/seahub/manage.py clear_invalid_repo_data
 echo
 
 echo Giving the server some time ...

@@ -21,7 +21,7 @@
 SEAFILE_PATH="/opt/seafile"
 SERVICE_USER="netbackup"
 LOG_PATH="/data/seafile-data/maintenance-log"
-LOG_FILE="Seafile-Maintenance-$(date +%Y-%m-%d)"
+LOG_FILE="Seafile-Maintenance-$(date +%Y-%m-%d).log"
 
 if [ ! -d $LOG_PATH ]; then
     mkdir -p $LOG_PATH

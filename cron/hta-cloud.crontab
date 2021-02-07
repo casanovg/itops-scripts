@@ -15,16 +15,20 @@
 # -----------------------------------------------------------------------------------
   0  23 *  *  sun   ~/itops-scripts/virtual-machines/cloud/update-os.sh
 
-# Seafile & Mattormost MySQL (MariaDB) databases backup (Every day 01:55 & 01:45 PM)
+# Seafile & Mattermost MySQL (MariaDB) databases backup (Every day 01:55 & 01:45 PM)
 # -----------------------------------------------------------------------------------
   55 01 *  *  *     ~/itops-scripts/virtual-machines/cloud/backup-seafile-db.sh
   45 01 *  *  *     ~/itops-scripts/virtual-machines/cloud/backup-mattermost-db.sh
 
 # Synchronize IT Operations GitHub repository every 1 hour
 # -----------------------------------------------------------------------------------
-  35 *  *  *  *     ~/itops-scripts/utils/git-sync.sh
+  35 *  *  *  *     ~/itops-scripts/utils/git-sync.sh ~/itops-scripts/
 
-# Verify every hour that Seafile cloud services are up
+# Verify every hour, from Monday through Friday, that Seafile cloud services are up
 # -----------------------------------------------------------------------------------
-  0  *  *  *  *     ~/itops-scripts/virtual-machines/cloud/start-cloud.sh
+  0  *  *  *  1-5   ~/itops-scripts/virtual-machines/cloud/start-cloud.sh
+
+# Seafile storage checking and repair (Every Saturday at 7:00 AM)
+# -----------------------------------------------------------------------------------
+  0  7  *  *  sat   ~/itops-scripts/virtual-machines/cloud/seafile-storage-cleanup.sh
 

@@ -1,3 +1,5 @@
+#/bin/sh
+
 # Update Cloudflare Dynamic DNS record
 # .............................................
 # 2021-02-12 gustavo.casanova@gmail.com

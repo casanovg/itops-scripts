@@ -20,7 +20,7 @@ source ~/.cloudflare-settings
 #    MATCH="all"
 #
 
-MY_IP="$(/root/get-ip.sh)"
+MY_IP="$(/root/get-myip.sh)"
 
 # API_TOKEN="P5UHT9maztaQkeRxNbpR-R-aNTcZ_PxfLFeApuwk"
 

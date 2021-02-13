@@ -6,7 +6,8 @@
 
 source ~/.cloudflare-settings
 
-# Please set the following variables before running this script:
+# Please set the following variables om a separate
+# ".cloudflare-settings" file before running this script:
 #
 #    API_URL="https://api.cloudflare.com/client/v4"
 #    EMAIL="your_email@domain.com"

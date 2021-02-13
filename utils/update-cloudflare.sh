@@ -58,13 +58,13 @@ if [ "$MY_IP" != $CF_IP ]; then
         echo >> $LOG_PATH
         echo -n " " | tee -a $LOG_PATH
         echo -n "DNS record successfully updated to $MY_IP " | tee -a $LOG_PATH
-        echo "at $(date)!" >> $LOG_PATH
+        echo "on $(date)!" >> $LOG_PATH
         echo
     else
         echo >> $LOG_PATH
         echo -n " " | tee -a $LOG_PATH
         echo -n "Clouflare record update to $MY_IP failed " | tee -a $LOG_PATH
-        echo "at $(date)!" >> $LOG_PATH
+        echo "on $(date)!" >> $LOG_PATH
         echo
     fi
 else

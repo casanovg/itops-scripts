@@ -113,10 +113,10 @@ MY_IP="$(curl -s $MY_IP_URL 2>>/dev/null)"
 # Validate the external IP address
 if $(validate_ip $MY_IP); then
     echo
-    echo " My current external IP address: $MY_IP"
+    echo " Device current external IP address: $MY_IP"
 else
     echo
-    echo " Unable to get my external IP address in a valid format, exiting!"
+    echo " Unable to get my external IP address in a valid format. Exiting!"
     echo ".........................................................................."
     echo
     exit
@@ -127,7 +127,6 @@ DNS_LOOKUP=$(nslookup $RECORD_NAME | grep 'Address*' | grep -v 'localhost' | awk
 
 # Validate the DNS lookup IP address
 if $(validate_ip $DNS_LOOKUP); then
-    echo
     echo " DNS lookup for $RECORD_NAME: $DNS_LOOKUP"
 else
     echo
@@ -144,8 +143,6 @@ if [ "$MY_IP" != "$DNS_LOOKUP" ]; then
     # Call the get Cloudflare record info function
     get_cf_dns
     #echo
-    #echo " === Cloudflare DNS record IP: $CF_IP"
-    #echo " === Cloudflare DNS record proxied status: $CF_PROXIED"
 
     # Validate the Cloudflare DNS record IP address
     if $(validate_ip $CF_IP); then
@@ -162,22 +159,22 @@ if [ "$MY_IP" != "$DNS_LOOKUP" ]; then
         else
 
             echo
-            echo " The Cloudflare DNS record matches my external IP address, maybe"
-            echo " the lookup returned a different address due to a DNS zone"
-            echo " propagation delay, or because the record is proxied ..."
+            echo " The Cloudflare DNS record IP address matches the external IP address,"
+            echo " perhaps the DNS lookup returned a different value due to a DNS zone"
+            echo " propagation delay or because the record proxy setting is incorrect ..."
             echo
             echo " Checking Cloudflare DNS record proxy status ..."
             echo
             echo " = Cloudflare DNS record proxy for $RECORD_NAME: $CF_PROXIED"
-            if [ "$CF_PROXIED" == "true" ]; then
+            if [ "$CF_PROXIED" != "$RECORD_PROXY" ]; then
                 echo
-                echo " DNS record proxy active, trying to update record to stop it ..."
+                echo " Cloudflare DNS record proxy:$CF_PROXIED, trying to set proxy:$RECORD_PROXY ..."
 
                 # Call the update Cloudflare function
                 update_cf_dns $MY_IP
             else
                 echo
-                echo " DNS proxy inactive, please wait for DNS propagation, exiting!"
+                echo " DNS proxy setting correct, please wait for DNS propagation. Exiting!"
             fi
             echo ".........................................................................."
             echo
@@ -199,8 +196,8 @@ if [ "$MY_IP" != "$DNS_LOOKUP" ]; then
 else
 
     echo
-    echo " The DNS lookup of the dynamic IP matches the current external"
-    echo " IP address. DNS record update not needed, exiting!"
+    echo " The DNS lookup of the dynamic IP matches the device current"
+    echo " external IP address. DNS record update not needed. Exiting!"
     echo ".........................................................................."
     echo
     exit

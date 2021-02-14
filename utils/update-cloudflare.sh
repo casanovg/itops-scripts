@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 
 # Update Cloudflare Dynamic DNS record
 # .............................................
@@ -19,58 +19,188 @@ source ~/.cloudflare-settings
 #    RECORD_NAME="service.domain.com"
 #    RECORD_TYPE="A"
 #    MATCH="all"
+
+# Choose any of these services URL
+# to get my external IP address:
 #
+#    checkip.amazonaws.com
+#    ifconfig.me
+#    icanhazip.com
+#    ipecho.net/plain
+#    ifconfig.co
 
-MY_IP="$(/root/get-myip.sh)"
+MY_IP_URL="checkip.amazonaws.com"
 
-# API_TOKEN="P5UHT9maztaQkeRxNbpR-R-aNTcZ_PxfLFeApuwk"
+CF_IP="0.0.0.0"
 
-# Api token test
-# curl -X GET "https://api.cloudflare.com/client/v4/user/tokens/verify" \
-#      -H "Authorization: Bearer P5UHT9maztaQkeRxNbpR-R-aNTcZ_PxfLFeApuwk" \
-#      -H "Content-Type:application/json"
+CF_PROXIED=""
 
 LOG_PATH="/var/log/cloudflare-updates.log"
 
-# Get current DNS record at Cloudflare
-CF_IP=$(curl -s -X GET "$API_URL/zones/$ZONE_ID/dns_records?name=$RECORD_NAME&match=$MATCH" \
-             -H "Content-Type: application/json" \
-             -H "X-Auth-Key: $GLOBAL_API_KEY" \
-             -H "X-Auth-Email: $EMAIL" | sed -e 's/[{}]/''/g' |
-        awk -v RS=',"' -F: '/^content/ {print $2}' |
-        tr -d '"')
+# Function to check IPv4 syntax
+validate_ip () {
+    if expr "$1" : '[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$' > /dev/null; then
+        for i in 1 2 3 4; do
+            if [ $(echo "$1" | cut -d. -f$i) -gt 255 ]; then
+                # echo " > Invalid IP address: \"$1\""
+                return 1
+            fi
+        done
+        # echo " > Valid IP address: \"$1\""
+        return 0
+    else
+        # echo " > Invalid IP address: \"$1\""
+        return 1
+    fi
+}
 
-echo
-echo "............................................................"
-echo " Checking Dynamic DNS on $(date)"
-echo "    Current IP: $MY_IP"
-echo " Cloudflare IP: $CF_IP"
+# Function to get the Cloudflare DNS record info
+get_cf_dns () {
 
-if [ "$MY_IP" != $CF_IP ]; then
-    echo " Cloudflare DNS record outdated, trying to update it ..."
-    # Update record address
+    # Get Cloudflare DNS record IP address
+    CF_IP=$(curl -s -X GET "$API_URL/zones/$ZONE_ID/dns_records?name=$RECORD_NAME&match=$MATCH" \
+                 -H "Content-Type: application/json" \
+                 -H "X-Auth-Key: $GLOBAL_API_KEY" \
+                 -H "X-Auth-Email: $EMAIL" | sed -e 's/[{}]/''/g' |
+            awk -v RS=',"' -F: '/^content/ {print $2}' |
+            tr -d '"')
+
+    # Get Cloudflare DNS record proxy status
+    CF_PROXIED=$(curl -s -X GET "$API_URL/zones/$ZONE_ID/dns_records?name=$RECORD_NAME&match=$MATCH" \
+                 -H "Content-Type: application/json" \
+                 -H "X-Auth-Key: $GLOBAL_API_KEY" \
+                 -H "X-Auth-Email: $EMAIL" | sed -e 's/[{}]/''/g' |
+            awk -v RS=',"' -F: '/^proxied/ {print $2}' |
+            tr -d '"')
+
+}
+
+# Function to update the Cloudflare DNS record data
+update_cf_dns () {
+
+    # Update record IP address
     RESULT=$(curl -s -X PUT "$API_URL/zones/$ZONE_ID/dns_records/$RECORD_ID" \
                   -H "X-Auth-Key: $GLOBAL_API_KEY" \
                   -H "X-Auth-Email: $EMAIL" \
                   -H "Content-Type: application/json" \
-                  --data '{"type":'\"$RECORD_TYPE\"',"name":'\"$RECORD_NAME\"',"content":'\"$MY_IP\"',"proxied":false}' |
+                  --data '{"type":'\"$RECORD_TYPE\"',"name":'\"$RECORD_NAME\"',"content":'\"$1\"',"proxied":false}' |
              grep "\"success\":true")
     if [ ! -z $RESULT ]; then
-        echo >> $LOG_PATH
+        echo | tee -a $LOG_PATH
         echo -n " " | tee -a $LOG_PATH
-        echo -n "DNS record successfully updated to $MY_IP " | tee -a $LOG_PATH
+        echo -n "DNS record successfully updated to $1 " | tee -a $LOG_PATH
         echo "on $(date)!" >> $LOG_PATH
         echo
     else
-        echo >> $LOG_PATH
+        echo | tee -a $LOG_PATH
         echo -n " " | tee -a $LOG_PATH
-        echo -n "Clouflare record update to $MY_IP failed " | tee -a $LOG_PATH
+        echo -n "Clouflare record update to $1 failed " | tee -a $LOG_PATH
         echo "on $(date)!" >> $LOG_PATH
         echo
     fi
+
+}
+
+echo ".........................................................................."
+echo " Checking Dynamic DNS on $(date)"
+
+# Get my external IP address
+MY_IP="$(curl -s $MY_IP_URL 2>>/dev/null)"
+#MY_IP=1.168.1.254
+
+# Validate the external IP address
+if $(validate_ip $MY_IP); then
+    echo
+    echo " My current external IP address: $MY_IP"
 else
-    echo " DNS record matches current IP, no update necessary!"
+    echo
+    echo " Unable to get my external IP address in a valid format, exiting!"
+    echo ".........................................................................."
+    echo
+    exit
 fi
 
-echo "............................................................"
-echo
+# Get DNS name resolution for the dynamic IP
+DNS_LOOKUP=$(nslookup $RECORD_NAME | grep 'Address*' | grep -v 'localhost' | awk '{print $3}')
+
+# Validate the DNS lookup IP address
+if $(validate_ip $DNS_LOOKUP); then
+    echo
+    echo " DNS lookup for $RECORD_NAME: $DNS_LOOKUP"
+else
+    echo
+    echo " Unable to get a valid DNS lookup for $RECORD_NAME ..."
+fi
+
+# Comparing my external IP address with the DNS lookup
+if [ "$MY_IP" != "$DNS_LOOKUP" ]; then
+
+    echo
+    echo " The DNS lookup of the dynamic IP doesn't match the current"
+    echo " external IP address. Verifying the Cloudflare DNS record ..."
+
+    # Call the get Cloudflare record info function
+    get_cf_dns
+    #echo
+    #echo " === Cloudflare DNS record IP: $CF_IP"
+    #echo " === Cloudflare DNS record proxied status: $CF_PROXIED"
+
+    # Validate the Cloudflare DNS record IP address
+    if $(validate_ip $CF_IP); then
+        echo
+        echo " = Cloudflare DNS record IP for $RECORD_NAME: $CF_IP"
+
+        # Comparing my external IP address with the Cloudflare record
+        if [ "$MY_IP" != "$CF_IP" ]; then
+
+            # Call the update Cloudflare function
+            update_cf_dns $MY_IP
+            echo
+
+        else
+
+            echo
+            echo " The Cloudflare DNS record matches my external IP address, maybe"
+            echo " the lookup returned a different address due to a DNS zone"
+            echo " propagation delay, or because the record is proxied ..."
+            echo
+            echo " Checking Cloudflare DNS record proxy status ..."
+            echo
+            echo " = Cloudflare DNS record proxy for $RECORD_NAME: $CF_PROXIED"
+            if [ "$CF_PROXIED" == "true" ]; then
+                echo
+                echo " DNS record proxy active, trying to update record to stop it ..."
+
+                # Call the update Cloudflare function
+                update_cf_dns $MY_IP
+            else
+                echo
+                echo " DNS proxy inactive, please wait for DNS propagation, exiting!"
+            fi
+            echo ".........................................................................."
+            echo
+            exit
+
+        fi
+
+    else
+        echo
+        echo " Unable to get a valid dynamic IP DNS record from Cloudflare "
+        echo " the $RECORD_NAME record has to be updated ..."
+
+        # Call the update Cloudflare function
+        update_cf_dns $MY_IP
+        echo
+
+    fi
+
+else
+
+    echo
+    echo " The DNS lookup of the dynamic IP matches the current external"
+    echo " IP address. DNS record update not needed, exiting!"
+    echo ".........................................................................."
+    echo
+    exit
+
+fi

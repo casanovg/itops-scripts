@@ -1,6 +1,7 @@
 #!/bin/sh
 
-# Update Cloudflare Dynamic DNS record
+# Script to update Cloudflare dynamic
+# DNS record for OpenWRT
 # .............................................
 # 2021-02-12 gustavo.casanova@gmail.com
 
@@ -16,8 +17,10 @@ source ~/.cloudflare-settings
 #    ZONE_ID="3ef7db67ae12dd63f0998ae8e8e97a9a"
 #    ZONE_NAME="domain.com"
 #    RECORD_ID="9ab3490fdda901255bb332a12cc127fa"
-#    RECORD_NAME="service.domain.com"
 #    RECORD_TYPE="A"
+#    RECORD_NAME="service.domain.com"
+#    RECORD_TTL="1"
+#    RECORD_PROXY="true"
 #    MATCH="all"
 
 # Choose any of these services URL
@@ -83,7 +86,7 @@ update_cf_dns () {
                   -H "X-Auth-Key: $GLOBAL_API_KEY" \
                   -H "X-Auth-Email: $EMAIL" \
                   -H "Content-Type: application/json" \
-                  --data '{"type":'\"$RECORD_TYPE\"',"name":'\"$RECORD_NAME\"',"content":'\"$1\"',"proxied":false}' |
+                  --data '{"type":'\"$RECORD_TYPE\"',"name":'\"$RECORD_NAME\"',"content":'\"$1\"',"ttl":'$RECORD_TTL',"proxied":'$RECORD_PROXY'}' |
              grep "\"success\":true")
     if [ ! -z $RESULT ]; then
         echo | tee -a $LOG_PATH
@@ -106,7 +109,6 @@ echo " Checking Dynamic DNS on $(date)"
 
 # Get my external IP address
 MY_IP="$(curl -s $MY_IP_URL 2>>/dev/null)"
-#MY_IP=1.168.1.254
 
 # Validate the external IP address
 if $(validate_ip $MY_IP); then

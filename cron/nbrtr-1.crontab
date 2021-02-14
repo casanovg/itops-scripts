@@ -11,6 +11,6 @@
 # -----------------------------------------------------------------------------------
   0  5  *  *  *     /sbin/reboot
 
-# Check our external IP address and update Cloudflare DNS (Every 5 minutes)
+# Check the external IP address and update Cloudflare DNS (Every 5 minutes)
 # -----------------------------------------------------------------------------------
  */5 *  *  *  *     /root/update-cloudflare.sh

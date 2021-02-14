@@ -185,7 +185,7 @@ if [ "$MY_IP" != "$DNS_LOOKUP" ]; then
     else
         echo
         echo " Unable to get a valid dynamic IP DNS record from Cloudflare "
-        echo " the $RECORD_NAME record has to be updated ..."
+        echo " Forcing a $RECORD_NAME record update ..."
 
         # Call the update Cloudflare function
         update_cf_dns $MY_IP

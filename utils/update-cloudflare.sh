@@ -156,6 +156,8 @@ if [ "$MY_IP" != "$DNS_LOOKUP" ]; then
             update_cf_dns $MY_IP
             echo
 
+            ~/ms.sh 1>>/dev/null 2>>/dev/null            # Send IP status email report
+
         else
 
             echo
@@ -190,6 +192,8 @@ if [ "$MY_IP" != "$DNS_LOOKUP" ]; then
         # Call the update Cloudflare function
         update_cf_dns $MY_IP
         echo
+
+        ~/ms.sh 1>>/dev/null 2>>/dev/null            # Send IP status email report
 
     fi
 

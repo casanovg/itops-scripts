@@ -7,6 +7,10 @@
 # |  |  |  |  |
 # *  *  *  *  * user-name  command to be executed
 
+# After reboot, wait 5 seconds and send IP status email report
+# -----------------------------------------------------------------------------------
+  @reboot sleep 5 && /root/ms.sh
+
 # System reboot (Every day at 05:00 AM)
 # -----------------------------------------------------------------------------------
   0  5  *  *  *     /sbin/reboot

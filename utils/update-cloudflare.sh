@@ -21,7 +21,6 @@ source ~/.cloudflare-settings
 #    RECORD_NAME="service.domain.com"
 #    RECORD_TTL="1"
 #    RECORD_PROXY="true"
-#    MATCH="all"
 
 # Choose any of these services URL
 # to get my external IP address:
@@ -34,11 +33,14 @@ source ~/.cloudflare-settings
 
 MY_IP_URL="checkip.amazonaws.com"
 
-CF_IP="0.0.0.0"
-
-CF_PROXIED=""
-
 LOG_PATH="/var/log/cloudflare-updates.log"
+TMP_FILE="/tmp/cf.json"
+
+CF_TYPE=""
+CF_IP="0.0.0.0"
+CF_TTL=""
+CF_PROXIED=""
+MATCH="all"
 
 # Function to check IPv4 syntax
 validate_ip () {
@@ -60,21 +62,20 @@ validate_ip () {
 # Function to get the Cloudflare DNS record info
 get_cf_dns () {
 
-    # Get Cloudflare DNS record IP address
-    CF_IP=$(curl -s -X GET "$API_URL/zones/$ZONE_ID/dns_records?name=$RECORD_NAME&match=$MATCH" \
-                 -H "Content-Type: application/json" \
-                 -H "X-Auth-Key: $GLOBAL_API_KEY" \
-                 -H "X-Auth-Email: $EMAIL" | sed -e 's/[{}]/''/g' |
-            awk -v RS=',"' -F: '/^content/ {print $2}' |
-            tr -d '"')
+    # Get Cloudflare DNS record json
+    curl -s -X GET "$API_URL/zones/$ZONE_ID/dns_records?name=$1&match=$MATCH" \
+            -H "Content-Type: application/json" \
+            -H "X-Auth-Key: $GLOBAL_API_KEY" \
+            -H "X-Auth-Email: $EMAIL" > $TMP_FILE
 
-    # Get Cloudflare DNS record proxy status
-    CF_PROXIED=$(curl -s -X GET "$API_URL/zones/$ZONE_ID/dns_records?name=$RECORD_NAME&match=$MATCH" \
-                 -H "Content-Type: application/json" \
-                 -H "X-Auth-Key: $GLOBAL_API_KEY" \
-                 -H "X-Auth-Email: $EMAIL" | sed -e 's/[{}]/''/g' |
-            awk -v RS=',"' -F: '/^proxied/ {print $2}' |
-            tr -d '"')
+	# Record type
+	CF_TYPE=$(cat $TMP_FILE | sed -e 's/[{}]/''/g' | awk -v RS=',"' -F: '/^type/ {print $2}' | tr -d '"')
+	# Record IP address
+	CF_IP=$(cat $TMP_FILE | sed -e 's/[{}]/''/g' | awk -v RS=',"' -F: '/^content/ {print $2}' | tr -d '"')
+	# Record TTL
+	CF_TTL=$(cat $TMP_FILE | sed -e 's/[{}]/''/g' | awk -v RS=',"' -F: '/^ttl/ {print $2}' | tr -d '"')
+	# Record proxy status
+	CF_PROXIED=$(cat $TMP_FILE | sed -e 's/[{}]/''/g' | awk -v RS=',"' -F: '/^proxied/ {print $2}' | tr -d '"')
 
 }
 
@@ -92,13 +93,13 @@ update_cf_dns () {
         echo | tee -a $LOG_PATH
         echo -n " " | tee -a $LOG_PATH
         echo -n "DNS record successfully updated to $1 " | tee -a $LOG_PATH
-        echo "on $(date)!" >> $LOG_PATH
+        echo "on $(date +"%Y-%m-%d %H:%M:%S")! ($RECORD_NAME)" >> $LOG_PATH
         echo
     else
         echo | tee -a $LOG_PATH
         echo -n " " | tee -a $LOG_PATH
         echo -n "Clouflare record update to $1 failed " | tee -a $LOG_PATH
-        echo "on $(date)!" >> $LOG_PATH
+        echo "on $(date +"%Y-%m-%d %H:%M:%S")! ($RECORD_NAME)" >> $LOG_PATH
         echo
     fi
 
@@ -141,7 +142,7 @@ if [ "$MY_IP" != "$DNS_LOOKUP" ]; then
     echo " external IP address. Verifying the Cloudflare DNS record ..."
 
     # Call the get Cloudflare record info function
-    get_cf_dns
+    get_cf_dns $RECORD_NAME
     #echo
 
     # Validate the Cloudflare DNS record IP address

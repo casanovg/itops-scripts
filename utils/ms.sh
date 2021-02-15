@@ -8,7 +8,7 @@
 # Note: This script depends on mailsend:
 #       $ opkg install mailsend
 
-source ~/.mail-settings
+source /root/.mail-settings
 
 # Please set the following variables om a separate
 # ".mail-settings" file before running this script:

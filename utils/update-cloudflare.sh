@@ -105,7 +105,7 @@ update_cf_dns () {
 }
 
 echo ".........................................................................."
-echo " Checking Dynamic DNS on $(date)"
+echo " Checking Dynamic DNS on $(date +"%Y-%m-%d %H:%M:%S")"
 
 # Get my external IP address
 MY_IP="$(curl -s $MY_IP_URL 2>>/dev/null)"

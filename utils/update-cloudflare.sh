@@ -156,7 +156,7 @@ if [ "$MY_IP" != "$DNS_LOOKUP" ]; then
             update_cf_dns $MY_IP
             echo
 
-            ~/ms.sh 1>>/dev/null 2>>/dev/null            # Send IP status email report
+            /root/ms.sh 1>>/dev/null 2>>/dev/null            # Send IP status email report
 
         else
 
@@ -174,6 +174,9 @@ if [ "$MY_IP" != "$DNS_LOOKUP" ]; then
 
                 # Call the update Cloudflare function
                 update_cf_dns $MY_IP
+
+                /root/ms.sh 1>>/dev/null 2>>/dev/null            # Send IP status email report
+
             else
                 echo
                 echo " DNS proxy setting correct, please wait for DNS propagation. Exiting!"
@@ -193,7 +196,7 @@ if [ "$MY_IP" != "$DNS_LOOKUP" ]; then
         update_cf_dns $MY_IP
         echo
 
-        ~/ms.sh 1>>/dev/null 2>>/dev/null            # Send IP status email report
+        /root/ms.sh 1>>/dev/null 2>>/dev/null            # Send IP status email report
 
     fi
 

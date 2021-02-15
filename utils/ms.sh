@@ -25,7 +25,7 @@ LOG_PATH="/var/log/cloudflare-updates.log"
 MAIL_SMTP="smtp.gmail.com"
 MAIL_PORT="587"
 MAIL_OPTS="-starttls -auth"
-MAIL_SUBJ="IP Report @ $(date)"
+MAIL_SUBJ="IP Report @ $(date +"%Y-%m-%d %H:%M:%S")"
 MAIL_ENCD="-cs \"iso-8859-1\" -enc-type \"8bit\""
 MAIL_MESG="External IP address: $(curl -s $MY_IP_URL 2>>/dev/null)"
 

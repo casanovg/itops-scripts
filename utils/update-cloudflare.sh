@@ -122,7 +122,7 @@ else
 fi
 
 # Get DNS name resolution for the dynamic IP
-DNS_LOOKUP=$(nslookup $RECORD_NAME | grep 'Address*' | grep -v 'localhost' | awk '{print $3}')
+DNS_LOOKUP=$(nslookup $RECORD_NAME | grep 'Address*' | grep -v 'localhost' | grep -v '127.0.0.1' | awk '{print $3}')
 
 # Validate the DNS lookup IP address
 if $(validate_ip $DNS_LOOKUP); then

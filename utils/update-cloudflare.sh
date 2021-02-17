@@ -5,6 +5,9 @@
 # .............................................
 # 2021-02-12 gustavo.casanova@gmail.com
 
+# Note: This script depends on curl over ssl:
+#       $ opkg update && opkg install curl ca-certificates
+
 source ~/.cloudflare-settings
 
 # Please set the following variables om a separate

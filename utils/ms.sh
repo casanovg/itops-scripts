@@ -6,7 +6,7 @@
 # 2021-02-14 gustavo.casanova@gmail.com
 
 # Note: This script depends on mailsend:
-#       $ opkg install mailsend
+#       $ opkg update && opkg install libopenssl mailsend
 
 source /root/.mail-settings
 

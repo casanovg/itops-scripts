@@ -21,9 +21,13 @@
 
 # Synchronize IT Operations GitHub repository every 1 hour
 # -----------------------------------------------------------------------------------
-# 45 *  *  *  *     ~/itops-scripts/utils/git-sync.sh
+# 45 *  *  *  *     ~/itops-scripts/utils/git-sync.sh ~/itops-scripts/
 
 # Verify every hour that Seafile cloud services are up
 # -----------------------------------------------------------------------------------
 # 0  *  *  *  *     ~/itops-scripts/virtual-machines/cloud/start-nb-cloud.sh
+
+# Seafile storage checking and repair (Every Saturday at 7:00 AM)
+# -----------------------------------------------------------------------------------
+  0  7  *  *  sat   ~/itops-scripts/virtual-machines/cloud/seafile-storage-cleanup.sh
 

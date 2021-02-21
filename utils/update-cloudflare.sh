@@ -33,10 +33,10 @@ source ~/.cloudflare-settings
 
 MY_IP_URL="checkip.amazonaws.com"
 
+API_URL="https://api.cloudflare.com/client/v4"
 LOG_PATH="/var/log/cloudflare-updates.log"
 TMP_FILE="/tmp/cf.json"
 
-API_URL="https://api.cloudflare.com/client/v4"
 CF_TYPE=""
 CF_IP="0.0.0.0"
 CF_TTL=""

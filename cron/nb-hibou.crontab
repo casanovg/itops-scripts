@@ -11,7 +11,7 @@
 # -----------------------------------------------------------------------------------
   @reboot sleep 15 && ~/itops-scripts/virtual-machines/cloud/start-nb-cloud.sh
 
-# Virtual machine operating system update (Every Thursday at 22:00 PM)
+# Virtual machine operating system update (Every Sunday at 23:30 PM)
 # -----------------------------------------------------------------------------------
   30 23 *  *  sun   ~/itops-scripts/virtual-machines/cloud/update-os.sh
 
@@ -21,7 +21,7 @@
 
 # Synchronize IT Operations GitHub repository every 1 hour
 # -----------------------------------------------------------------------------------
-# 0  *  *  *  *     ~/itops-scripts/utils/git-sync.sh
+# 45 *  *  *  *     ~/itops-scripts/utils/git-sync.sh
 
 # Verify every hour that Seafile cloud services are up
 # -----------------------------------------------------------------------------------

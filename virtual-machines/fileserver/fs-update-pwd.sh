@@ -1,22 +1,56 @@
-#!/bin/sh
+#!/bin/bash
 
 # HTA filesystem update password
 # ...........................................
-# 2019-12-09 gcasanova@hellermanntyton.com.ar
+# 2020-10-13 gcasanova@hellermanntyton.com.ar
+
+clear
 
 echo ""
-echo "················································"
-echo "· Please enter the NEW domain admin password ·"
-echo "················································"
+echo "··········································"
+echo "· Please enter the domain admin username ·"
+echo "··········································"
+echo -n " > "
+read USR
+echo "$USR" | openssl aes-256-cbc -pbkdf2 -pass pass:' ' > ~/.fs-usr
+
+echo ""
+echo "··········································"
+echo "· Please enter the domain admin password ·"
+echo "··········································"
 stty_orig=$(stty -g)
 stty -echo
-read pwd 1>/dev/null
+echo -n " > "
+read PWD 1>/dev/null
 stty $stty_orig
-#echo "$pwd" | openssl aes-256-cbc -a -salt -pass pass:' ' > ~/.fs-usr
-echo "$pwd" | openssl aes-256-cbc -pbkdf2 -pass pass:' ' > ~/.fs-usr
+echo "$PWD" | openssl aes-256-cbc -pbkdf2 -pass pass:' ' > ~/.fs-pwd
+echo ""
+
+stty sane
+
+clear
+
 echo ""
 echo "#############################################################################"
-echo "# ATTENTION! The new administrator's password is:" $pwd
+echo "# ATTENTION!"
+echo -n "# Domain admin username set to: [ $USR ] password: [ "
+
+LPWD=${#PWD}
+SHOW=$(( LPWD * 1 / 3 ))
+
+for (( i=0; i<$LPWD; i++ )); do
+        if [ $i -lt $((LPWD-$SHOW)) ]; then
+                echo -n "*";
+        else
+                echo -n "${PWD:$i:1}";
+        fi
+done;
+echo " ]"
+
 echo "#############################################################################"
 echo ""
+
+stty sane
+sleep 3
+clear
 

@@ -20,6 +20,6 @@ else
 	exit 1;
 fi
 
-stty ospeed $SERIAL_BPS ispeed $SERIAL_BPS -F $SERIAL_PORT
+stty ospeed $SERIAL_BPS ispeed $SERIAL_BPS raw -F $SERIAL_PORT
 cat $SERIAL_PORT
 

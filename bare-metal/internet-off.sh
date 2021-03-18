@@ -11,7 +11,7 @@ WAIT_TIME=300 # If the virtual machine does not stop in 5 minutes, exit
 EXIT_CODE=0
 
 #for INTERNET in "HTA-NetPal" "HTA-Firewall"; do
-for INTERNET in "HTA-NetPal"; do
+for INTERNET in "HTA-Firewall" do
 
 	VM=$(vboxmanage list vms | gawk -F\" '{print $(NF-1)}' | grep -w "^$INTERNET$")
 	if [ ! -z "$VM" ]; then

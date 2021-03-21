@@ -2,7 +2,7 @@
 
 # Script to move a virtual machine to anothe bare-metal server
 # .............................................................
-# 2021-03-21 gcasanova@hellermanntyton.com.ar
+# 2020-01-16 gcasanova@hellermanntyton.com.ar
 
 VM=$(vboxmanage list vms | gawk -F\" '{print $(NF-1)}' | grep -w "^$1$")
 DEST=$2
@@ -11,7 +11,7 @@ VBOX_PATH="/data/VirtualBox-VMs"
 if [ $# -eq 0 ] || [ -z "$1" ] || [ -z "$2" ]
   then
     echo ""
-    echo "Usage: vm-move-out.sh <VIRTUAL-MACHINE> <DESTINATION-SERVER> [--disk-only]"
+    echo "Usage: vm-move-out.sh <VIRTUAL-MACHINE> <DESTINATION-SERVER>"
     echo ""
 else
     if [ -z "$VM" ]; then
@@ -36,4 +36,5 @@ else
         echo ""
     fi
 fi
+
 

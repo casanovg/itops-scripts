@@ -7,6 +7,7 @@
 VM=$(vboxmanage list vms | gawk -F\" '{print $(NF-1)}' | grep -w "^$1$")
 DEST=$2
 VBOX_PATH="/data/VirtualBox-VMs"
+VM_RUNNING=$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep "$VM")
 
 if [ $# -eq 0 ] || [ -z "$1" ] || [ -z "$2" ]
   then
@@ -28,10 +29,18 @@ else
             echo "$DEST server can NOT be contactacted!"
         else
             echo "Remote server $DEST contacted!"
-            ~/itops-scripts/bare-metal/vm-off.sh "$VM"
+	    if [ ! -z "$VM_RUNNING" ]; then 
+            	echo "$VM virtual machine is running, sending stop signal ..."	
+		~/itops-scripts/bare-metal/vm-off.sh "$VM"
+	    else
+		echo "$VM virtual machine already stopped ..."
+	    fi
             echo "Copying \"$VM\" virtual machine to $DEST host ..."
             echo ""
             rsync -r -a --relative "$VBOX_PATH"/"$VM" --info=progress2 $DEST:/
+	    if [ ! -z "$VM_RUNNING" ]; then
+		echo "Restarting virtual machine ..."
+	    fi 
         fi
         echo ""
     fi

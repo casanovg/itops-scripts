@@ -2,7 +2,8 @@
 
 # Script to move a virtual machine to anothe bare-metal server
 # .............................................................
-# 2021-03-21 gcasanova@hellermanntyton.com.ar
+# 2020-01-16 gcasanova@hellermanntyton.com.ar
+# 2021-03-21 Add --disk-only option
 
 VM=$(vboxmanage list vms | gawk -F\" '{print $(NF-1)}' | grep -w "^$1$")
 DEST=$2
@@ -31,7 +32,7 @@ else
         else
             echo "Remote server $DEST contacted!"
 	    if [ ! -z "$VM_RUNNING" ]; then 
-            	echo "$VM virtual machine is running, sending stop signal ..."	
+            	# echo "$VM virtual machine is running, sending stop signal ..."	
 		~/itops-scripts/bare-metal/vm-off.sh "$VM"
 	    else
 		echo "$VM virtual machine already stopped ..."
@@ -40,7 +41,13 @@ else
 	    if [ "$3" == "$DO_OPT" ]; then
 		echo "Copying \"$VM\" disk/s to $DEST host ..."
 		echo ""
-            	rsync -r -a --relative "$VBOX_PATH"/"$VM" --include '$VBOX_PATH//$VM' --include '*.vdi *.vmdk' --exclude '*' --info=progress2 $DEST:/
+		if [ ! -z "$(ls -1 /data/VirtualBox-VMs/HTA-NetPal/*.vdi 2>>/dev/null)" ]; then
+			rsync -r -a --relative "$VBOX_PATH"/"$VM"/*.vdi --info=progress2 $DEST:/
+		fi
+		if [ ! -z "$(ls -1 /data/VirtualBox-VMs/HTA-NetPal/*.vmdk 2>>/dev/null)" ]; then
+			rsync -r -a --relative "$VBOX_PATH"/"$VM"/*.vmdk --info=progress2 $DEST:/
+		fi
+            	#rsync -r -a --relative "$VBOX_PATH"/"$VM" --include="*/" --include="*.vdi *.vmdk" --exclude="*" --info=progress2 $DEST:/
 	    else
 		echo "Copying \"$VM\" virtual machine to $DEST host ..."
             	echo ""
@@ -49,6 +56,7 @@ else
 
 	    if [ ! -z "$VM_RUNNING" ]; then
 		echo "Restarting virtual machine ..."
+		~/itops-scripts/bare-metal/vm-on.sh "$VM"
 	    fi 
         fi
         echo ""

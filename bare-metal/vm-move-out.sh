@@ -8,11 +8,12 @@ VM=$(vboxmanage list vms | gawk -F\" '{print $(NF-1)}' | grep -w "^$1$")
 DEST=$2
 VBOX_PATH="/data/VirtualBox-VMs"
 VM_RUNNING=$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep "$VM")
+DO_OPT="--disk-only"
 
-if [ $# -eq 0 ] || [ -z "$1" ] || [ -z "$2" ]
+if [ $# -eq 0 ] || [ -z "$1" ] || [ -z "$2" ] || ([ ! -z "$3" ] && [ "$3" != "$DO_OPT" ])
   then
     echo ""
-    echo "Usage: vm-move-out.sh <VIRTUAL-MACHINE> <DESTINATION-SERVER> [--disk-only]"
+    echo "Usage: vm-move-out.sh <VIRTUAL-MACHINE> <DESTINATION-SERVER> ["$DO_OPT"]"
     echo ""
 else
     if [ -z "$VM" ]; then
@@ -35,9 +36,17 @@ else
 	    else
 		echo "$VM virtual machine already stopped ..."
 	    fi
-            echo "Copying \"$VM\" virtual machine to $DEST host ..."
-            echo ""
-            rsync -r -a --relative "$VBOX_PATH"/"$VM" --info=progress2 $DEST:/
+
+	    if [ "$3" == "$DO_OPT" ]; then
+		echo "Copying \"$VM\" disk/s to $DEST host ..."
+		echo ""
+            	rsync -r -a --relative "$VBOX_PATH"/"$VM" --include '$VBOX_PATH//$VM' --include '*.vdi *.vmdk' --exclude '*' --info=progress2 $DEST:/
+	    else
+		echo "Copying \"$VM\" virtual machine to $DEST host ..."
+            	echo ""
+            	rsync -r -a --relative "$VBOX_PATH"/"$VM" --info=progress2 $DEST:/
+	    fi
+
 	    if [ ! -z "$VM_RUNNING" ]; then
 		echo "Restarting virtual machine ..."
 	    fi 

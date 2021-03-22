@@ -55,7 +55,8 @@ else
 	    fi
 
 	    if [ ! -z "$VM_RUNNING" ]; then
-		echo "Restarting virtual machine ..."
+		echo ""
+		echo "The $VM virtual machine was on before the copy, restarting it ..."
 		~/itops-scripts/bare-metal/vm-on.sh "$VM"
 	    fi 
         fi

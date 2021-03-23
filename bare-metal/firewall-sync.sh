@@ -18,7 +18,6 @@ echo ""
 if [ "$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$FIREWALL_VM$")" ]; then
 
 	~/itops-scripts/bare-metal/vm-off.sh $FIREWALL_VM
-
 	for BARE_METAL in $BARE_METAL_1 $BARE_METAL_2 $BARE_METAL_3; do
 	    echo -n "Bare-metal server "
 	    if [ $BARE_METAL == "$THIS_BARE_METAL_IP" ]; then
@@ -46,4 +45,3 @@ else
     echo ""
 
 fi
-

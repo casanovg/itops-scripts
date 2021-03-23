@@ -4,8 +4,7 @@
 # ..............................................................
 # 2020-03-22 gcasanova@hellermanntyton.com.ar
 
-#FIREWALL_VM="HTA-Firewall"
-FIREWALL_VM="HTA-NetPal"
+FIREWALL_VM="HTA-Firewall"
 PING_TIMEOUT=2
 BARE_METAL_1=10.6.17.30
 BARE_METAL_2=10.6.17.40

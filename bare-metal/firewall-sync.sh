@@ -6,6 +6,7 @@
 
 #FIREWALL_VM="HTA-Firewall"
 FIREWALL_VM="HTA-NetPal"
+PING_TIMEOUT=2
 BARE_METAL_1=10.6.17.30
 BARE_METAL_2=10.6.17.40
 BARE_METAL_3=10.6.17.50
@@ -16,6 +17,8 @@ THIS_BARE_METAL_IP=$(sudo ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*'
 echo ""
 
 if [ "$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$FIREWALL_VM$")" ]; then
+
+	~/itops-scripts/bare-metal/vm-off.sh $FIREWALL_VM
 
 	for BARE_METAL in $BARE_METAL_1 $BARE_METAL_2 $BARE_METAL_3; do
 	    echo -n "Bare-metal server "
@@ -31,9 +34,10 @@ if [ "$(vboxmanage list runningvms | gawk -F\" '{print $(NF-1)}' | grep -w "^$FI
 	        else
 	            echo "inactive, can't sync ..."
 		fi
-		echo ""
+		#echo ""
 	    fi
 	done
+	~/itops-scripts/bare-metal/vm-on.sh $FIREWALL_VM
 	echo "Sync complete!"
 	echo ""
 

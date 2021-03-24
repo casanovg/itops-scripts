@@ -21,12 +21,17 @@
 
 # Synchronize IT Operations GitHub repository every 1 hour
 # -----------------------------------------------------------------------------------
-  0  *  *  *  *     ~/itops-scripts/utils/git-sync.sh ~/itops-scripts/
+  0  *  *  *  *     crontab -l > ~/itops-scripts/cron/$(hostname -s).crontab
+  5  *  *  *  *     ~/itops-scripts/utils/git-sync.sh ~/itops-scripts/
 
 # Verify every 6 hours that essential network services are running. This schedule
 # is to prevent a virtual machine from restarting while it is being backed up
 # -----------------------------------------------------------------------------------
   0 */6 *  *  *     ~/itops-scripts/bare-metal/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
+
+# Export Firewall settings if running on this server (Every day at 03:30 AM) 
+# -----------------------------------------------------------------------------------
+  30 3  *  *  *     ~/itops-scripts/bare-metal/firewall-sync.sh
 
 # Restart access control and surveillance virtual machine (Several times a week)
 # -----------------------------------------------------------------------------------

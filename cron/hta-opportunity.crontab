@@ -13,7 +13,7 @@
 
 # Server operating system update (Every Wednesday at 22:00 PM)
 # -----------------------------------------------------------------------------------
-  0  22 *  *  wed   ~/itops-scripts/bare-metal/update-os.sh
+# 0  22 *  *  wed   ~/itops-scripts/bare-metal/update-os.sh
 
 # VirtualBox full virtual machines backup (Every Sunday at 07:00 AM)
 # -----------------------------------------------------------------------------------
@@ -21,10 +21,19 @@
 
 # Synchronize IT Operations GitHub repository every 1 hour
 # -----------------------------------------------------------------------------------
-  30 *  *  *  *     ~/itops-scripts/utils/git-sync.sh
+  30 *  *  *  *     crontab -l > ~/itops-scripts/cron/$(hostname -s).crontab
+  35 *  *  *  *     ~/itops-scripts/utils/git-sync.sh ~/itops-scripts/
 
 # Verify every 12 hours that essential network services are running. This schedule
 # is to prevent a virtual machine from restarting while it is being backed up
 # -----------------------------------------------------------------------------------
-  0 3-23/12 *  *  *  ~/itops-scripts/bare-metal/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
+  0 3-23/12 *  *  * ~/itops-scripts/bare-metal/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
+
+# Export Firewall settings if running on this server (Every day at 03:30 AM)
+# -----------------------------------------------------------------------------------
+  30 3  *  *  *     ~/itops-scripts/bare-metal/firewall-sync.sh
+
+# Start HTA-ALT development server (Every day at 23:30 PM)
+# -----------------------------------------------------------------------------------
+  30 23 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh HTA-ALT
 

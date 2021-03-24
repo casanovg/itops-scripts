@@ -8,14 +8,17 @@
 
 LETSENCRYPT="/etc/letsencrypt/archive"
 
-if [ $# -eq 0 ] || [ -z "$1" ]
-  then
+if [ $# -eq 0 ] || [ -z "$1" ] || [ ! -d $LETSENCRYPT ]; then
     echo ""
     echo "Usage: generate-pfx-from-pem-certificate.sh <CERTIFICATE_NAME>"
     echo ""
-    echo "Certificates existing on this machine:"
-    echo ""
-    sudo ls -1 $LETSENCRYPT
+    if [ -z "$(ls -1 $LETSENCRYPT 2>>/dev/null)" ]; then
+        echo "Certificates existing on this machine:"
+        echo ""
+        sudo ls -1 $LETSENCRYPT
+    else
+        echo "   *** There are no certificates on this machine ***   "
+    fi
     echo ""
     exit 1
 fi

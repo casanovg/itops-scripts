@@ -37,3 +37,8 @@
 # -----------------------------------------------------------------------------------
   30 23 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh HTA-ALT
 
+# Restart HTA-RDS remote desktop server (After scheduled shutdowns)
+# -----------------------------------------------------------------------------------
+  0  3  *  *  mon   ~/itops-scripts/bare-metal/vm-restart.sh HTA-RDS
+  0  3  *  *  thu   ~/itops-scripts/bare-metal/vm-restart.sh HTA-RDS
+

@@ -16,10 +16,10 @@ rm -f /var/lib/samba/*
 # Setup primary AD controller as primary dns by editing "/etc/resolv.conf"
 # ------------------------------------------------------------------------
 cat /etc/resolv.conf
-nslookup HTA-PDC.htargentina.lan
+nslookup HTA-ADP.hellermanntyton.ar
 # Reverse lookup primary AD domain controller ...
 # -----------------------------------------------
-nslookup 10.6.17.45
+nslookup 10.6.17.41
 # Resolving SRV records in interactive mode ...
 # ---------------------------------------------
 #nslookup

@@ -30,10 +30,11 @@ sudo firewall-cmd --reload
 
 echo
 echo "Enabling and starting Zabbix agent service ..."
+echo
 sudo systemctl enable zabbix-agent.service
 sudo systemctl start zabbix-agent.service
 
 echo
-echo "Setup complete!"
+echo "Zabbix agent setup complete!"
 echo
 

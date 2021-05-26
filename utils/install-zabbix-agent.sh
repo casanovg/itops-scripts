@@ -11,19 +11,27 @@ ZABBIX_SERVER_IP_MASK=32
 AGENT_PORT=10050
 AGENT_PROTOCOL=tcp
 
-# Install Zabbix agento for Fedora
+echo
+echo "Installing Zabbix agent ..."
 sudo dnf install -y zabbix-agent
 
-# Copy customized agent configuration file to the agent folder
+echo
+echo "Copying customized agent configuration file to the agent folder ..."
 sudo cp ~/itops-scripts/utils/zabbix_agentd.conf /etc/zabbix/zabbix_agentd.conf
 
-# Create firewall zone and enable agent port 
+echo
+echo "Creating firewall zone and enabling agent port (Server: $ZABBIX_SERVER_IP_ADDR)"
 sudo firewall-cmd --new-zone=zabbix --permanent
 sudo firewall-cmd --permanent --zone=zabbix --add-source=$ZABBIX_SERVER_IP_ADDR/$ZABBIX_SERVER_IP_MASK
 sudo firewall-cmd --permanent --zone=zabbix --add-port=$AGENT_PORT/$AGENT_PROTOCOL
 sudo firewall-cmd --reload
 
-# Enable ans start Zabbix agent service
+echo
+echo "Enabling and starting Zabbix agent service ..."
 sudo systemctl enable zabbix-agent.service
 sudo systemctl start zabbix-agent.service
+
+echo
+echo "Setup complete!"
+echo
 

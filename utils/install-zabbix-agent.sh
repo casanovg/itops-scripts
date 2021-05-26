@@ -12,7 +12,7 @@ AGENT_PORT=10050
 AGENT_PROTOCOL=tcp
 
 # Install Zabbix agento for Fedora
-sudo dnf install zabbix-agent
+sudo dnf install -y zabbix-agent
 
 # Copy customized agent configuration file to the agent folder
 sudo cp ~/itops-scripts/utils/zabbix_agentd.conf /etc/zabbix/zabbix_agentd.conf

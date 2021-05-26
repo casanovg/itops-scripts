@@ -13,14 +13,16 @@ AGENT_PROTOCOL=tcp
 
 echo
 echo "Installing Zabbix agent ..."
+echo
 sudo dnf install -y zabbix-agent
 
 echo
-echo "Copying customized agent configuration file to the agent folder ..."
+echo "Copying HTA customized agent configuration file to the agent folder ..."
 sudo cp ~/itops-scripts/utils/zabbix_agentd.conf /etc/zabbix/zabbix_agentd.conf
 
 echo
 echo "Creating firewall zone and enabling agent port (Server: $ZABBIX_SERVER_IP_ADDR)"
+echo
 sudo firewall-cmd --new-zone=zabbix --permanent
 sudo firewall-cmd --permanent --zone=zabbix --add-source=$ZABBIX_SERVER_IP_ADDR/$ZABBIX_SERVER_IP_MASK
 sudo firewall-cmd --permanent --zone=zabbix --add-port=$AGENT_PORT/$AGENT_PROTOCOL

@@ -35,7 +35,7 @@
 
 # Start HTA-ALT development server (Every day at 23:30 PM)
 # -----------------------------------------------------------------------------------
-  30 23 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh HTA-ALT
+# 30 23 *  *  *     ~/itops-scripts/bare-metal/vm-on.sh HTA-ALT
 
 # Restart HTA-RDS remote desktop server (After scheduled shutdowns)
 # -----------------------------------------------------------------------------------

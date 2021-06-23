@@ -24,9 +24,9 @@ if [ $# -eq 0 ] || [ -z "$1" ] || [ ! -d $LETSENCRYPT ]; then
 fi
 
 CERTIFICATE="$1"
-VERSION="${2:=1}"
+VERSION="${2:-1}"
 
-sudo openssl pkcs12 -export -in $LETSENCRYPT/$CERTIFICATE/fullchain1.pem -inkey $LETSENCRYPT/$CERTIFICATE/privkey1.pem -out $CERTIFICATE.pfx
+sudo openssl pkcs12 -export -in $LETSENCRYPT/$CERTIFICATE/fullchain$VERSION.pem -inkey $LETSENCRYPT/$CERTIFICATE/privkey$VERSION.pem -out $CERTIFICATE.pfx
 
 if [ $? -eq 0 ]; then
   sudo chown $(whoami):$(id -gn $(whoami)) $CERTIFICATE.pfx 

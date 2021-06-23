@@ -10,7 +10,7 @@ LETSENCRYPT="/etc/letsencrypt/archive"
 
 if [ $# -eq 0 ] || [ -z "$1" ] || [ ! -d $LETSENCRYPT ]; then
     echo ""
-    echo "Usage: generate-pfx-from-pem-certificate.sh <CERTIFICATE_NAME>"
+    echo "Usage: generate-pfx-from-pem-certificate.sh <CERTIFICATE_NAME> [version]"
     echo ""
     if [ -z "$(ls -1 $LETSENCRYPT 2>>/dev/null)" ]; then
         echo "Certificates existing on this machine:"
@@ -24,6 +24,7 @@ if [ $# -eq 0 ] || [ -z "$1" ] || [ ! -d $LETSENCRYPT ]; then
 fi
 
 CERTIFICATE="$1"
+VERSION="${2:=1}"
 
 sudo openssl pkcs12 -export -in $LETSENCRYPT/$CERTIFICATE/fullchain1.pem -inkey $LETSENCRYPT/$CERTIFICATE/privkey1.pem -out $CERTIFICATE.pfx
 

@@ -16,7 +16,7 @@ echo""
 echo "Joining HellermannTyton.ar Domain"
 echo "---------------------------------"
 echo "Using \"fs-usr\" domain administrator password ..."
-sudo net ads join -U administrator%$pwd -S $DC_FQDN -I $DC_ADDR 
+sudo net ads join -U administrator%"$pwd" -S $DC_FQDN -I $DC_ADDR 
 sudo winbindd
 sudo smbd
 sudo nmbd

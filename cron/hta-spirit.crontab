@@ -49,4 +49,5 @@
 
 # 0  17 *  *  sat   echo > /dev/pts/1; cowsay 'Hey!' > /dev/pts/1
 
-0-59/15 * * * * ~/itops-scripts/physical-machines/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
+  */10 * * *  *     ~/itops-scripts/physical-machines/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
+

@@ -36,7 +36,7 @@ for VM in $(sudo -H -u netbackup bash -c "vboxmanage list runningvms" | gawk -F\
 
 done
 
-# Shutdown
+# Shut down
 echo "Shutting down this server ..."
-#sudo shutdown now
+sudo shutdown now
 

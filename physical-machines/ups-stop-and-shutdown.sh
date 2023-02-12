@@ -9,11 +9,17 @@
 
 IFS=$'\n'
 
+ComputerLog="/home/netbackup/ups-control.log"
+
+echo "........................................................................................................................" >> $ComputerLog;
+echo ">>> $(hostname -s | tr [a-z] [A-Z]) server shutdown sequence initiated by UPS on $(date) ..." >> $ComputerLog;
+
 for VM in $(sudo -H -u netbackup bash -c "vboxmanage list runningvms" | gawk -F\" '{print $(NF-1)}') ; do
 	
 	WAIT_TIME=180	# Time to wait for machine shutdown in seconds
 
 	echo "Shutting $VM down ...";
+	echo "Shutting $VM down on $(date "+%b %d, %Y - %T")..." >> $ComputerLog;
 		
 	sudo -H -u netbackup bash -c "vboxmanage controlvm $VM acpipowerbutton"
 	sleep 2
@@ -38,5 +44,7 @@ done
 
 # Shut down
 echo "Shutting down this server ..."
-sudo shutdown now
+echo ">>> $(hostname -s | tr [a-z] [A-Z]) server shutdown sequence by UPS completed on $(date), turning computer off!" >>$ComputerLog;
+echo "........................................................................................................................" >> $ComputerLog;
+sudo shutdown now "Emergency shutdown initiated by the UPS!"
 

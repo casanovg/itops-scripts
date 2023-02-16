@@ -76,10 +76,10 @@ for SHARE in $(ls -1 $BKP_DIR); do
 	    sudo chmod u+s /bin/mount
 	    sudo chmod u+s /bin/umount
 	    sudo chmod u+s /usr/sbin/mount.cifs
-	    WINSHARES_USR=$(sudo cat ~/.windowsshares-usr | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')
-	    WINSHARES_PWD=$(sudo cat ~/.windowsshares-pwd | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')
+	    WINSHARES_USR="$(sudo cat ~/.windowsshares-usr | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')"
+	    WINSHARES_PWD="$(sudo cat ~/.windowsshares-pwd | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')"
 	    if [ "$SHARE" == "sqlserver-backup" ]; then
-		sudo mount -t cifs //HTA-DYP/SQLServer-Backup$ /mnt-backintime/sqlserver-backup -o username=$WINSHARES_USR,password=$WINSHARES_PWD
+		sudo mount -t cifs //HTA-DYP/SQLServer-Backup$ /mnt-backintime/sqlserver-backup -o username="$WINSHARES_USR",password="$WINSHARES_PWD"
 	    fi
 	    # ...........................................
 	    # End patch

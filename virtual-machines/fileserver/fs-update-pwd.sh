@@ -11,7 +11,7 @@ echo "·····································
 echo "· Please enter the domain admin username ·"
 echo "··········································"
 echo -n " > "
-read USR
+read -r USR
 echo "$USR" | openssl aes-256-cbc -pbkdf2 -pass pass:' ' > ~/.fs-usr
 
 echo ""
@@ -21,7 +21,7 @@ echo "·····································
 stty_orig=$(stty -g)
 stty -echo
 echo -n " > "
-read PWD 1>/dev/null
+read -r -s PWD
 stty $stty_orig
 echo "$PWD" | openssl aes-256-cbc -pbkdf2 -pass pass:' ' > ~/.fs-pwd
 echo ""
@@ -35,11 +35,11 @@ echo "##########################################################################
 echo "# ATTENTION!"
 echo -n "# Domain admin username set to: [ $USR ] password: [ "
 
-LPWD=${#PWD}
-SHOW=$(( LPWD * 1 / 3 ))
+LPWD="${#PWD}"
+SHOW="$(( LPWD * 1 / 3 ))"
 
-for (( i=0; i<$LPWD; i++ )); do
-        if [ $i -lt $((LPWD-$SHOW)) ]; then
+for (( i=0; i<"$LPWD"; i++ )); do
+        if [ $i -lt "$((LPWD-$SHOW))" ]; then
                 echo -n "*";
         else
                 echo -n "${PWD:$i:1}";

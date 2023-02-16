@@ -11,7 +11,7 @@ echo "·····································
 echo "· Please enter the Windows domain username to mount shares ·"
 echo "····························································"
 echo -n " > "
-read "USR"
+read -r USR
 echo "$USR" | openssl aes-256-cbc -pbkdf2 -pass pass:' ' > ~/.windowsshares-usr
 
 echo ""
@@ -21,9 +21,9 @@ echo "··································"
 stty_orig=$(stty -g)
 stty -echo
 echo -n " > "
-read "PWD" 1>/dev/null
+read -r -s PWD
 stty $stty_orig
-echo "$PWD" | "$(openssl aes-256-cbc -pbkdf2 -pass pass:' ' > ~/.windowsshares-pwd)"
+echo "$PWD" | openssl aes-256-cbc -pbkdf2 -pass pass:' ' > ~/.windowsshares-pwd
 echo ""
 
 stty sane
@@ -33,7 +33,7 @@ clear
 echo ""
 echo "#############################################################################"
 echo "# ATTENTION!"
-echo -n "# Windows shares username set to: [ USR ] password: [ "
+echo -n "# Windows shares username set to: [ $USR ] password: [ "
 
 LPWD="${#PWD}"
 SHOW="$(( LPWD * 1 / 3 ))"

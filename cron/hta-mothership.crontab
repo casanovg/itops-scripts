@@ -42,3 +42,7 @@
 # -----------------------------------------------------------------------------------
   0 22  *  *  *     ~/itops-scripts/physical-machines/vboxall-on.sh
 
+# Stop HTA-Fire, it will be active if there was a host reboot (Every day a 00:00 AM)
+# -----------------------------------------------------------------------------------
+  0  0  *  *  *     ~/itops-scripts/physical-machines/vm-off.sh HTA-Fire 
+

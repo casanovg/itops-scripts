@@ -98,9 +98,9 @@ done
 if [ ! "$(sudo wbinfo --ping-dc 2>>/dev/null | grep -w "succeeded")" ]; then
    ~/itops-scripts/virtual-machines/fileserver/fs-start.sh
    sleep 1
-   ~/itops-scripts/virtual-machines/fileserver/fs-stop.sh
-   sleep 1
-   ~/itops-scripts/virtual-machines/fileserver/fs-start.sh
+   #~/itops-scripts/virtual-machines/fileserver/fs-stop.sh
+   #sleep 1
+   #~/itops-scripts/virtual-machines/fileserver/fs-start.sh
 else
     echo "Samba service already active!"
 fi

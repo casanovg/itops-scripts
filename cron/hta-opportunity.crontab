@@ -34,9 +34,9 @@
 # If running, stop the firewall VM to let the main communication host run it.
 57 22 *  *  mon   ~/itops-scripts/physical-machines/internet-off.sh
 
-# Export Firewall settings if running on this server (Every day at 03:30 AM)
+# Export Firewall settings if running on this server (Every day at 03:50 AM)
 # -----------------------------------------------------------------------------------
-30 3  *  *  *     ~/itops-scripts/physical-machines/firewall-sync.sh
+50 3  *  *  *     ~/itops-scripts/physical-machines/firewall-sync.sh
 
 # Start non-backed-up virtual machines (Every day at 23:30 PM)
 # -----------------------------------------------------------------------------------
@@ -50,6 +50,7 @@
 # -----------------------------------------------------------------------------------
 */30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Aurora"
 */30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Jetson"
+*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Sulaco"
 
 # 0  20 *  *  fri   ~/itops-scripts/physical-machines/vboxbackup.sh
 

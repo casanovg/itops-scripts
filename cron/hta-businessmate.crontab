@@ -37,4 +37,8 @@
 # -----------------------------------------------------------------------------------
   0  *  *  *  *     crontab -l > ~/itops-scripts/cron/$(hostname -s).crontab
   5  *  *  *  *     ~/itops-scripts/utils/git-sync.sh ~/itops-scripts/
+ 
+# Stop and reboot (Tuesday at 03:00 AM)
+# -----------------------------------------------------------------------------------
+# 0  3  *  *  tue   ~/itops-scripts/physical-machines/stop-and-reboot.sh
 

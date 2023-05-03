@@ -14,6 +14,7 @@
 # Server operating system update (Every Wednesday at 16:30 PM)
 # -----------------------------------------------------------------------------------
 # 30 16 *  *  wed   ~/itops-scripts/physical-machines/update-os.sh
+  30 16 *  *  wed   sudo dnf -y update
 
 # VirtualBox full virtual machines backup (Every Sunday at 07:00 AM)
 # -----------------------------------------------------------------------------------

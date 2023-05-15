@@ -33,8 +33,8 @@ cp /etc/krb5.conf /etc/krb5-orig.conf
 #	dns_lookup_realm = false
 #	dns_lookup_kdc = true
 
-# Configuring the name service switch (append winbind to password and group)
-# --------------------------------------------------------------------------
+# Configuring the name service switch (append winbind to password and group in /etc/nsswitch.conf)
+# ------------------------------------------------------------------------------------------------
 # passwd:     files sss systemd winbind
 # group:      files sss systemd winbind
 

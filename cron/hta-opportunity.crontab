@@ -11,9 +11,9 @@
 # -----------------------------------------------------------------------------------
 @reboot sleep 120 && ~/itops-scripts/physical-machines/vboxall-on.sh
 
-# Server operating system update (Every Wednesday at 22:00 PM)
+# Server operating system update (Every Tuesday at 21:30 PM)
 # -----------------------------------------------------------------------------------
-0  22 *  *  wed   ~/itops-scripts/physical-machines/update-os.sh
+30 21 *  *  tue   ~/itops-scripts/physical-machines/update-os.sh
 
 # VirtualBox full virtual machines backup (Every Sunday at 07:00 AM)
 # -----------------------------------------------------------------------------------

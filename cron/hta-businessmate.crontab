@@ -29,6 +29,11 @@
 # -----------------------------------------------------------------------------------
   0  7  *  *  sun   ~/itops-scripts/physical-machines/vboxbackup.sh
 
+
+# Synchronize, close the CW-BusinessMate wallet, and reboot (Every day at 14:30 PM)
+# -----------------------------------------------------------------------------------
+  30 14 *  *  *     ~/itops-scripts/virtual-machines/worker/close-rem-wll.sh
+
 # CW-BusinessMate VM clone (At 15:00 PM on the first day of each month)
 # -----------------------------------------------------------------------------------
   0 15  1  *  *     ~/itops-scripts/physical-machines/vm-clone.sh CW-BusinessMate

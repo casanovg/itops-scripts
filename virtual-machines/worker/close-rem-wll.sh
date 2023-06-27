@@ -10,6 +10,6 @@ WLL_PR_NAME="raptoreum-qt"
 
 RPID=$(ssh $REMOTE_USR@$WLL_MACHINE "pgrep $WLL_PR_NAME")
 ssh $REMOTE_USR@$WLL_MACHINE "kill $RPID"
-sleep 3
+sleep 15
 ssh $REMOTE_USR@$WLL_MACHINE "sudo shutdown -r now"
 

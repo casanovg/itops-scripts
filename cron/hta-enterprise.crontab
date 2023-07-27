@@ -20,6 +20,10 @@
 # -----------------------------------------------------------------------------------
 # 0  7  *  *  sun   ~/itops-scripts/physical-machines/vboxbackup.sh
 
+# Verify every 5 minutes that BackinTime directories are mounted
+# -----------------------------------------------------------------------------------
+*/5 *  *  *  *    ~/itops-scripts/physical-machines/mnt-backintime-dirs.sh
+
 # Synchronize IT Operations GitHub repository every 1 hour
 # -----------------------------------------------------------------------------------
 15 *  *  *  *     crontab -l > ~/itops-scripts/cron/$(hostname -s).crontab

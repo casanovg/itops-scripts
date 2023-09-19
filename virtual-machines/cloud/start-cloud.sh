@@ -66,7 +66,8 @@ fi
 if [ ! -z "$(sudo blkid | grep "$DEV_MATTERMOST_UUID")" ]; then
     if [ ! -z "$(ls -1 $MM_DIR | grep $ISCSI_WARNING)" ]; then
         echo "Mounting \"$MM_DIR\" directory ..."
-        sudo mount /dev/disk/by-uuid/$DEV_MATTERMOST_UUID $MM_DIR
+        #sudo mount /dev/disk/by-uuid/$DEV_MATTERMOST_UUID $MM_DIR
+       mount /dev/disk/by-uuid/$DEV_MATTERMOST_UUID $MM_DIR
     else
         echo "\"$MM_DIR\" directory already mounted ..."
     fi

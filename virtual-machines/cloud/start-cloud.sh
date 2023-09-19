@@ -44,7 +44,8 @@ fi
 if [ ! -z "$(sudo blkid | grep "$DEV_SEAFILE_UUID")" ]; then
     if [ ! -z "$(ls -1 $CL_DIR | grep $ISCSI_WARNING)" ]; then
 	    echo "Mounting \"$CL_DIR\" directory ..."
-        sudo mount /dev/disk/by-uuid/$DEV_SEAFILE_UUID $CL_DIR
+        #sudo mount /dev/disk/by-uuid/$DEV_SEAFILE_UUID $CL_DIR
+        mount /dev/disk/by-uuid/$DEV_SEAFILE_UUID $CL_DIR
     else
 	    echo "\"$CL_DIR\" directory already mounted ..."
     fi

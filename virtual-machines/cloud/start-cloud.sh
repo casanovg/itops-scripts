@@ -43,11 +43,10 @@ fi
 # Mount HTA Seafile cloud storage
 if [ ! -z "$(sudo blkid | grep "$DEV_SEAFILE_UUID")" ]; then
     if [ ! -z "$(ls -1 $CL_DIR | grep $ISCSI_WARNING)" ]; then
-	    echo "Mounting \"$CL_DIR\" directory ..."
-        #sudo mount /dev/disk/by-uuid/$DEV_SEAFILE_UUID $CL_DIR
-        mount /dev/disk/by-uuid/$DEV_SEAFILE_UUID $CL_DIR
+	echo "Mounting \"$CL_DIR\" directory ..."
+        sudo mount /dev/disk/by-uuid/$DEV_SEAFILE_UUID $CL_DIR
     else
-	    echo "\"$CL_DIR\" directory already mounted ..."
+	echo "\"$CL_DIR\" directory already mounted ..."
     fi
 else
     echo "Unable to mount \"$CL_DIR\", target iSCSI disconected!"
@@ -66,8 +65,7 @@ fi
 if [ ! -z "$(sudo blkid | grep "$DEV_MATTERMOST_UUID")" ]; then
     if [ ! -z "$(ls -1 $MM_DIR | grep $ISCSI_WARNING)" ]; then
         echo "Mounting \"$MM_DIR\" directory ..."
-        #sudo mount /dev/disk/by-uuid/$DEV_MATTERMOST_UUID $MM_DIR
-       mount /dev/disk/by-uuid/$DEV_MATTERMOST_UUID $MM_DIR
+        sudo mount /dev/disk/by-uuid/$DEV_MATTERMOST_UUID $MM_DIR
     else
         echo "\"$MM_DIR\" directory already mounted ..."
     fi

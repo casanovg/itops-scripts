@@ -17,9 +17,14 @@
 # -----------------------------------------------------------------------------------
 @reboot sleep 120 && ~/itops-scripts/physical-machines/vboxall-on.sh
 
-# Server operating system update (Every Monday at 20:45 PM)
+# Shutdown server due to weekly gen-set test (Every Monday at 17:00 & 17:15 PM)
 # -----------------------------------------------------------------------------------
-45 20 *  *  mon   ~/itops-scripts/physical-machines/update-os.sh
+0  17 *  *  mon   sudo shutdown
+15 17 *  *  mon   sudo shutdown
+
+# Server operating system update (Every Tuesday at 21:30 PM)
+# -----------------------------------------------------------------------------------
+30 21 *  *  tue   ~/itops-scripts/physical-machines/update-os.sh
 
 # VirtualBox full virtual machines backup (Every Sunday at 07:00 AM)
 # -----------------------------------------------------------------------------------

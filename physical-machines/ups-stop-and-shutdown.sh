@@ -47,7 +47,7 @@ if command -v vboxmanage &> /dev/null; then
 		       	done
 		       	echo ""
 
-	done
+		done
 
         fi
 fi

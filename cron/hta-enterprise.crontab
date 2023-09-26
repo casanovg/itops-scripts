@@ -33,8 +33,6 @@
 #Back In Time system entry, this will be edited by the gui:
 0 6 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile-id 2 backup-job >/dev/null
 #Back In Time system entry, this will be edited by the gui:
-0 1 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile-id 3 backup-job >/dev/null
-#Back In Time system entry, this will be edited by the gui:
 0 4 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile-id 4 backup-job >/dev/null
 #Back In Time system entry, this will be edited by the gui:
 0 3 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile-id 5 backup-job >/dev/null

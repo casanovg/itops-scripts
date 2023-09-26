@@ -19,8 +19,8 @@
 
 # Shutdown server due to weekly gen-set test (Every Monday at 17:00 & 17:15 PM)
 # -----------------------------------------------------------------------------------
-0  17 *  *  mon   sudo shutdown
-15 17 *  *  mon   sudo shutdown
+0  17 *  *  mon   sudo shutdown now
+15 17 *  *  mon   sudo shutdown now
 
 # Server operating system update (Every Tuesday at 21:30 PM)
 # -----------------------------------------------------------------------------------

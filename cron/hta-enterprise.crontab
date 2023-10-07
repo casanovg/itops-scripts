@@ -11,9 +11,9 @@
 # -----------------------------------------------------------------------------------
 # @reboot sleep 120 && ~/itops-scripts/physical-machines/vboxall-on.sh
 
-# Server operating system update (Every Tuesday at 21:30 PM)
+# Server operating system update (Every Tuesday at 22:30 PM)
 # -----------------------------------------------------------------------------------
-30 21 *  *  tue   ~/itops-scripts/physical-machines/update-os.sh
+30 22 *  *  tue   ~/itops-scripts/physical-machines/update-os.sh
 #30 16 *  *  wed   sudo dnf -y update
 
 # VirtualBox full virtual machines backup (Every Sunday at 07:00 AM)
@@ -32,6 +32,8 @@
 0 0 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime backup-job >/dev/null
 #Back In Time system entry, this will be edited by the gui:
 0 6 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile-id 2 backup-job >/dev/null
+#Back In Time system entry, this will be edited by the gui:
+0 1 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile-id 3 backup-job >/dev/null
 #Back In Time system entry, this will be edited by the gui:
 0 4 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile-id 4 backup-job >/dev/null
 #Back In Time system entry, this will be edited by the gui:

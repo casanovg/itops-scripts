@@ -7,7 +7,12 @@
 source ~/itops-scripts/common/set-vm-lists.sh
 
 # Stop all virtual machines
-~/itops-scripts/physical-machines/vboxall-off.sh
+if command -v vboxmanage &> /dev/null; then
+	if [ ! -n "$(vboxmanage --version | grep "WARNING")" ]; then
+		~/itops-scripts/physical-machines/vboxall-off.sh
+	fi
+fi
+
 # Update OS
 sleep 3
 echo ""

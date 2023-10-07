@@ -21,10 +21,10 @@ sudo dnf -y update
 sleep 3
 
 # Stopping essential net services
-echo ""
-echo "Stopping $ESSENTIAL_NET_SERVICE essential network services, Bye!"
 if command -v vboxmanage &> /dev/null; then
 	if [ ! -n "$(vboxmanage --version | grep "WARNING")" ]; then
+		echo ""
+		echo "Stopping $ESSENTIAL_NET_SERVICE essential network services, Bye!"
 		~/itops-scripts/physical-machines/vm-off.sh "$ESSENTIAL_NET_SERVICE"
 		sleep 3
 	fi

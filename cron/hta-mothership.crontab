@@ -37,7 +37,7 @@
 
 # Verify every 5 minutes that off-site backup directories are mounted
 # -----------------------------------------------------------------------------------
-#*/5 *  *  *  *    ~/itops-scripts/physical-machines/mnt-offsite-dirs.sh
+*/5 *  *  *  *    ~/itops-scripts/physical-machines/mnt-offsite-dirs.sh
 
 # Start all virtual machines (Every day at 22:00)
 # -----------------------------------------------------------------------------------

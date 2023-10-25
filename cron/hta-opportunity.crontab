@@ -48,7 +48,7 @@
 # 0  3  *  *  thu   ~/itops-scripts/physical-machines/vm-restart.sh HTA-RDS
 
 # -----------------------------------------------------------------------------------
-#*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-BKP"
+*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-BKP"
 */30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Aurora"
 */30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Jetson"
 */30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Sulaco"

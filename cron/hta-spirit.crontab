@@ -40,13 +40,6 @@
 # -----------------------------------------------------------------------------------
 30 17 *  *  *     ~/itops-scripts/utils/power-ms-on.sh
 
-# Start & stop non-productive VMs to allow OS updates (Several times a week)
-# -----------------------------------------------------------------------------------
-#*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-ACC"
-# 0  16 *  *  sun   ~/itops-scripts/physical-machines/vm-restart.sh "HTA-ACC"
-# 0  23 *  *  mon   ~/itops-scripts/physical-machines/vm-restart.sh "HTA-ACC"
-# 30 1  *  *  thu   ~/itops-scripts/physical-machines/vm-restart.sh "HTA-ACC"
-
 # Test & Dev VMs
 # -----------------------------------------------------------------------------------
 */30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-Plex"
@@ -57,5 +50,4 @@
 # 0  17 *  *  sat   echo > /dev/pts/1; cowsay 'Hey!' > /dev/pts/1
 
 # */10 * * *  *     ~/itops-scripts/physical-machines/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
-
 

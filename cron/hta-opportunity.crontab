@@ -49,9 +49,9 @@
 
 # -----------------------------------------------------------------------------------
 #*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-BKP"
-#*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Aurora"
-#*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Jetson"
-#*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Sulaco"
+*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Aurora"
+*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Jetson"
+*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Sulaco"
 
 # 0  20 *  *  fri   ~/itops-scripts/physical-machines/vboxbackup.sh
 

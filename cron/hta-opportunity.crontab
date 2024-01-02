@@ -27,8 +27,8 @@
 # Verify every Every 15 minutes, starting at 10 minutes past the hour, Monday through Saturday.
 # On Sundays, every 12 hours, starting at 04:00 AM, to allow VMs backup.
 # -----------------------------------------------------------------------------------
-#10-59/15 * * * 1-6 ~/itops-scripts/physical-machines/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
-#0 4-23/12  * * 0   ~/itops-scripts/physical-machines/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
+10-59/15 * * * 1-6 ~/itops-scripts/physical-machines/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
+0 4-23/12  * * 0   ~/itops-scripts/physical-machines/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
 # Clear Net Services log every 3 months.
 0  0  * */3 *     echo "" > /data/VirtualBox-VMs/VMLogs/Net-Services.log
 # If running, stop the firewall VM to let the main communication host run it.
@@ -40,7 +40,7 @@
 
 # Start non-backed-up virtual machines (Every day at 23:30 PM)
 # -----------------------------------------------------------------------------------
-# 30 23 *  *  *     ~/itops-scripts/physical-machines/vm-on.sh HTA-ALT
+30 23 *  *  *     ~/itops-scripts/physical-machines/vm-on.sh HTA-ALT
 
 # Restart HTA-RDS remote desktop server (After host scheduled shutdowns)
 # -----------------------------------------------------------------------------------
@@ -48,11 +48,10 @@
 # 0  3  *  *  thu   ~/itops-scripts/physical-machines/vm-restart.sh HTA-RDS
 
 # -----------------------------------------------------------------------------------
-#*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-BKP"
+*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-BKP"
 */30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Aurora"
 */30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Jetson"
 */30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Sulaco"
 
 # 0  20 *  *  fri   ~/itops-scripts/physical-machines/vboxbackup.sh
-
 

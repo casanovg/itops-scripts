@@ -42,7 +42,7 @@
 
 # Test & Dev VMs
 # -----------------------------------------------------------------------------------
-#*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-Plex"
+*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-Plex"
 */30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Hope"
 */30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Jurassic"
 */30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Nostromo"

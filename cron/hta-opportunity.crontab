@@ -33,6 +33,7 @@
 0  0  * */3 *     echo "" > /data/VirtualBox-VMs/VMLogs/Net-Services.log
 # If running, stop the firewall VM to let the main communication host run it.
 57 22 *  *  mon   ~/itops-scripts/physical-machines/internet-off.sh
+30 4  *  *  *     ~/itops-scripts/physical-machines/internet-off.sh
 
 # Export Firewall settings if running on this server (Every day at 03:50 AM)
 # -----------------------------------------------------------------------------------

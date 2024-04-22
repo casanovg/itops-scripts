@@ -1,0 +1,42 @@
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name  command to be executed
+
+# After reboot, wait 15 seconds and start file services
+# -----------------------------------------------------------------------------------
+  @reboot sleep 15 && ~/itops-scripts/virtual-machines/fileserver/start-fileserver.sh
+
+# Virtual machine operating system update (Every Sunday at 22:00 PM)
+# -----------------------------------------------------------------------------------
+  0  22 *  *  sun   ~/itops-scripts/virtual-machines/fileserver/update-os.sh
+
+# Synchronize IT Operations GitHub repository every 1 hour
+# -----------------------------------------------------------------------------------
+  40 *  *  *  *     ~/itops-scripts/utils/git-sync.sh ~/itops-scripts/
+
+# Verify every 5 minutes that essential file services are up
+# -----------------------------------------------------------------------------------
+  */5 *  *  *  *     ~/itops-scripts/virtual-machines/fileserver/start-fileserver.sh
+
+# Back-in-Time backup system profiles schedule (Please DO NOT modify it here!)
+# -----------------------------------------------------------------------------------
+#Back In Time system entry, this will be edited by the gui:
+  0 0 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime backup-job >/dev/null
+#Back In Time system entry, this will be edited by the gui:
+  0 6 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile-id 2 backup-job >/dev/null
+#Back In Time system entry, this will be edited by the gui:
+  0 1 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile-id 3 backup-job >/dev/null
+#Back In Time system entry, this will be edited by the gui:
+  0 2 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile-id 4 backup-job >/dev/null
+#Back In Time system entry, this will be edited by the gui:
+  0 5 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile-id 5 backup-job >/dev/null
+#Back In Time system entry, this will be edited by the gui:
+  0 3 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile-id 6 backup-job >/dev/null
+#Back In Time system entry, this will be edited by the gui:
+  0 2 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile-id 7 backup-job >/dev/null
+

@@ -1,0 +1,61 @@
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name  command to be executed
+
+# After reboot, wait 120 seconds and start all virtual machines
+# -----------------------------------------------------------------------------------
+@reboot sleep 120 && ~/itops-scripts/physical-machines/vboxall-on.sh
+
+# Server operating system update (Every Monday at 21:15 PM)
+# -----------------------------------------------------------------------------------
+15 21 *  *  mon   ~/itops-scripts/physical-machines/update-os.sh
+
+# VirtualBox full virtual machines backup (Every Sunday at 07:00 AM)
+# -----------------------------------------------------------------------------------
+0 7 * * sun cronitor exec sZT0x1 ~/itops-scripts/physical-machines/vboxbackup.sh
+
+# Synchronize IT Operations GitHub repository every 1 hour
+# -----------------------------------------------------------------------------------
+0  *  *  *  *     crontab -l > ~/itops-scripts/cron/$(hostname -s).crontab
+5 * * * * cronitor exec 2AECHR ~/itops-scripts/utils/git-sync.sh ~/itops-scripts/
+
+# Verify every Every 15 minutes, starting at 0 minutes past the hour, Monday through Saturday.
+# On Sundays, every 6 hours, starting at 12:00 AM, to allow VMs backup.
+# -----------------------------------------------------------------------------------
+0-59/15 * * * 1-6 ~/itops-scripts/physical-machines/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
+0 */6 * * 0       ~/itops-scripts/physical-machines/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
+# Clear Net Services log every 3 months.
+0  0  * */3 *     echo "" > /data/VirtualBox-VMs/VMLogs/Net-Services.log
+
+# Export Firewall settings if running on this server (Every day at 03:30 AM)
+# -----------------------------------------------------------------------------------
+30 3  *  *  *     ~/itops-scripts/physical-machines/firewall-sync.sh
+
+# Power HTA-Mothership server on (Every day at 17:30 PM)
+# -----------------------------------------------------------------------------------
+30 17 *  *  *     ~/itops-scripts/utils/power-ms-on.sh
+
+# Start & stop non-productive VMs to allow OS updates (Several times a week)
+# -----------------------------------------------------------------------------------
+*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-ACC"
+# 0  16 *  *  sun   ~/itops-scripts/physical-machines/vm-restart.sh "HTA-ACC"
+# 0  23 *  *  mon   ~/itops-scripts/physical-machines/vm-restart.sh "HTA-ACC"
+# 30 1  *  *  thu   ~/itops-scripts/physical-machines/vm-restart.sh "HTA-ACC"
+
+# Test & Dev VMs
+# -----------------------------------------------------------------------------------
+*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-Plex"
+*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Hope"
+*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Jurassic"
+*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Nostromo"
+
+# 0  17 *  *  sat   echo > /dev/pts/1; cowsay 'Hey!' > /dev/pts/1
+
+# */10 * * *  *     ~/itops-scripts/physical-machines/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
+
+

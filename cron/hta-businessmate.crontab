@@ -1,0 +1,49 @@
+#
+# **********************************************
+# ATTENTION: System decommissioned on 2022-01-22
+# **********************************************
+#
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name  command to be executed
+
+# After reboot, wait 120 seconds and start all virtual machines
+# -----------------------------------------------------------------------------------
+  @reboot sleep 120 && ~/itops-scripts/physical-machines/vboxall-on.sh
+
+# Server operating system update (Every Monday at 21:15 PM)
+# -----------------------------------------------------------------------------------
+  15 21 *  *  mon   ~/itops-scripts/physical-machines/update-os.sh
+
+# Export worker settings if running on this server (Every day at 05:55 AM)
+# -----------------------------------------------------------------------------------
+  55 5  *  *  *     ~/itops-scripts/virtual-machines/worker/worker-sync.sh
+
+# VirtualBox full virtual machines backup (Every Sunday at 07:00 AM)
+# -----------------------------------------------------------------------------------
+  0  7  *  *  sun   ~/itops-scripts/physical-machines/vboxbackup.sh
+
+
+# Synchronize, close the CW-BusinessMate wallet, and reboot (Every day at 14:30 PM)
+# -----------------------------------------------------------------------------------
+  30 14 *  *  *     ~/itops-scripts/virtual-machines/worker/close-rem-wll.sh
+
+# CW-BusinessMate VM clone (At 15:00 PM on the first day of each month)
+# -----------------------------------------------------------------------------------
+  0 15  1  *  *     ~/itops-scripts/physical-machines/vm-clone.sh CW-BusinessMate
+
+# Synchronize IT Operations GitHub repository every 1 hour
+# -----------------------------------------------------------------------------------
+  0  *  *  *  *     crontab -l > ~/itops-scripts/cron/$(hostname -s).crontab
+  5  *  *  *  *     ~/itops-scripts/utils/git-sync.sh ~/itops-scripts/
+ 
+# Stop and reboot (Tuesday at 03:00 AM)
+# -----------------------------------------------------------------------------------
+# 0  3  *  *  tue   ~/itops-scripts/physical-machines/stop-and-reboot.sh
+

@@ -17,7 +17,8 @@
 
 # VirtualBox full virtual machines backup (Every Sunday at 07:00 AM)
 # -----------------------------------------------------------------------------------
-0 7 * * sun cronitor exec d40p28 ~/itops-scripts/physical-machines/vboxbackup.sh
+#0 7 * * sun cronitor exec d40p28 ~/itops-scripts/physical-machines/vboxbackup.sh
+0 7 * * sat cronitor exec d40p28 ~/itops-scripts/physical-machines/vboxbackup.sh
 
 # Synchronize IT Operations GitHub repository every 1 hour
 # -----------------------------------------------------------------------------------

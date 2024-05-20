@@ -9,7 +9,7 @@
 
 # After reboot, wait 120 seconds and start all virtual machines
 # -----------------------------------------------------------------------------------
-@reboot sleep 120 && ~/itops-scripts/physical-machines/vboxall-on.sh
+#@reboot sleep 120 && ~/itops-scripts/physical-machines/vboxall-on.sh
 
 # Server operating system update (Every Tuesday at 21:30 PM)
 # -----------------------------------------------------------------------------------

@@ -6,7 +6,7 @@
 
 #!/bin/sh
 
-POST_START_DLY=60
+POST_START_DLY=120
 IFS=$'\n'
 
 for VM in $(cat ~/ActiveVMs); do

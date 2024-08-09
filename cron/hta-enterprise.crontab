@@ -29,6 +29,9 @@
 15 *  *  *  *     crontab -l > ~/itops-scripts/cron/$(hostname -s).crontab
 20 *  *  *  *     ~/itops-scripts/utils/git-sync.sh ~/itops-scripts/
 
+
+
+
 #Back In Time system entry, this will be edited by the gui:
 0 0 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime backup-job >/dev/null
 #Back In Time system entry, this will be edited by the gui:
@@ -43,4 +46,3 @@
 0 11 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile-id 6 backup-job >/dev/null
 #Back In Time system entry, this will be edited by the gui:
 0 19 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile-id 7 backup-job >/dev/null
-

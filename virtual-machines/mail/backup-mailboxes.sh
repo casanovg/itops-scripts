@@ -5,7 +5,7 @@
 # 2024-08-14 gustavo.casanova@gmail.com
 
 MAILBX_DIR="/data/mailusr-home"
-BACKUP_DIR="/data/mail-bkp"
+BACKUP_DIR="/data/mailusr-backup"
 BKP_USR="netbackup"
 BKP_GRP="wheel"
 
@@ -24,7 +24,7 @@ echo "Stopping Mail Server services ..."
 echo ""
 echo "Backing up all mailboxes ..."
 echo ""
-sudo rsync -r -a --info=progress2 --delete --delete-excluded --human-readable --include=$INCLUDE01 --exclude=$EXCLUDE01 --exclude=$EXCLUDE02 --exclude=$EXCLUDE03 --exclude=$EXCLUDE04 $MAILBX_DIR/* $BACKUP_DIR/.
+sudo rsync -r -a --info=progress2 --times --devices --specials --hard-links --links --perms --executability --group --owner --delete --delete-excluded --human-readable --include=$INCLUDE01 --exclude=$EXCLUDE01 --exclude=$EXCLUDE02 --exclude=$EXCLUDE03 --exclude=$EXCLUDE04 $MAILBX_DIR/ $BACKUP_DIR/
 
 echo ""
 echo "Changing backup files ownership to $BKP_USR ..."

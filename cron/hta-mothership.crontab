@@ -32,6 +32,8 @@
 # -----------------------------------------------------------------------------------
 #30 23 *  *  *     ~/itops-scripts/physical-machines/vm-on.sh HTA-AZU
 
+
+
 #Back In Time system entry, this will be edited by the gui:
 0 0 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime backup-job >/dev/null
 #Back In Time system entry, this will be edited by the gui:
@@ -48,4 +50,3 @@
 0 17 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile-id 7 backup-job >/dev/null
 #Back In Time system entry, this will be edited by the gui:
 0 21 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile-id 8 backup-job >/dev/null
-

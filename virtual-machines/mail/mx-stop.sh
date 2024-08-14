@@ -6,7 +6,7 @@
 
 # Stop mail server services
 echo ""
-for SERVICE in postfix dovecot clamd@scan spamassassin opendkim; do
+for SERVICE in postfix dovecot clamd@scan spamassassin opendkim fail2ban; do
     SERVICE_STATUS="$(sudo systemctl is-active $SERVICE)"
     if [ "$SERVICE_STATUS" = "active" ]; then
         echo "Stopping $SERVICE ..."

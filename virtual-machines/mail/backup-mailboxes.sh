@@ -9,12 +9,12 @@ BACKUP_DIR="/data/mailusr-backup"
 BKP_USR="netbackup"
 BKP_GRP="wheel"
 
-INCLUDE01="Maildir"
+INC_01="Maildir"
 
-EXCLUDE01="spamd"
-EXCLUDE02="netbackup"
-EXCLUDE03=".bash*"
-EXCLUDE04=".X*"
+EXC_01="spamd"
+EXC_02="netbackup"
+EXC_03=".bash*"
+EXC_04=".X*"
 
 # Stop Mail Server services
 echo ""
@@ -24,7 +24,7 @@ echo "Stopping Mail Server services ..."
 echo ""
 echo "Backing up all mailboxes ..."
 echo ""
-sudo rsync -r -a --info=progress2 --times --devices --specials --hard-links --links --perms --executability --group --owner --delete --delete-excluded --human-readable --include=$INCLUDE01 --exclude=$EXCLUDE01 --exclude=$EXCLUDE02 --exclude=$EXCLUDE03 --exclude=$EXCLUDE04 $MAILBX_DIR/ $BACKUP_DIR/
+sudo rsync -r -a -v --info=progress2 --times --devices --specials --hard-links --links --perms --executability --group --owner --delete --delete-excluded --human-readable --include=$INC_01 --exclude=$EXC_01 --exclude=$EXC_02 --exclude=$EXC_03 --exclude=$EXC_04 $MAILBX_DIR/ $BACKUP_DIR/
 
 echo ""
 echo "Changing backup files ownership to $BKP_USR ..."

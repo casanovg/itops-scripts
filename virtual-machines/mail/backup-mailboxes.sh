@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Backup TY-Mail users' mailboxes
+# Backup Ty-Mail users' mailboxes
 # ......................................
 # 2024-08-14 gustavo.casanova@gmail.com
 

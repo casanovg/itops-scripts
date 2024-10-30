@@ -9,6 +9,9 @@
 # Default version if no argument is provided
 NEWVERSION=${NEWVERSION:-41}
 
+# Log file
+ComputerLog="/home/netbackup/Fedora-OS-Update.log"
+
 # If a command line argument is provided, override NEWVERSION with it
 if [ ! -z "$1" ]; then
     NEWVERSION=$1

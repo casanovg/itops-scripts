@@ -14,4 +14,5 @@ sudo pip3 install --root-user-action=ignore wheel
 sudo pip3 install --root-user-action=ignore captcha
 sudo pip3 install --root-user-action=ignore mysqlclient
 sudo pip3 install --root-user-action=ignore --timeout=3600 Pillow pylibmc captcha jinja2 sqlalchemy psd-tools django-pylibmc django-simple-captcha python3-ldap
+sudo pip3 install --root-user-action=ignore djangosaml2
 

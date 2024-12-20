@@ -34,7 +34,7 @@
 
 # Export Firewall settings if running on this server (Every day at 03:25 AM)
 # -----------------------------------------------------------------------------------
-25 3  *  *  *     ~/itops-scripts/physical-machines/firewall-sync.sh
+#25 3  *  *  *     ~/itops-scripts/physical-machines/firewall-sync.sh
 
 # Power HTA-Mothership server on (Every day at 17:30 PM)
 # -----------------------------------------------------------------------------------

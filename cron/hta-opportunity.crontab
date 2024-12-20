@@ -37,7 +37,7 @@
 
 # Export Firewall settings if running on this server (Every day at 03:50 AM)
 # -----------------------------------------------------------------------------------
-50 3  *  *  *     ~/itops-scripts/physical-machines/firewall-sync.sh
+#50 3  *  *  *     ~/itops-scripts/physical-machines/firewall-sync.sh
 
 # Start non-backed-up virtual machines (Every day at 23:30 PM)
 # -----------------------------------------------------------------------------------

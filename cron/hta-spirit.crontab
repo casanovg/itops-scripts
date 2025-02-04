@@ -46,6 +46,7 @@
 */30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Hope"
 */35 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Jurassic"
 */40 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Nostromo"
+ 0 22 *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Aether"
 
 # 0  17 *  *  sat   echo > /dev/pts/1; cowsay 'Hey!' > /dev/pts/1
 

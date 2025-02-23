@@ -44,6 +44,7 @@
 # -----------------------------------------------------------------------------------
  0 23 *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-ALT"
  0 22 *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Aether"
+ 0 11 *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Aether"
 */30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Plex"
 */30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Hope"
 */35 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Jurassic"

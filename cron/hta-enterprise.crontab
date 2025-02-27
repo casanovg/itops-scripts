@@ -7,9 +7,9 @@
 # |  |  |  |  |
 # *  *  *  *  * user-name  command to be executed
 
-# After reboot, wait 120 seconds and start all virtual machines
+# After reboot, connect to the phone & camera network
 # -----------------------------------------------------------------------------------
-# @reboot sleep 120 && ~/itops-scripts/physical-machines/vboxall-on.sh
+@reboot             ~/connect-to-nb.sh
 
 # Server operating system update (Every Tuesday at 22:30 PM)
 # -----------------------------------------------------------------------------------

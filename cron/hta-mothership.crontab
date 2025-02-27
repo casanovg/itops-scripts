@@ -30,7 +30,7 @@
 
 # Start non-backed-up virtual machines (Every day at 23:30 PM)
 # -----------------------------------------------------------------------------------
- 30 23 *  *  *     ~/itops-scripts/physical-machines/vm-on.sh HTA-AZU
+#30 23 *  *  *     ~/itops-scripts/physical-machines/vm-on.sh HTA-AZU
 
 
 

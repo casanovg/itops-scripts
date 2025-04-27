@@ -34,22 +34,21 @@
 
 # Export Firewall settings if running on this server (Every day at 03:25 AM)
 # -----------------------------------------------------------------------------------
-#25 3  *  *  *     ~/itops-scripts/physical-machines/firewall-sync.sh
+#25  3  *  *  *     ~/itops-scripts/physical-machines/firewall-sync.sh
 
 # Power HTA-Mothership server on (Every day at 17:30 PM)
 # -----------------------------------------------------------------------------------
-30 17 *  *  *     ~/itops-scripts/utils/power-ms-on.sh
+ 30 17  *  *  *     ~/itops-scripts/utils/power-ms-on.sh
 
 # Test & Dev VMs
 # -----------------------------------------------------------------------------------
- 0 23 *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-ALT"
- 30 7 *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Aether"
- 0 22 *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Aether"
- 0  1 *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-Classic"
-*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Plex"
-*/30 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Hope"
-*/35 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Jurassic"
-*/40 * * *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Nostromo"
+  0 23  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-ALT"
+ 0 */3  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Aether"
+  0  1  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-Classic"
+*/30 *  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Plex"
+*/30 *  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Hope"
+*/35 *  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Jurassic"
+*/40 *  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Nostromo"
 
 # 0  17 *  *  sat   echo > /dev/pts/1; cowsay 'Hey!' > /dev/pts/1
 

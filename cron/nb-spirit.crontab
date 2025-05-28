@@ -45,6 +45,7 @@
   0 23  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-ALT"
  0 */3  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Aether"
   0  1  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-Classic"
+ 20  1  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-RHEL"
 */30 *  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Plex"
 */30 *  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Hope"
 */35 *  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Jurassic"

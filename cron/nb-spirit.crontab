@@ -13,7 +13,7 @@
 
 # Server operating system update (Every Monday at 21:15 PM)
 # -----------------------------------------------------------------------------------
-#15 21 *  *  mon   ~/itops-scripts/physical-machines/update-os.sh
+15 21 *  *  mon   ~/itops-scripts/physical-machines/update-os.sh
 
 # VirtualBox full virtual machines backup (Every Sunday at 07:00 AM)
 # -----------------------------------------------------------------------------------

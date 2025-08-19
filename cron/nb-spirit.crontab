@@ -9,7 +9,7 @@
 
 # After reboot, wait 120 seconds and start all virtual machines
 # -----------------------------------------------------------------------------------
-#@reboot sleep 120 && ~/itops-scripts/physical-machines/vboxall-on.sh
+@reboot sleep 120 && ~/itops-scripts/physical-machines/vboxall-on.sh
 
 # Server operating system update (Every Monday at 21:15 PM)
 # -----------------------------------------------------------------------------------
@@ -42,14 +42,14 @@
 
 # Test & Dev VMs
 # -----------------------------------------------------------------------------------
-# 0  23  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-ALT"
-# 0 */2  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Aether"
-# 0 */3  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-Classic"
-# 0 */3  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-RHEL"
-#*/30 *  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Plex"
-#*/30 *  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Hope"
-#*/35 *  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Jurassic"
-#*/40 *  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Nostromo"
+ 0  23  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-ALT"
+ 0 */2  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Aether"
+ 0 */3  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-Classic"
+ 0 */3  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-RHEL"
+*/30 *  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Plex"
+*/30 *  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Hope"
+*/35 *  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Jurassic"
+*/40 *  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Nostromo"
 
 # 0  17 *  *  sat   echo > /dev/pts/1; cowsay 'Hey!' > /dev/pts/1
 

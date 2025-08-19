@@ -49,10 +49,10 @@
 # 0  3  *  *  thu   ~/itops-scripts/physical-machines/vm-restart.sh HTA-RDS
 
 # -----------------------------------------------------------------------------------
-#0 */4  * * *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-BKP"
-#*/30 * * * *     ~/itops-scripts/physical-machines/vm-on.sh "Testbed-01"
-#*/35 * * * *     ~/itops-scripts/physical-machines/vm-on.sh "Testbed-02"
-#*/40 * * * *     ~/itops-scripts/physical-machines/vm-on.sh "Testbed-03"
+0 */4  * * *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-BKP"
+*/30 * * * *     ~/itops-scripts/physical-machines/vm-on.sh "Testbed-01"
+*/35 * * * *     ~/itops-scripts/physical-machines/vm-on.sh "Testbed-02"
+*/40 * * * *     ~/itops-scripts/physical-machines/vm-on.sh "Testbed-03"
 
 # 0  20 *  *  fri   ~/itops-scripts/physical-machines/vboxbackup.sh
 

@@ -17,7 +17,6 @@
 
 # VirtualBox full virtual machines backup (Every Sunday at 07:00 AM)
 # -----------------------------------------------------------------------------------
-0 7 * * sun cronitor exec sZT0x1 ~/itops-scripts/physical-machines/vboxbackup.sh
 
 # Synchronize IT Operations GitHub repository every 1 hour
 # -----------------------------------------------------------------------------------
@@ -56,4 +55,4 @@
 
 # */10 * * *  *     ~/itops-scripts/physical-machines/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
 
-0 2 * * * /home/netbackup/ci-cd-infrastructure/apps/affine/scripts/backup.sh >> /home/netbackup/.local/log/affine-backup.log 2>&1
+0 2 * * * /home/netbackup/ci-cd-infrastructure/apps/affine/scripts/backup.sh >> /data/affine/logs/affine-backup.log 2>&1

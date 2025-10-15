@@ -56,3 +56,4 @@
 
 # */10 * * *  *     ~/itops-scripts/physical-machines/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
 
+0 2 * * * /home/netbackup/ci-cd-infrastructure/apps/affine/scripts/backup.sh >> /home/netbackup/.local/log/affine-backup.log 2>&1

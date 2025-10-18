@@ -30,10 +30,10 @@
 #5-59/15 * * * 1-6 ~/itops-scripts/physical-machines/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
 #0 4-23/12  * * 0   ~/itops-scripts/physical-machines/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
 # Clear Net Services log every 3 months.
-0  0  * */3 *     echo "" > /data/VirtualBox-VMs/VMLogs/Net-Services.log
+#0  0  * */3 *     echo "" > /data/VirtualBox-VMs/VMLogs/Net-Services.log
 # If running, stop the firewall VM to let the main communication host run it.
-57 22 *  *  mon   ~/itops-scripts/physical-machines/internet-off.sh
-30 4  *  *  *     ~/itops-scripts/physical-machines/internet-off.sh
+#57 22 *  *  mon   ~/itops-scripts/physical-machines/internet-off.sh
+#30 4  *  *  *     ~/itops-scripts/physical-machines/internet-off.sh
 
 # Export Firewall settings if running on this server (Every day at 03:50 AM)
 # -----------------------------------------------------------------------------------

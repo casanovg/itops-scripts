@@ -17,11 +17,12 @@
 
 # VirtualBox full virtual machines backup (Every Sunday at 07:00 AM)
 # -----------------------------------------------------------------------------------
+0  7  *  *  sun   ~/itops-scripts/physical-machines/vboxbackup.sh
 
 # Synchronize IT Operations GitHub repository every 1 hour
 # -----------------------------------------------------------------------------------
 0  *  *  *  *     crontab -l > ~/itops-scripts/cron/$(hostname -s).crontab
-5 * * * * cronitor exec 2AECHR ~/itops-scripts/utils/git-sync.sh ~/itops-scripts/
+5  *  *  *  *     ~/itops-scripts/utils/git-sync.sh ~/itops-scripts/
 
 # Verify internet every 15 minutes, starting at 0 minutes past the hour, Monday through Saturday.
 # On Sundays, every 6 hours, starting at 12:00 AM, to allow VMs backup.

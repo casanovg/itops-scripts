@@ -9,8 +9,7 @@
 
 # After reboot, wait 120 seconds and start all virtual machines
 # -----------------------------------------------------------------------------------
-#@reboot sleep 120 && ~/itops-scripts/physical-machines/vboxall-on.sh
-@reboot sleep 120 && ~/itops-scripts/physical-machines/vm-on.sh NB-Aether
+@reboot sleep 120 && ~/itops-scripts/physical-machines/vboxall-on.sh
 
 # Server operating system update (Every Monday at 21:15 PM)
 # -----------------------------------------------------------------------------------
@@ -44,7 +43,7 @@
 # Test & Dev VMs
 # -----------------------------------------------------------------------------------
 # 0  23  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-ALT"
-### 0 */2  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Aether"
+0 */2  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Aether"
 ### 0 */3  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-Classic"
 ### 0 */3  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-Mattermost
 ### */30 *  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Flix"
@@ -56,4 +55,5 @@
 
 # */10 * * *  *     ~/itops-scripts/physical-machines/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
 
- 0 2 * * * /home/netbackup/ci-cd-infrastructure/apps/affine/scripts/backup.sh >> /data/affine/logs/affine-backup.log 2>&1
+#0 2 * * * /home/netbackup/ci-cd-infrastructure/apps/affine/scripts/backup.sh >> /data/affine/logs/affine-backup.log 2>&1
+

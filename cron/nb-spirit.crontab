@@ -42,7 +42,7 @@
 
 # Test & Dev VMs
 # -----------------------------------------------------------------------------------
-# 0  23  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-ALT"
+0  23  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-ALT"
 0 */2  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Aether"
 ### 0 */3  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-Classic"
 ### 0 */3  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-Mattermost

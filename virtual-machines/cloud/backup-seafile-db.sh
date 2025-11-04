@@ -60,7 +60,10 @@ fi
 echo ""
 echo "Backing Seafile system files up ..."
 sudo rsync -r -a $SYSTEM_DIR $BACKUP_SYSTEM
-sudo rsync -r -a $SYSTEM_USR $BACKUP_SYSTEM
+# Backup MySQL credentials file if exists
+if [ -f "$SYSTEM_USR" ]; then
+    sudo rsync -r -a $SYSTEM_USR $BACKUP_SYSTEM
+fi
 sudo chown -R $BKP_USR:$BKP_GRP $BACKUP_SYSTEM
 
 # Start Seafile services

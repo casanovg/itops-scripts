@@ -46,7 +46,7 @@
 0 */2  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Aether"
 0 */3  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-Classic"
 0 */3  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-Mattermost
-*/30 *  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Flix"
+#*/30 *  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Flix"
 */30 *  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Hope"
 */35 *  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Jurassic"
 */40 *  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "CW-Nostromo"

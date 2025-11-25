@@ -56,8 +56,8 @@
 # Monitor podman pods (pod_ai, pod_affine) every 5 minutes
 # Only shows output if there are problems (alert mode)
 # ------------------------------------------------------------------------------
-*/5 * * * * ~/monitor-pods.sh --alert 2>&1 | grep -v "✅ TODOS LOS SERVICIOS ESTÁN OK" || true
+*/5 * * * * ~/pod-scripts/pods-monitor --alert 2>&1 | grep -v "✅ TODOS LOS SERVICIOS ESTÁN OK" || true
 
 # */10 * * *  *     ~/itops-scripts/physical-machines/net-monitor.sh &>> /data/VirtualBox-VMs/VMLogs/Net-Services.log
 # AFFiNE backup (daily at 2:00 AM) - Local retention: latest only, BackInTime handles full retention
-0 2 * * * /home/netbackup/devops/containerized-apps/affine/scripts/backup-pod-affine.sh >> /data/affine/logs/backup.log 2>&1
+0 2 * * * ~/pod-scripts/affine-backup >> /data/affine/logs/backup.log 2>&1

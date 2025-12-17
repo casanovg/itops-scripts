@@ -38,7 +38,7 @@ case "$VM_STATE" in
 		echo "$VM virtual machine in state $VM_STATE, discarding state before start ..."
 		vboxmanage discardstate "$VM" || EXIT_CODE=$?
 		;;
-	poweroff|*
+	poweroff|*)
 		:
 		;;
 esac

@@ -3,6 +3,7 @@
 # Start fileserver shares and services
 # ......................................
 # 2019-12-30 gustavo.casanova@gmail.com
+# 2025-12-17 Updated with dynamic wait for iSCSI devices
 
 #TARGET_NETFILES="iqn.2019-12.lan.htargentina:hta-mothership.aleph"
 TARGET_NETFILES="iqn.2022-11.ar.hellermanntyton:hta-opportunity.netfiles"
@@ -24,13 +25,35 @@ EXCLUSION_2="hta-enterprise"
 FS_DIR="/data/netfiles-disk"
 TP_DIR="/data/taxpy-disk"
 
+# Function to wait for device to be available
+wait_for_device() {
+    local UUID=$1
+    local DEVICE_NAME=$2
+    local MAX_WAIT=60
+    local WAITED=0
+    
+    echo "Waiting for device $DEVICE_NAME (UUID: $UUID) to be available..."
+    while [ $WAITED -lt $MAX_WAIT ]; do
+        if [ -e "/dev/disk/by-uuid/$UUID" ]; then
+            echo "Device $DEVICE_NAME is ready after ${WAITED}s"
+            return 0
+        fi
+        sleep 2
+        WAITED=$((WAITED + 2))
+    done
+    
+    echo "WARNING: Device $DEVICE_NAME did not appear after ${MAX_WAIT}s"
+    return 1
+}
+
 # Discover available iSCSI targets disks
 sudo iscsiadm -m discovery -t sendtargets -p $SERVER_NETFILES
 
 # Connect HTA files and users shares iscsi targets
 if [ ! "$(cat /proc/partitions | grep -w "$DEV_NETFILES")" ]; then
+    echo "Connecting to $TARGET_NETFILES..."
     sudo iscsiadm -m node --targetname $TARGET_NETFILES -p $SERVER_NETFILES --login
-    sleep 1
+    wait_for_device "$DEV_NETFILES_UUID" "$DEV_NETFILES"
 else
     echo ""
     echo "\"$TARGET_NETFILES\" already connected ..."
@@ -38,11 +61,12 @@ fi
 
 # Mount HTA files and users shares
 if [ "$(cat /proc/partitions | grep -w "$DEV_NETFILES")" ]; then
-    if [ ! -z "$(ls -1 $FS_DIR | grep $ISCSI_WARNING)" ]; then
+    if [ ! -z "$(ls -1 $FS_DIR 2>/dev/null | grep $ISCSI_WARNING)" ]; then
+        echo "Mounting $FS_DIR..."
         sudo mount /dev/disk/by-uuid/$DEV_NETFILES_UUID $FS_DIR
     else
-	echo ""
-	echo "\"$FS_DIR\" already mounted ..."
+        echo ""
+        echo "\"$FS_DIR\" already mounted ..."
     fi
 else
     echo ""
@@ -51,8 +75,9 @@ fi
 
 # Connect finance tax payers records iscsi target
 if [ ! "$(cat /proc/partitions | grep -w "$DEV_TAXPY")" ]; then
+    echo "Connecting to $TARGET_TAXPY..."
     sudo iscsiadm -m node --targetname $TARGET_TAXPY -p $SERVER_TAXPY --login
-    sleep 1
+    wait_for_device "$DEV_TAXPY_UUID" "$DEV_TAXPY"
 else
     echo ""
     echo "\"$TARGET_TAXPY\" already connected ..."
@@ -60,7 +85,8 @@ fi
 
 # Mount finance tax payers records share
 if [ "$(cat /proc/partitions | grep -w "$DEV_TAXPY")" ]; then
-    if [ ! -z "$(ls -1 $TP_DIR | grep $ISCSI_WARNING)" ]; then
+    if [ ! -z "$(ls -1 $TP_DIR 2>/dev/null | grep $ISCSI_WARNING)" ]; then
+        echo "Mounting $TP_DIR..."
         sudo mount /dev/disk/by-uuid/$DEV_TAXPY_UUID $TP_DIR
     fi
 else
@@ -73,18 +99,18 @@ echo ""
 for SHARE in $(ls -1 $BKP_DIR); do
     if [ "$SHARE" != "$EXCLUSION_1" ] && [ "$SHARE" != "$EXCLUSION_2" ]; then
         if [ ! -z "$(ls -1 $BKP_DIR/"$SHARE" | grep $SHARE_WARNING)" ]; then
-	    # Patch to mount the SQL Server Windows share
-	    # ...........................................
-	    sudo chmod u+s /bin/mount
-	    sudo chmod u+s /bin/umount
-	    sudo chmod u+s /usr/sbin/mount.cifs
-	    WINSHARES_USR="$(sudo cat ~/.windowsshares-usr | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')"
-	    WINSHARES_PWD="$(sudo cat ~/.windowsshares-pwd | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')"
-	    if [ "$SHARE" == "sqlserver-backup" ]; then
-		sudo mount -t cifs //HTA-DYP/SQLServer-Backup$ /mnt-backintime/sqlserver-backup -o username="$WINSHARES_USR",password="$WINSHARES_PWD"
-	    fi
-	    # ...........................................
-	    # End patch
+            # Patch to mount the SQL Server Windows share
+            # ...........................................
+            sudo chmod u+s /bin/mount
+            sudo chmod u+s /bin/umount
+            sudo chmod u+s /usr/sbin/mount.cifs
+            WINSHARES_USR="$(sudo cat ~/.windowsshares-usr | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')"
+            WINSHARES_PWD="$(sudo cat ~/.windowsshares-pwd | openssl aes-256-cbc -d -pbkdf2 -pass pass:' ')"
+            if [ "$SHARE" == "sqlserver-backup" ]; then
+                sudo mount -t cifs //HTA-DYP/SQLServer-Backup$ /mnt-backintime/sqlserver-backup -o username="$WINSHARES_USR",password="$WINSHARES_PWD"
+            fi
+            # ...........................................
+            # End patch
             echo "Mounting $SHARE ..."
             mount $BKP_DIR/"$SHARE"
             echo ""

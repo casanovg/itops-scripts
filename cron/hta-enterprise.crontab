@@ -9,7 +9,7 @@
 
 # After reboot, connect to the phone & camera network
 # -----------------------------------------------------------------------------------
-@reboot             ~/connect-to-nb.sh
+#@reboot             ~/connect-to-nb.sh
 
 # Server operating system update (Every Tuesday at 22:30 PM)
 # -----------------------------------------------------------------------------------

@@ -34,7 +34,6 @@ fi
 sudo dnf needs-restarting -r > /dev/null 2>&1
 SYSTEM_REBOOT_REQUIRED=$?
 
-# DECISION LOGIC: Should we stop VMs?
 # We stop them ONLY if the system needs a reboot OR VirtualBox itself was updated
 if [ $SYSTEM_REBOOT_REQUIRED -eq 1 ] || [ $VBOX_UPDATED -eq 0 ]; then
     

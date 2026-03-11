@@ -1,0 +1,24 @@
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name  command to be executed
+
+# After reboot, wait 120 seconds and start all virtual machines
+# ------------------------------------------------------------------------------
+# @reboot sleep 120 && ~/itops-scripts/physical-machines/vboxall-on.sh
+
+# Server operating system update (Every Sunday at 22:30 PM)
+# ------------------------------------------------------------------------------
+30 22 *  *  sun   ~/itops-scripts/physical-machines/update-os.sh
+
+0 3 * * * /usr/local/bin/zm_backup.sh >> /var/log/zm_backup.log 2>&1
+
+# Synchronize IT Operations GitHub repository every 1 hour
+# -----------------------------------------------------------------------------------
+15 *  *  *  *     crontab -l > ~/itops-scripts/cron/$(hostname -s).crontab
+50 *  *  *  *     ~/itops-scripts/utils/git-sync.sh ~/itops-scripts/
+

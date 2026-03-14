@@ -12,7 +12,7 @@ echo "**************************************************************************
 echo "* $DateNow * Backing-up  >>> $(hostname -s | tr [a-z] [A-Z]) <<< VirtualBox Virtual Machines"
 echo "********************************************************************************"
 
-for virtualmachine in $(grep -v '^#' /root/ActiveVMs); do
+for virtualmachine in $([ -f /root/ActiveVMs ] && grep -v '^#' /root/ActiveVMs || echo "Warning: /root/ActiveVMs not found, ignoring." >&2); do
 	echo "--------------------------------------------------------------------------------"
 	echo "- Starting >> $virtualmachine << VM Backup on $(date)"
 	echo "Trying to shutdown" $virtualmachine on $DateNow "..."

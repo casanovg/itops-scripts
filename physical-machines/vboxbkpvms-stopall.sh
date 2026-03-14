@@ -23,12 +23,12 @@ echo "**************************************************************************
 echo "* $DATE_NOW * Backing-up >>> $(hostname -s | tr [a-z] [A-Z]) <<< VirtualBox Virtual Machines"
 echo "********************************************************************************"
 
-for VM in $(grep -v '^#' ~/ActiveVMs); do
+for VM in $([ -f ~/ActiveVMs ] && grep -v '^#' ~/ActiveVMs || echo "Warning: ~/ActiveVMs not found, ignoring." >&2); do
 	echo "--------------------------------------------------------------------------------"
 	echo "Shutting >> "$VM" << down on $(date) ..."
 	~/itops-scripts/physical-machines/vm-off.sh "$VM"
 done
-for VM in $(grep -v '^#' ~/ActiveVMs); do
+for VM in $([ -f ~/ActiveVMs ] && grep -v '^#' ~/ActiveVMs || echo "Warning: ~/ActiveVMs not found, ignoring." >&2); do
 	echo "--------------------------------------------------------------------------------"
 	echo "Removing old "$VM" backups ..."
 	find $BACKUP_DIR -type f -mtime +0 -name "$VM*"
@@ -41,7 +41,7 @@ for VM in $(grep -v '^#' ~/ActiveVMs); do
 	echo ""
 	sleep 3
 	# If the VM backed-up is an essential service, start it now
-	for ESSENTIAL_SERVICE in $(grep -v '^#' ~/EssentialNetServices); do
+	for ESSENTIAL_SERVICE in $([ -f ~/EssentialNetServices ] && grep -v '^#' ~/EssentialNetServices || echo "Warning: ~/EssentialNetServices not found, ignoring." >&2); do
 		if [ "$VM" == "$ESSENTIAL_SERVICE" ]; then
 			echo "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
 			echo "|| "$VM" runs essential services, starting it now ..."
@@ -52,7 +52,7 @@ for VM in $(grep -v '^#' ~/ActiveVMs); do
 	done
 done
 # Start all non-essential service VMs
-for VM in $(grep -v '^#' ~/ActiveVMs); do
+for VM in $([ -f ~/ActiveVMs ] && grep -v '^#' ~/ActiveVMs || echo "Warning: ~/ActiveVMs not found, ignoring." >&2); do
 	if [ "$VM" != "$ESSENTIAL_SERVICE" ]; then
 		echo "Restarting >> "$VM" << on $(date) ..."
 			~/itops-scripts/physical-machines/vm-on.sh "$VM"

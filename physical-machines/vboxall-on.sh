@@ -7,7 +7,7 @@
 POST_START_DLY=120
 IFS=$'\n'
 
-for VM in $(grep -v '^#' ~/ActiveVMs); do
+for VM in $([ -f ~/ActiveVMs ] && grep -v '^#' ~/ActiveVMs || echo "Warning: ~/ActiveVMs not found, ignoring." >&2); do
         echo "Starting VM: $VM"
         ~/itops-scripts/physical-machines/vm-on.sh "$VM"
         RC=$?

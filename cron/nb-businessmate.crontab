@@ -22,3 +22,7 @@
 15 *  *  *  *     crontab -l > ~/itops-scripts/cron/$(hostname -s).crontab
 50 *  *  *  *     ~/itops-scripts/utils/git-sync.sh ~/itops-scripts/
 
+# Clean server logs to free disk space (Every month)
+# -----------------------------------------------------------------------------------
+  0  0  1  *  *     sudo ~/itops-scripts/utils/free-space.sh -y
+

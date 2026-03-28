@@ -47,6 +47,20 @@ echo "Vacuuming journald..."
 journalctl --vacuum-time=1d
 # Alternatively, to keep a specific size: journalctl --vacuum-size=100M
 
+# 1.2 Podman / Docker containers log vacuum (rootless or system-wide)
+echo "Truncating container logs (Podman/Docker)..."
+if command -v podman &> /dev/null; then
+    # Podman logs are usually handled by journald (which we just vacuumed)
+    # This will only delete dangling images/networks (no running or stopped regular containers)
+    podman system prune -f
+fi
+if command -v docker &> /dev/null; then
+    # This will only delete dangling images/networks (no running or stopped regular containers)
+    docker system prune -f
+    # Truncate JSON log files from Docker
+    find /var/lib/docker/containers/ -type f -name "*.log" -exec truncate -s 0 {} \; 2>/dev/null
+fi
+
 # 2. General application and system logs
 # We use 'truncate' to empty the files without deleting them, 
 # preventing file permission and handler issues.
@@ -104,7 +118,12 @@ find /var/log -type f -regex ".*\.[0-9]$" -delete
 find /var/log -type f -name "*.gz" -delete
 find /var/log -type f -name "*-20[0-9][0-9][0-1][0-9][0-3][0-9]*" -delete
 
-# 5. Clean apt/yum/dnf cache (optional, un-comment if needed)
+# 5. Clean VirtualBox VM log archives and BackInTime diagnostics (if any)
+echo "Removing VirtualBox old logs and specific software residues..."
+find / -maxdepth 4 -type f -name "VBox.log.*" -delete 2>/dev/null
+find / -maxdepth 4 -type f -ipath "*backintime*.log*" -delete 2>/dev/null
+
+# 6. Clean apt/yum/dnf cache (optional, un-comment if needed)
 # echo "Cleaning package manager caches..."
 # apt-get clean || yum clean all || dnf clean all
 

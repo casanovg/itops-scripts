@@ -16,6 +16,29 @@ if [ "$EUID" -ne 0 ]
   	exit 1
 fi
 
+AUTO_REBOOT=0
+
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -h|--help)
+            echo "Usage: $0 [options]"
+            echo "Options:"
+            echo "  -h, --help    Show this help message and exit"
+            echo "  -y, --yes     Automatically reboot the machine without prompting"
+            exit 0
+            ;;
+        -y|--yes)
+            AUTO_REBOOT=1
+            shift
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Use -h or --help for usage."
+            exit 1
+            ;;
+    esac
+done
+
 echo "Cleaning log files to free space..."
 echo
 
@@ -90,8 +113,14 @@ echo "File cleanup finished."
 echo
 
 # Ask for confirmation before rebooting
-read -p "Do you want to reboot the machine now? (y/n) " -n 1 -r
-echo
+if [ "$AUTO_REBOOT" -eq 1 ]; then
+    echo "Auto-reboot flag provided (--yes). Proceeding with reboot..."
+    REPLY="y"
+else
+    read -p "Do you want to reboot the machine now? (y/n) " -n 1 -r
+    echo
+fi
+
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     echo "Rebooting the machine in 9 seconds..."

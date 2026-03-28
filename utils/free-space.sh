@@ -78,6 +78,7 @@ LOG_DIRS=(
     "/var/lib/pgsql/data/log"
     "/data/mattermost/logs"
     "/opt/seafile/logs"
+    "/var/log/asterisk"
 )
 
 for DIR in "${LOG_DIRS[@]}"; do
@@ -103,6 +104,8 @@ SYSTEM_LOGS=(
     "/var/log/maillog"
     "/var/log/fail2ban.log"
     "/var/log/audit/audit.log"
+    "/var/log/asterisk/full"
+    "/var/log/asterisk/messages"
 )
 
 for LOG in "${SYSTEM_LOGS[@]}"; do

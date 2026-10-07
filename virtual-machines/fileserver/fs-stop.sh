@@ -28,5 +28,5 @@ else
      sudo kill $(sudo ps -C winbindd -o pid | grep -v PID)
 fi
 
-sudo ps ax | egrep "samba|smbd|nmbd|winbindd" | grep -v grep
+sudo ps ax | grep -E "samba|smbd|nmbd|winbindd" | grep -v grep
 echo ""

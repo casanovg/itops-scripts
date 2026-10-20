@@ -18,7 +18,6 @@ TP_DIR="/data/taxpy-disk"
 
 
 # Mount physical server shares to back them up with Back-in-Time
-echo ""
 for SHARE in $(ls -1 $BKP_DIR); do
     if [ "$SHARE" != "$EXCLUSION_1" ] && [ "$SHARE" != "$EXCLUSION_2" ]; then
         if [ ! -z "$(ls -1 $BKP_DIR/"$SHARE" | grep $SHARE_WARNING)" ]; then
@@ -36,10 +35,6 @@ for SHARE in $(ls -1 $BKP_DIR); do
 	    # End patch
             echo "Mounting $SHARE ..."
             mount $BKP_DIR/"$SHARE"
-            echo ""
-        else
-            echo "$SHARE already mounted!"
-            echo ""
         fi
     fi
     sleep 2

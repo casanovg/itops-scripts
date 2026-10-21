@@ -12,6 +12,8 @@ SHARE_WARNING="SHARE_NOT_MOUNTED"
 ISCSI_WARNING="DISK_NOT_MOUNTED"
 EXCLUSION_1="BACKUP-README"
 EXCLUSION_2="hta-enterprise"
+EXCLUSION_3="hta-businessmate"  # baja 2026-10-20: backup no importa
+EXCLUSION_4="hta-mothership"    # baja 2026-10-20: dir stale sin fstab
 
 FS_DIR="/data/netfiles-disk"
 TP_DIR="/data/taxpy-disk"
@@ -19,7 +21,7 @@ TP_DIR="/data/taxpy-disk"
 
 # Mount physical server shares to back them up with Back-in-Time
 for SHARE in $(ls -1 $BKP_DIR); do
-    if [ "$SHARE" != "$EXCLUSION_1" ] && [ "$SHARE" != "$EXCLUSION_2" ]; then
+    if [ "$SHARE" != "$EXCLUSION_1" ] && [ "$SHARE" != "$EXCLUSION_2" ] && [ "$SHARE" != "$EXCLUSION_3" ] && [ "$SHARE" != "$EXCLUSION_4" ]; then
         if [ ! -z "$(ls -1 $BKP_DIR/"$SHARE" | grep $SHARE_WARNING)" ]; then
 	    # Patch to mount the SQL Server Windows share
 	    # ...........................................

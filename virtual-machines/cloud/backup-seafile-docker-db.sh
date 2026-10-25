@@ -1,16 +1,35 @@
 #!/bin/sh
-# Backup Seafile Docker databases (MariaDB en contenedor seafile-mysql)
-# Politica: solo ULTIMA copia en host (igual que antes); retencion la da
-# Backintime en 10.77.77.40 que levanta /data/seafile-data/backup-database/
-set -u
+# Backup Seafile Docker (MariaDB en contenedor) - online, sin downtime
+# NB-Hibou 2026-10-25. Adaptado de backup-seafile-db.sh (binario).
+# Cron: 45 01 * * * (retencion historica: Backintime + OVA semanal)
+
+ENV_FILE="/data/seafile-docker/.env"
 BACKUP_DATABASE="/data/seafile-data/backup-database"
-mkdir -p "$BACKUP_DATABASE"
-cd /data/seafile-docker || exit 1
-ROOTPW=$(grep ^INIT_SEAFILE_MYSQL_ROOT_PASSWORD .env | cut -d= -f2)
-STAMP=$(date +"%Y-%m-%d_%H-%M-%S")
+BKP_USR="netbackup"
+BKP_GRP="wheel"
+
+set +o history
+ROOTPW="$(grep -E '^INIT_SEAFILE_MYSQL_ROOT_PASSWORD' "$ENV_FILE" | cut -d= -f2)"
+if [ -z "$ROOTPW" ]; then
+    echo "ERROR: no se pudo leer root password de $ENV_FILE"
+    exit 1
+fi
+
+if [ ! -d "$BACKUP_DATABASE" ]; then
+    echo "Directory $BACKUP_DATABASE DOES NOT exist, creating it ..."
+    mkdir -p "$BACKUP_DATABASE"
+fi
+
 for DB in ccnet_db seafile_db seahub_db; do
-    echo "Dumping $DB ..."
-    rm -f "$BACKUP_DATABASE/$DB.sql."*
-    sudo docker exec seafile-mysql mariadb-dump -uroot -p"$ROOTPW" --single-transaction --opt "$DB" > "$BACKUP_DATABASE/$DB.sql.$STAMP" || exit 1
+    echo "Backing $DB up ..."
+    rm -f "$BACKUP_DATABASE/${DB}.sql".*
+    if sudo docker exec seafile-mysql mysqldump -uroot -p"$ROOTPW" --opt "$DB" > "$BACKUP_DATABASE/${DB}.sql.$(date +"%Y-%m-%d_%H-%M-%S")"; then
+        echo "$DB OK"
+    else
+        echo "ERROR backing $DB up!"
+        exit 1
+    fi
 done
-echo "OK $STAMP"
+unset ROOTPW
+sudo chown -R $BKP_USR:$BKP_GRP "$BACKUP_DATABASE"
+echo "Done $(date)"

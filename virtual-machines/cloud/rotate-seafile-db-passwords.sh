@@ -11,8 +11,20 @@
 # NO se expusieron y NO se tocan con este script.
 #
 # Uso:
-#   rotate-seafile-db-passwords.sh [--app-only | --root-only] [--yes]
+#   rotate-seafile-db-passwords.sh [--app-only | --root-only] [--yes] [--dry-run]
 #   rotate-seafile-db-passwords.sh --rollback <dir-rot-AAAAMMDD-HHMM>
+#   rotate-seafile-db-passwords.sh [--app-only | --root-only] --show-once
+#
+# --dry-run: valida precheck y muestra el plan SIN tocar nada (ideal para
+#   probar que el script "llega" sin rotar).
+#
+# --show-once (OPCIONAL, interactivo, incompatible con --yes): al final,
+# tras validar, pide confirmacion y muestra los NUEVOS passwords UNA vez
+# para cargarlos en KeePass. Ejecutarlo directo por ssh (NO via sesiones
+# de agente: quedarian en el transcript) y limpiar el scrollback despues.
+# Sugerencia KeePass: entradas "hta-cloud / MariaDB seafile|root",
+# usuario segun caso, URL http://10.6.17.88:3306 (solo referencia, sin
+# acceso directo), notas con fecha de rotacion y dir de backup.
 #
 # Requiere sudo (docker) y openssl. Ventana sugerida fuera de 01:30-04:30
 # (backup cron 01:55 + pull Backintime ~04:00). JAMAS imprime passwords.
@@ -30,22 +42,31 @@ info() { echo "== $*"; }
 
 MODE=both
 YES=0
+SHOW=0
+DRY=0
 ROLLBACK_DIR=""
+LOCKFILE=/data/seafile-upgrade/.rotate-db.lock
 
 while [ $# -gt 0 ]; do
   case "$1" in
     --app-only) MODE=app ;;
     --root-only) MODE=root ;;
     --yes) YES=1 ;;
+    --show-once) SHOW=1 ;;
+    --dry-run) DRY=1 ;;
     --rollback) ROLLBACK_DIR="${2:?falta directorio de backup}"; shift ;;
-    -h|--help) sed -n '2,20p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,32p' "$0"; exit 0 ;;
     *) die "opcion desconocida: $1 (usar --help)" ;;
   esac
   shift
 done
 
-[ -f "$PROJ/.env" ] || die "no existe $PROJ/.env"
-grep -q "^$APP_KEY=" "$PROJ/.env" || die "falta $APP_KEY en .env"
+# Lock anti-carreras: dos rotaciones/rollbacks jamas pisan el mismo
+# .env/DB a la vez (corridas concurrentes = causa posible de mismatch).
+exec 9>"$LOCKFILE" || die "sin lockfile $LOCKFILE"
+flock -n 9 || die "ya hay una rotacion/rollback en curso (lock $LOCKFILE)"
+
+[ -f "$PROJ/.env" ] || die "no existe $PROJ/.env"grep -q "^$APP_KEY=" "$PROJ/.env" || die "falta $APP_KEY en .env"
 grep -q "^$ROOT_KEY=" "$PROJ/.env" || die "falta $ROOT_KEY en .env"
 command -v openssl >/dev/null || die "falta openssl"
 sudo docker container inspect "$DB_CN" >/dev/null 2>&1 \
@@ -57,23 +78,25 @@ db_exec_root() {
   sudo docker exec -i "$DB_CN" mariadb -uroot -p"$_pw" "$@"
 }
 
+# Hosts conocidos (verificados 2026-10-25). Si un ALTER falla es porque
+# un host cambio: el error lo dice y se aborta sin seguir. NO se usa
+# FLUSH (bajo skip-grant-tables reactiva la autenticacion; en operacion
+# normal ALTER aplica de inmediato).
+# Diseno anti-carrera: precheck + ALTERs van en UNA sola sesion (-e con
+# todo junto). O autentica todo o no corre nada; no hay ventana entre
+# "probar" y "cambiar" donde otro actor pueda intercalarse.
 alter_users() {
   # $1 = root pw actual (auth); $2 = nuevo root ("" = no tocar);
-  # $3 = nuevo app ("" = no tocar). La app primero: el auth no cambia
-  # hasta rotar root, asi el mismo $1 sirve para todo.
+  # $3 = nuevo app ("" = no tocar)
+  _SQL="SELECT 1 AS precheck;"
   if [ -n "$3" ]; then
-    for h in $(db_exec_root "$1" -N -e "SELECT host FROM mysql.user WHERE user='$APP_DB_USER';"); do
-      db_exec_root "$1" -e "ALTER USER '$APP_DB_USER'@'$h' IDENTIFIED BY '$3';" \
-        || die "fallo ALTER $APP_DB_USER@$h"
-    done
+    _SQL="$_SQL ALTER USER '$APP_DB_USER'@'%' IDENTIFIED BY '$3';"
   fi
   if [ -n "$2" ]; then
-    for h in $(db_exec_root "$1" -N -e "SELECT host FROM mysql.user WHERE user='root';"); do
-      db_exec_root "$1" -e "ALTER USER 'root'@'$h' IDENTIFIED BY '$2';" \
-        || die "fallo ALTER root@$h"
-    done
+    _SQL="$_SQL ALTER USER 'root'@'localhost' IDENTIFIED BY '$2'; ALTER USER 'root'@'%' IDENTIFIED BY '$2';"
   fi
-  db_exec_root "$1" -e "FLUSH PRIVILEGES;"
+  db_exec_root "$1" -e "$_SQL" || die "fallo ALTER (verificar hosts en mysql.user)"
+  unset _SQL
 }
 
 verify_logins() {
@@ -108,6 +131,14 @@ if [ -z "$ROLLBACK_DIR" ]; then
   unset _PRE_ROOT
 fi
 
+if [ "$DRY" -eq 1 ]; then
+  info "DRY-RUN modo=$MODE: precheck OK, sin cambios."
+  [ "$MODE" != "root" ] && info "  ALTER pendiente: '$APP_DB_USER'@'%'"
+  [ "$MODE" != "app" ] && info "  ALTER pendiente: 'root'@'localhost', 'root'@'%'"
+  info "  luego seria: verify logins + .env + up -d + wait 200 (no ejecutado)"
+  exit 0
+fi
+
 if [ -n "$ROLLBACK_DIR" ]; then
   info "ROLLBACK desde $ROLLBACK_DIR"
   [ -d "$ROLLBACK_DIR" ] || die "no existe $ROLLBACK_DIR"
@@ -132,6 +163,10 @@ fi
 H=$(date +%H)
 if [ "$H" -ge 1 ] && [ "$H" -lt 5 ]; then
   echo "AVISO: ventana de backup 01:30-04:30, preferible rotar fuera de ella."
+fi
+
+if [ "$SHOW" -eq 1 ] && [ "$YES" -eq 1 ]; then
+  die "--show-once es interactivo, incompatible con --yes"
 fi
 
 if [ "$YES" -eq 0 ]; then
@@ -170,13 +205,31 @@ info "ALTER USER OK"
 verify_logins "${NEW_ROOT:-$OLD_ROOT}" "$NEW_APP"
 
 [ -n "$NEW_APP" ] && sed -i -E "s/^($APP_KEY)=.*/\1=$NEW_APP/" "$PROJ/.env"
-[ -n "$NEW_ROOT" ] && sed -i -E "s/^($ROOT_KEY)=.*/\1=$NEWROOT/" "$PROJ/.env"
+[ -n "$NEW_ROOT" ] && sed -i -E "s/^($ROOT_KEY)=.*/\1=$NEW_ROOT/" "$PROJ/.env"
 chmod 600 "$PROJ/.env"
 info ".env actualizado"
 
 cd "$PROJ" && sudo docker compose up -d
 info "contenedores recreados (up -d recarga .env; restart NO lo hace)"
 wait_login_200
+
+if [ "$SHOW" -eq 1 ]; then
+  echo ""
+  echo "Vas a ver los NUEVOS passwords UNA vez para cargarlos en KeePass."
+  printf 'Escribi MOSTRAR para continuar: '
+  read -r ans2 </dev/tty || ans2=""
+  if [ "$ans2" = "MOSTRAR" ]; then
+    echo "=============================================="
+    echo "COPIAR A KEEPASS AHORA (no se muestra de nuevo)"
+    [ -n "$NEW_APP" ] && { echo "MariaDB app (usuario: $APP_DB_USER):"; echo "  $NEW_APP"; }
+    [ -n "$NEW_ROOT" ] && { echo "MariaDB root (usuario: root):"; echo "  $NEW_ROOT"; }
+    echo "Modo: $MODE | Fecha: $TS | Backup: $BK"
+    echo "Despues de copiar: limpiar el scrollback de la terminal."
+    echo "=============================================="
+  else
+    echo "(no se mostraron; quedaron solo en .env + DB)"
+  fi
+fi
 
 unset OLD_APP OLD_ROOT NEW_APP NEW_ROOT
 info "OK modo=$MODE backup=$BK"

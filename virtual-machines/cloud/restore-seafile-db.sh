@@ -1,17 +1,19 @@
 #!/bin/sh
 
-# Restore Seafile MySQL (MariaDB) databases and system files
-# ...........................................................
-# 2020-02-15 gustavo.casanova@gmail.com
+# Restore Seafile Docker databases (MariaDB en contenedor seafile-mysql)
+# Adaptado de la era binaria (/opt/seafile + mysql host) a Docker 2026-10-25:
+#  - sin cliente mysql en el host: se usa `docker exec seafile-mysql mariadb`
+#  - password root se lee de /data/seafile-docker/.env (igual que el backup)
+#  - se frena nginx + contenedor seafile (app); mysql queda corriendo
+#  - la seccion "system files" (/opt/...) ya no aplica: .env/ymls/conf se
+#    restauran a mano desde /data/seafile-upgrade/<motivo>-AAAAMMDD-HHMM/
+# USO MANUAL E INTERACTIVO (no va en cron). JAMAS imprime passwords.
+set -u
 
-SYSTEM_DIR="/opt/seafile"
-SYSTEM_USR="/opt/seafile.my.cnf"
-BACKUP_SYSTEM="/data/seafile-data/backup-system"
+PROJ=/data/seafile-docker
+DB_CN=seafile-mysql
 BACKUP_DATABASE="/data/seafile-data/backup-database"
-BKP_USR="netbackup"
-BKP_GRP="wheel"
 
-clear
 echo ""
 echo " **********************************************"
 echo " *     WARNING!     WARNING!     WARNING!     *"
@@ -24,8 +26,8 @@ echo " *   this database restore implies, please    *"
 echo " *   exit now!                                *"
 echo " **********************************************"
 echo ""
-echo -en "Please enter \e[38;2;255;0;0mrestore\e[0m to continue, or any key to \e[38;2;0;255;0mexit\e[0m: "
-read USER_INPUT
+printf "Please enter restore to continue, or any key to exit: "
+read -r USER_INPUT || exit 1
 
 if [ "$USER_INPUT" = "restore" ] || [ "$USER_INPUT" = "Restore" ] || [ "$USER_INPUT" = "RESTORE" ]; then
     echo ""
@@ -34,56 +36,61 @@ else
     echo ""
     echo "Exiting ..."
     echo ""
-    exit
+    exit 0
 fi
 
-# Stop Seafile services
+[ -f "$PROJ/.env" ] || { echo "ERROR: no existe $PROJ/.env" >&2; exit 1; }
+ROOTPW=$(grep ^INIT_SEAFILE_MYSQL_ROOT_PASSWORD "$PROJ/.env" | cut -d= -f2)
+[ -n "$ROOTPW" ] || { echo "ERROR: sin root en .env" >&2; exit 1; }
+
 echo ""
-echo "Stopping Seafile services ..."
-#sudo systemctl stop nginx seahub seafile
-~/itops-scripts/virtual-machines/cloud/cl-stop.sh
+echo "Stopping Seafile app + nginx (mysql sigue corriendo) ..."
+sudo systemctl stop nginx 2>/dev/null || true
+sudo docker stop seafile >/dev/null 2>&1 || true
 
-DB_SERVICE_STATUS="$(systemctl is-active mariadb)"
-
-# Restore Seafile databases
-if [ "$DB_SERVICE_STATUS" = "active" ]; then
-
+if [ "$(sudo docker container inspect -f '{{.State.Status}}' "$DB_CN" 2>/dev/null)" != "running" ]; then
     echo ""
-    echo "Seafile database restore ..."
-
-    # Restore updated ccnet_db
-    echo "Restoring ccnet_db ..."
-    mysql -h localhost -u root -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" ccnet_db < "$(ls $BACKUP_DATABASE/ccnet_db.sql.*)"
-
-    # Restore updated seafile_db
-    echo "Restoring seafile_db ..."
-    mysql -h localhost -u root -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" seafile_db < "$(ls $BACKUP_DATABASE/seafile_db.sql.*)"
-
-    # Restore updated seahub_db
-    echo "Restoring seahub_db ..."
-    mysql -h localhost -u root -p"$(~/itops-scripts/virtual-machines/cloud/vm-setup/get-mysql-root-pwd.sh)" seahub_db < "$(ls $BACKUP_DATABASE/seahub_db.sql.*)"
-
-else
-    echo ""
-    echo "WARNING! MariaDB not running, unable to restore the Seafile databases!"
-
+    echo "WARNING! $DB_CN no esta corriendo, imposible restaurar."
+    sudo systemctl start nginx 2>/dev/null || true
+    sudo docker start seafile >/dev/null 2>&1 || true
+    unset ROOTPW
+    exit 1
 fi
 
-# Restore Seafile system files
+# shellcheck disable=SC2012
+latest_dump() {
+    ls -t "$BACKUP_DATABASE/$1.sql."* 2>/dev/null | head -1
+}
+
+FAILED=0
+for DB in ccnet_db seafile_db seahub_db; do
+    DUMP=$(latest_dump "$DB")
+    if [ -z "$DUMP" ]; then
+        echo "ERROR: sin dump para $DB en $BACKUP_DATABASE" >&2
+        FAILED=1
+        continue
+    fi
+    echo "Restoring $DB desde $(basename "$DUMP") ..."
+    if sudo docker exec -i "$DB_CN" mariadb -uroot -p"$ROOTPW" "$DB" < "$DUMP"; then
+        echo "  $DB OK"
+    else
+        echo "  ERROR restaurando $DB" >&2
+        FAILED=1
+    fi
+done
+unset ROOTPW
+
 echo ""
-echo -en "Restore also Seafile system files? (Y/N): "
-read USER_INPUT
-if [ "$USER_INPUT" = "Y" ] || [ "$USER_INPUT" = "y" ] || [ "$USER_INPUT" = "yes" ] || [ "$USER_INPUT" = "Yes" ] || [ "$USER_INPUT" = "YES" ]
-then
+echo "Starting Seafile app + nginx ..."
+sudo docker start seafile >/dev/null 2>&1 || true
+sudo systemctl start nginx 2>/dev/null || true
+
+if [ "$FAILED" -ne 0 ]; then
     echo ""
-    echo "Restoring Seafile system files ..."
-    sudo rsync -r -a $BACKUP_SYSTEM/* /opt/.
-    sudo chown -R root:wheel /opt/seafile.my.cnf
+    echo "RESTORE CON ERRORES: revisar que DBs quedaron a medias."
+    exit 1
 fi
 
-# Start Seafile services
 echo ""
-echo "Starting Seafile services ..."
-#sudo systemctl start seafile seahub nginx
-~/itops-scripts/virtual-machines/cloud/cl-start.sh
+echo "Restore OK. Validar: login web + subida/bajada de archivo."
 echo ""

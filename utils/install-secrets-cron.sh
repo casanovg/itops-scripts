@@ -3,6 +3,9 @@
 # Install the hourly secrets-vault synchronization job in the current user's
 # crontab. Each machine gets a different minute to reduce push races.
 #
+# VAULT SCOPE: install ONLY on nb-comet, nb-spirit, hta-opportunity and
+# hta-enterprise. Other machines must NOT clone the private vault repo.
+#
 # Run it manually once per machine:
 #   ~/itops-scripts/utils/install-secrets-cron.sh --dry-run
 #   ~/itops-scripts/utils/install-secrets-cron.sh
@@ -33,11 +36,14 @@ Options:
   -h, --help      Show this help
 
 Default minutes (per host):
-  hta-businessmate 12   hta-cloud       14   hta-enterprise  16
-  hta-fileserver   18   hta-mothership  22   hta-opportunity 24
-  hta-spirit       26   nb-businessmate 28   nb-spirit       32
+  hta-businessmate 12   hta-cloud       14   hta-enterprise  16 *
+  hta-fileserver   18   hta-mothership  22   hta-opportunity 24 *
+  hta-spirit       26   nb-businessmate 28   nb-spirit       32 *
   nb-hibou         34 (disabled)
-  nb-comet         36   nb-meteor       38   wks-03-nbk      40
+  nb-comet         36 * nb-meteor       38   wks-03-nbk      40
+
+  * = vault scope (only these four hosts install secrets-sync):
+      nb-comet, nb-spirit, hta-opportunity, hta-enterprise.
 
 After running this, the machine's next "crontab -l > cron/<host>.crontab"
 job will mirror the change into the repository.

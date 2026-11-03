@@ -1,0 +1,10 @@
+# Secrets and local artifacts: never commit these.
+*.kdbx
+*.kdb
+*.key
+vault/
+secrets-vault-backups/
+pwd-*.kdbx
+*.bak
+*.backup-*
+*~

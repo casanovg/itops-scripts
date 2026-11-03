@@ -53,4 +53,5 @@
 */30 * * * *     ~/itops-scripts/physical-machines/vm-on.sh "Testbed-01"
 #*/35 * * * *     ~/itops-scripts/physical-machines/vm-on.sh "Testbed-02"
 #*/40 * * * *     ~/itops-scripts/physical-machines/vm-on.sh "Testbed-03"
-
+# Synchronize the private secrets vault every 1 hour (unique minute per machine)
+ 24 * * * *     ~/itops-scripts/utils/secrets-sync.sh

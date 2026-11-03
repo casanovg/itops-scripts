@@ -65,4 +65,5 @@
 # Local retention: latest only, BackInTime handles full retention
 # ------------------------------------------------------------------------------
   0 2 * * * ~/pod-scripts/affine-backup >> /data/affine/logs/backup.log 2>&1
-
+# Synchronize the private secrets vault every 1 hour (unique minute per machine)
+ 32 * * * *     ~/itops-scripts/utils/secrets-sync.sh

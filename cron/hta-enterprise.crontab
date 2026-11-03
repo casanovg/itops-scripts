@@ -53,4 +53,5 @@ MAILTO=""
 0 3 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile 11 backup --background >/dev/null
 #Back In Time system entry, this will be edited by the gui:
 0 13 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile 12 backup --background >/dev/null
-
+# Synchronize the private secrets vault every 1 hour (unique minute per machine)
+ 16 * * * *     ~/itops-scripts/utils/secrets-sync.sh

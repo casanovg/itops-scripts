@@ -19,7 +19,7 @@ ASKPASS="$SCRIPT_DIR/git-askpass-github.sh"
 
 REPO="${SECRETS_REPO:-$HOME/secrets-vault}"
 BRANCH="${SECRETS_BRANCH:-master}"
-DB_PATH="${SECRETS_DB_PATH:-vault/itops.kdbx}"
+DB_PATH="${SECRETS_DB_PATH:-vault/hta-itops.kdbx}"
 BACKUP_DIR="${SECRETS_BACKUP_DIR:-$HOME/secrets-vault-backups}"
 READ_ONLY=0
 HOST="$(hostname -s 2>/dev/null || hostname)"
@@ -32,7 +32,7 @@ Usage: $(basename "$0") [options]
 Options:
   --repo PATH          Local secrets repository (default: ~/secrets-vault)
   --branch NAME        Branch to synchronize (default: master)
-  --db PATH            Vault path inside the repository (default: vault/itops.kdbx)
+  --db PATH            Vault path inside the repository (default: vault/hta-itops.kdbx)
   --backup-dir PATH    Directory for conflict copies (default: ~/secrets-vault-backups)
   --read-only          Only pull; never commit or push
   -h, --help           Show this help

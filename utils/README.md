@@ -18,7 +18,7 @@ automatically.
 # Custom paths
 ~/itops-scripts/utils/secrets-sync.sh \
     --repo ~/secrets-vault \
-    --db vault/itops.kdbx
+    --db vault/hta-itops.kdbx
 ```
 
 On divergence it saves both database versions under

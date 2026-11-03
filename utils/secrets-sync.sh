@@ -89,6 +89,11 @@ MAGIC="$(od -An -tx1 -N8 -- "$DB_PATH" | tr -d ' \n')"
 [ "$MAGIC" = "03d9a29a67fb4bb5" ] \
     || die 1 "refusing to sync: $DB_PATH does not look like a KDBX database"
 
+# Fresh clones check out 644 (git only tracks the +x bit); the vault must
+# stay readable only by its owner.
+chmod 600 -- "$DB_PATH" \
+    || die 1 "cannot set 600 permissions on $DB_PATH"
+
 LOCK_FILE="${XDG_RUNTIME_DIR:-/tmp}/secrets-sync-$(id -u).lock"
 exec 9>"$LOCK_FILE" || die 1 "cannot create lock file: $LOCK_FILE"
 if ! flock -n 9; then
@@ -156,6 +161,7 @@ if git merge-base --is-ancestor "$REMOTE" "$LOCAL"; then
 elif git merge-base --is-ancestor "$LOCAL" "$REMOTE"; then
     log "fast-forwarding to origin/$BRANCH"
     git merge --ff-only "origin/$BRANCH" >/dev/null
+    chmod 600 -- "$DB_PATH" || true
     log "up to date"
     exit 0
 else

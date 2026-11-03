@@ -2,6 +2,27 @@
 
 Various general utility scripts.
 
+## itops-scripts synchronization
+
+`git-sync.sh` synchronizes this repository. It is idempotent: concurrent
+runs are serialized with `flock`, a second run without changes is a no-op,
+pulls are fast-forward only (never merge commits), and diverged histories
+are rebased when clean or reported with exit code `2` otherwise. The GitHub
+token never appears in push URLs; pushes use the `git-askpass-github.sh`
+helper.
+
+```bash
+# Normal mode (cron default): commit local changes, fast-forward, push
+~/itops-scripts/utils/git-sync.sh ~/itops-scripts/
+
+# Read-only consumer: only fast-forward, never commit or push
+~/itops-scripts/utils/git-sync.sh ~/itops-scripts/ --read-only
+```
+
+Existing `cron/*.crontab` entries keep working unchanged: the optional
+positional repo path is still accepted. No crontab changes are required;
+machines pick up the new script on their next pull.
+
 ## Secrets vault synchronization
 
 `secrets-sync.sh` synchronizes the private `secrets-vault` repository. It is
@@ -32,7 +53,10 @@ recommended as a next step.
 
 ### Install the hourly cron job
 
-Run once per machine:
+Install ONLY on these four hosts (vault scope):
+
+- nb-comet (this workstation)
+- nb-spirit, hta-opportunity, hta-enterprise
 
 ```bash
 ~/itops-scripts/utils/install-secrets-cron.sh --dry-run

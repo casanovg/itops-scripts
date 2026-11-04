@@ -112,7 +112,7 @@ fi
 
 # Serialize concurrent runs (cron may overlap with a previous slow run).
 REPO_HASH="$(printf '%s' "$REPO" | md5sum | cut -c1-12)"
-LOCK_FILE="${XDG_RUNTIME_DIR:-/tmp}/git-sync-$UID-$REPO_HASH.lock"
+LOCK_FILE="${XDG_RUNTIME_DIR:-${TMPDIR:-/tmp}}/git-sync-$(id -u)-$REPO_HASH.lock"
 exec 9>"$LOCK_FILE" || die 1 "cannot create lock file: $LOCK_FILE"
 if ! flock -n 9; then
     log "another git-sync process is running for $REPO; skipping"

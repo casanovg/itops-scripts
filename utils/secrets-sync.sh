@@ -94,7 +94,7 @@ MAGIC="$(od -An -tx1 -N8 -- "$DB_PATH" | tr -d ' \n')"
 chmod 600 -- "$DB_PATH" \
     || die 1 "cannot set 600 permissions on $DB_PATH"
 
-LOCK_FILE="${XDG_RUNTIME_DIR:-/tmp}/secrets-sync-$(id -u).lock"
+LOCK_FILE="${XDG_RUNTIME_DIR:-${TMPDIR:-/tmp}}/secrets-sync-$(id -u).lock"
 exec 9>"$LOCK_FILE" || die 1 "cannot create lock file: $LOCK_FILE"
 if ! flock -n 9; then
     log "another secrets-sync process is running; skipping"

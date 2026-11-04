@@ -12,7 +12,7 @@
 #
 set -euo pipefail
 
-PATH="/usr/local/bin:/usr/bin:/bin"
+PATH="${PREFIX:+$PREFIX/bin:}/usr/local/bin:/usr/bin:/bin:${PATH:-}"
 export PATH
 
 HOST="$(hostname -s 2>/dev/null || hostname)"

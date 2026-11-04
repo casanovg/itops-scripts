@@ -14,7 +14,7 @@
 #
 set -euo pipefail
 
-PATH="/usr/local/bin:/usr/bin:/bin"
+PATH="${PREFIX:+$PREFIX/bin:}/usr/local/bin:/usr/bin:/bin:${PATH:-}"
 export PATH
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"

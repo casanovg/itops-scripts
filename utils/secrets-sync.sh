@@ -18,7 +18,7 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 ASKPASS="$SCRIPT_DIR/git-askpass-github.sh"
 
 REPO="${SECRETS_REPO:-$HOME/secrets-vault}"
-BRANCH="${SECRETS_BRANCH:-master}"
+BRANCH="${SECRETS_BRANCH:-main}"
 DB_PATH="${SECRETS_DB_PATH:-vault/hta-itops.kdbx}"
 BACKUP_DIR="${SECRETS_BACKUP_DIR:-$HOME/secrets-vault-backups}"
 READ_ONLY=0
@@ -31,7 +31,7 @@ Usage: $(basename "$0") [options]
 
 Options:
   --repo PATH          Local secrets repository (default: ~/secrets-vault)
-  --branch NAME        Branch to synchronize (default: master)
+  --branch NAME        Branch to synchronize (default: main)
   --db PATH            Vault path inside the repository (default: vault/hta-itops.kdbx)
   --backup-dir PATH    Directory for conflict copies (default: ~/secrets-vault-backups)
   --read-only          Only pull; never commit or push

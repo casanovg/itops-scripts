@@ -65,3 +65,17 @@ Install ONLY on these four hosts (vault scope):
 
 Each host gets a different minute to reduce concurrent pushes. The next
 `crontab -l > cron/<host>.crontab` job mirrors the change into the repository.
+
+## Human-driven sessions
+
+`git-sync-careful.sh` is the interactive counterpart of `git-sync.sh` for
+human sessions with uncommitted work from others. It never stages files you
+did not name (`--only f1 f2`, or `--all`), runs secrets hygiene before
+committing, pulls with `--rebase --autostash`, stops on conflicts instead
+of pushing a mess, and pushes only with `--push`. Default with no `-m` is
+`--check` (read-only report).
+
+```bash
+~/itops-scripts/utils/git-sync-careful.sh --check ~/itops-scripts/
+~/itops-scripts/utils/git-sync-careful.sh -m "docs: ..." --only utils/x.sh --push ~/itops-scripts/
+```

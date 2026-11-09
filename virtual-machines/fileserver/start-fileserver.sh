@@ -4,6 +4,8 @@
 # ......................................
 # 2019-12-30 gustavo.casanova@gmail.com
 # 2025-12-17 Updated with dynamic wait for iSCSI devices
+# 2026-11-09 Detect disks by UUID (sd letters shift across relogins);
+#            skip login when a session already exists (avoid duplicates).
 
 #TARGET_NETFILES="iqn.2019-12.lan.htargentina:hta-mothership.aleph"
 TARGET_NETFILES="iqn.2022-11.ar.hellermanntyton:hta-opportunity.netfiles"
@@ -46,13 +48,28 @@ wait_for_device() {
     return 1
 }
 
+# Disk is present when its filesystem UUID resolves, whatever sd name
+# the kernel assigned on this login (sdb1/sdc1 are NOT stable).
+disk_present() {
+    [ -e "/dev/disk/by-uuid/$1" ]
+}
+
+# An iSCSI session already exists for the given target IQN.
+session_active() {
+    sudo iscsiadm -m session 2>/dev/null | grep -q "$1"
+}
+
 # Discover available iSCSI targets disks
 sudo iscsiadm -m discovery -t sendtargets -p $SERVER_NETFILES
 
 # Connect HTA files and users shares iscsi targets
-if [ ! "$(cat /proc/partitions | grep -w "$DEV_NETFILES")" ]; then
-    echo "Connecting to $TARGET_NETFILES..."
-    sudo iscsiadm -m node --targetname $TARGET_NETFILES -p $SERVER_NETFILES --login
+if ! disk_present "$DEV_NETFILES_UUID"; then
+    if ! session_active "$TARGET_NETFILES"; then
+        echo "Connecting to $TARGET_NETFILES..."
+        sudo iscsiadm -m node --targetname $TARGET_NETFILES -p $SERVER_NETFILES --login
+    else
+        echo "Session $TARGET_NETFILES exists, waiting for device..."
+    fi
     wait_for_device "$DEV_NETFILES_UUID" "$DEV_NETFILES"
 else
     echo ""
@@ -60,7 +77,7 @@ else
 fi
 
 # Mount HTA files and users shares
-if [ "$(cat /proc/partitions | grep -w "$DEV_NETFILES")" ]; then
+if disk_present "$DEV_NETFILES_UUID"; then
     if [ ! -z "$(ls -1 $FS_DIR 2>/dev/null | grep $ISCSI_WARNING)" ]; then
         echo "Mounting $FS_DIR..."
         sudo mount /dev/disk/by-uuid/$DEV_NETFILES_UUID $FS_DIR
@@ -74,9 +91,13 @@ else
 fi
 
 # Connect finance tax payers records iscsi target
-if [ ! "$(cat /proc/partitions | grep -w "$DEV_TAXPY")" ]; then
-    echo "Connecting to $TARGET_TAXPY..."
-    sudo iscsiadm -m node --targetname $TARGET_TAXPY -p $SERVER_TAXPY --login
+if ! disk_present "$DEV_TAXPY_UUID"; then
+    if ! session_active "$TARGET_TAXPY"; then
+        echo "Connecting to $TARGET_TAXPY..."
+        sudo iscsiadm -m node --targetname $TARGET_TAXPY -p $SERVER_TAXPY --login
+    else
+        echo "Session $TARGET_TAXPY exists, waiting for device..."
+    fi
     wait_for_device "$DEV_TAXPY_UUID" "$DEV_TAXPY"
 else
     echo ""
@@ -84,7 +105,7 @@ else
 fi
 
 # Mount finance tax payers records share
-if [ "$(cat /proc/partitions | grep -w "$DEV_TAXPY")" ]; then
+if disk_present "$DEV_TAXPY_UUID"; then
     if [ ! -z "$(ls -1 $TP_DIR 2>/dev/null | grep $ISCSI_WARNING)" ]; then
         echo "Mounting $TP_DIR..."
         sudo mount /dev/disk/by-uuid/$DEV_TAXPY_UUID $TP_DIR

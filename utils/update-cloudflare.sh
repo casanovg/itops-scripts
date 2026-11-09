@@ -13,9 +13,9 @@ source ~/.cloudflare-settings
 # ".cloudflare-settings" file before running this script:
 #
 #    EMAIL="your_email@domain.com"
-#    GLOBAL_API_KEY="<REDACTED-PURGED>"
-#    ZONE_ID="<REDACTED-PURGED>"
-#    RECORD_ID="<REDACTED-PURGED>"
+#    GLOBAL_API_KEY="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"  # ficticio: poner la real en ~/.cloudflare-settings
+#    ZONE_ID="BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+#    RECORD_ID="CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
 #    RECORD_TYPE="A"
 #    RECORD_NAME="service.domain.com"
 #    RECORD_TTL="1"

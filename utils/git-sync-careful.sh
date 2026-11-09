@@ -74,7 +74,9 @@ else
   if [ "$STAGE_ALL" -eq 1 ]; then git add -A; else git add -- "${ONLY[@]}"; fi
   echo "--- higiene de secretos sobre el diff staged (lineas agregadas) ---"
   ADDED="$(git diff --cached -U0 | grep '^+' | grep -v '^+++')"
-  if echo "$ADDED" | grep -nEi '(password|token|secret|api[_-]?key)[[:space:]]*[:=][[:space:]]*[A-Za-z0-9/+_.-]{6,}'; then
+  # Placeholders conocidos (ver .githooks/pre-commit): no abortan.
+  ADDED="$(echo "$ADDED" | grep -viE 'changeme|redacted|xxx|ejemplo|ficticio|your_|service\.domain|<[^>]*>')"
+  if echo "$ADDED" | grep -nEi '(password|token|secret|api[_-]?key)["'"'"']?[[:space:]]*[:=][[:space:]]*["'"'"']?[A-Za-z0-9/+_.-]{6,}'; then
     echo "ABORTO: posible secreto en el diff (ver arriba)." >&2; exit 1
   fi
   # Nota: los patrones evitan auto-matchearse ([Y],[A],[p]) para no abortar

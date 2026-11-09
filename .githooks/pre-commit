@@ -1,0 +1,41 @@
+#!/bin/sh
+# pre-commit — higiene de secretos sobre el diff staged (líneas agregadas).
+#
+# Instalación (los hooks no se versionan vía git, ver utils/install-git-hooks.sh):
+#   ./utils/install-git-hooks.sh [repo-path]
+#
+# Comportamiento: exit 1 + mensaje si el staged diff parece contener un
+# secreto (valor asignado o clave/token conocido); exit 0 en caso contrario.
+# Bypass solo para emergencias (queda registrado en el reflog del commit):
+#   git commit --no-verify -m "..."
+#
+# NOTA: los patrones evitan auto-matchearse ([Y],[A],[p],[h]) para no abortar
+# cuando el diff agrega estas mismas líneas del hook.
+
+ADDED="$(git diff --cached -U0 | grep '^+' | grep -v '^+++')"
+if [ -z "$ADDED" ]; then
+    exit 0
+fi
+
+# Placeholders conocidos: no son secretos (CHANGEME-*, <REDACTED>, xxxx,
+# texto de ejemplo). Se excluyen para evitar falsos positivos; lo demás
+# con forma de asignación con valor sí aborta.
+ADDED="$(echo "$ADDED" | grep -viE 'changeme|redacted|xxx|ejemplo|ficticio|your_|service\.domain|<[^>]*>')"
+if [ -z "$ADDED" ]; then
+    exit 0
+fi
+
+if echo "$ADDED" | grep -nEi '(password|token|secret|api[_-]?key)["'"'"']?[[:space:]]*[:=][[:space:]]*["'"'"']?[A-Za-z0-9/+_.-]{6,}' >/dev/null; then
+    echo "pre-commit: ABORTO, posible secreto en el diff staged:" >&2
+    echo "$ADDED" | grep -nEi '(password|token|secret|api[_-]?key)["'"'"']?[[:space:]]*[:=][[:space:]]*["'"'"']?[A-Za-z0-9/+_.-]{6,}' | cut -c1-120 >&2
+    echo "Si es un falso positivo (placeholder, nombre de variable sin valor)," >&2
+    echo "ajustá el texto o commiteá con --no-verify dejando constancia." >&2
+    exit 1
+fi
+
+if echo "$ADDED" | grep -nE 'BEGIN [A-Z ]*PRIVATE KE[Y]|ssh-(rsa|ed25519) AAA[A]|gh[p]_|AKI[A][0-9A-Z]{16}' >/dev/null; then
+    echo "pre-commit: ABORTO, posible clave/token en el diff staged." >&2
+    exit 1
+fi
+
+exit 0

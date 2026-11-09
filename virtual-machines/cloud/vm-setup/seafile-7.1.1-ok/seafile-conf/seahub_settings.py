@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-SECRET_KEY = "b'pq!-(v1$5dgbzci+=iy9-jmmm6s%det%1h9n^g1ont0cxkr1pz'"
+SECRET_KEY = "b'CHANGEME-snapshot-historico-ver-deploy-Docker-vivo'"
 
 DATABASES = {
     'default': {

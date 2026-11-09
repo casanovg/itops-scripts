@@ -162,7 +162,7 @@
                 "random_datain_seq_offsets": 0,
                 "random_r2t_offsets": 0
               },
-              "chap_password": "netbackup",
+              "chap_password": "CHANGEME-rotar-en-targetcli-ver-historial",
               "chap_userid": "netbackup",
               "mapped_luns": [
                 {
@@ -252,7 +252,7 @@
                 "random_datain_seq_offsets": 0,
                 "random_r2t_offsets": 0
               },
-              "chap_password": "netbackup",
+              "chap_password": "CHANGEME-rotar-en-targetcli-ver-historial",
               "chap_userid": "netbackup",
               "mapped_luns": [
                 {

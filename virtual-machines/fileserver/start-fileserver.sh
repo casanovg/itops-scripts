@@ -54,9 +54,69 @@ disk_present() {
     [ -e "/dev/disk/by-uuid/$1" ]
 }
 
+# 2026-11-10 Release stale mounts left by an iSCSI session loss + relogin
+#            (fresh device refuses to mount with "XFS: duplicate UUID").
 # An iSCSI session already exists for the given target IQN.
 session_active() {
     sudo iscsiadm -m session 2>/dev/null | grep -q "$1"
+}
+
+# Drop a mountpoint left stale by an iSCSI session loss.
+# Only provably-stale mounts are touched; healthy mounts are never modified.
+# Returns 0 when the mountpoint is free (or was never mounted), 1 when it
+# could not be released yet (busy) - the caller must skip the mount and let
+# a later tick retry.
+release_stale_mount() {
+    local MNT=$1
+    local UUID=$2
+    local SRC CUR BASE FLAG
+    SRC="$(findmnt -n -o SOURCE "$MNT" 2>/dev/null)" || return 0
+    [ -n "$SRC" ] || return 0
+    case "$SRC" in /dev/*) ;; *) return 0 ;; esac
+    CUR="$(readlink -f /dev/disk/by-uuid/$UUID 2>/dev/null)"
+    if [ "$SRC" = "$CUR" ] && [ -e "$SRC" ]; then
+        if ls "$MNT" >/dev/null 2>&1; then
+            return 0
+        fi
+        # Same device path but unreadable: only safe to release if the
+        # kernel already declared this filesystem dead (avoids ripping out
+        # a live mount during a transient I/O hiccup).
+        BASE="${SRC##*/}"
+        if journalctl --no-pager -b 0 -k 2>/dev/null | grep -q "XFS ($BASE).*Shutting down filesystem"; then
+            echo "Stale mount on $MNT ($SRC shut down by kernel), releasing..."
+        else
+            echo "WARNING: $MNT unreadable but $SRC looks live, leaving for next tick ..."
+            return 1
+        fi
+    else
+        echo "Stale mount on $MNT (was $SRC, device now ${CUR:-missing}), releasing..."
+    fi
+    # Fast path: clean unmount (no open files).
+    if sudo umount "$MNT" 2>/dev/null; then
+        sleep 1
+        findmnt "$MNT" >/dev/null 2>&1 || return 0
+    fi
+    # Slow path: open files (typically smbd) keep even a lazy-detached
+    # mount active, which still blocks remounting ("duplicate UUID").
+    FLAG="/tmp/.stale-bounce-$(echo "$MNT" | tr -c 'a-zA-Z0-9' '_')"
+    if [ -e "$FLAG" ]; then
+        echo "WARNING: $MNT still busy (samba bounce already done this boot), retry next tick ..."
+        return 1
+    fi
+    touch "$FLAG"
+    echo "Mount $MNT busy, restarting samba to release open files..."
+    sudo systemctl stop smb nmb 2>/dev/null
+    trap 'sudo systemctl start smb nmb 2>/dev/null' EXIT HUP INT TERM
+    sleep 3
+    sudo umount "$MNT" 2>/dev/null || sudo umount -l "$MNT" 2>/dev/null
+    sleep 2
+    sudo systemctl start smb nmb 2>/dev/null
+    trap - EXIT HUP INT TERM
+    if findmnt "$MNT" >/dev/null 2>&1; then
+        echo "WARNING: $MNT still busy after samba bounce, retry next tick ..."
+        return 1
+    fi
+    return 0
 }
 
 # Discover available iSCSI targets disks
@@ -78,12 +138,17 @@ fi
 
 # Mount HTA files and users shares
 if disk_present "$DEV_NETFILES_UUID"; then
-    if [ ! -z "$(ls -1 $FS_DIR 2>/dev/null | grep $ISCSI_WARNING)" ]; then
-        echo "Mounting $FS_DIR..."
-        sudo mount /dev/disk/by-uuid/$DEV_NETFILES_UUID $FS_DIR
+    if release_stale_mount "$FS_DIR" "$DEV_NETFILES_UUID"; then
+        if [ ! -z "$(ls -1 $FS_DIR 2>/dev/null | grep $ISCSI_WARNING)" ]; then
+            echo "Mounting $FS_DIR..."
+            sudo mount /dev/disk/by-uuid/$DEV_NETFILES_UUID $FS_DIR
+        else
+            echo ""
+            echo "\"$FS_DIR\" already mounted ..."
+        fi
     else
         echo ""
-        echo "\"$FS_DIR\" already mounted ..."
+        echo "WARNING: \"$FS_DIR\" mount blocked, will retry next tick ..."
     fi
 else
     echo ""
@@ -106,9 +171,14 @@ fi
 
 # Mount finance tax payers records share
 if disk_present "$DEV_TAXPY_UUID"; then
-    if [ ! -z "$(ls -1 $TP_DIR 2>/dev/null | grep $ISCSI_WARNING)" ]; then
-        echo "Mounting $TP_DIR..."
-        sudo mount /dev/disk/by-uuid/$DEV_TAXPY_UUID $TP_DIR
+    if release_stale_mount "$TP_DIR" "$DEV_TAXPY_UUID"; then
+        if [ ! -z "$(ls -1 $TP_DIR 2>/dev/null | grep $ISCSI_WARNING)" ]; then
+            echo "Mounting $TP_DIR..."
+            sudo mount /dev/disk/by-uuid/$DEV_TAXPY_UUID $TP_DIR
+        fi
+    else
+        echo ""
+        echo "WARNING: \"$TP_DIR\" mount blocked, will retry next tick ..."
     fi
 else
     echo ""

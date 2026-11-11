@@ -26,7 +26,7 @@
 
 # Verify every 5 minutes that BackinTime directories are mounted
 # -----------------------------------------------------------------------------------
-*/5 *  *  *  *    ~/itops-scripts/physical-machines/mnt-offsite-dirs.sh
+#*/5 *  *  *  *    ~/itops-scripts/physical-machines/mnt-offsite-dirs.sh
 
 # Start non-backed-up virtual machines (Every day at 23:30 PM)
 # -----------------------------------------------------------------------------------
@@ -35,21 +35,21 @@
 
 
 #Back In Time system entry, this will be edited by the gui:
-0 0 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime backup --background >/dev/null
+#0 0 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime backup --background >/dev/null
 #Back In Time system entry, this will be edited by the gui:
-0 8 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile 2 backup --background >/dev/null
+#0 8 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile 2 backup --background >/dev/null
 #Back In Time system entry, this will be edited by the gui:
-0 3 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile 3 backup --background >/dev/null
+#0 3 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile 3 backup --background >/dev/null
 #Back In Time system entry, this will be edited by the gui:
-0 6 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile 4 backup --background >/dev/null
+#0 6 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile 4 backup --background >/dev/null
 #Back In Time system entry, this will be edited by the gui:
-0 7 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile 5 backup --background >/dev/null
+#0 7 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile 5 backup --background >/dev/null
 #Back In Time system entry, this will be edited by the gui:
-0 13 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile 6 backup --background >/dev/null
+#0 13 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile 6 backup --background >/dev/null
 #Back In Time system entry, this will be edited by the gui:
-0 17 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile 7 backup --background >/dev/null
+#0 17 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile 7 backup --background >/dev/null
 #Back In Time system entry, this will be edited by the gui:
-0 21 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile 8 backup --background >/dev/null
+#0 21 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile 8 backup --background >/dev/null
 #Back In Time system entry, this will be edited by the gui:
-0 4 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile 9 backup --background >/dev/null
+#0 4 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime --profile 9 backup --background >/dev/null
 

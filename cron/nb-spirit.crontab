@@ -40,8 +40,8 @@
 # ------------------------------------------------------------------------------
  30 17  *  *  *     ~/itops-scripts/utils/power-ms-on.sh
 
-# Test & Dev VMs
-# ------------------------------------------------------------------------------
+# Start non-backed-up virtual machines (Multiple times)
+# -----------------------------------------------------------------------------------
 # 0  23  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-ALT"
   0 */2  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "NB-Aether"
 # 0 */3  *  *  *     ~/itops-scripts/physical-machines/vm-on.sh "HTA-Classic"

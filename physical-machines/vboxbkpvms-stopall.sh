@@ -19,16 +19,18 @@ LOG_FILE='/data/VirtualBox-Exports/Log/vboxbackup.log'
 #ESSENTIAL_SERVICE='HTA-Firewall'
 IFS=$'\n'
 
+source ~/itops-scripts/common/set-vm-lists.sh
+
 echo "********************************************************************************"
 echo "* $DATE_NOW * Backing-up >>> $(hostname -s | tr [a-z] [A-Z]) <<< VirtualBox Virtual Machines"
 echo "********************************************************************************"
 
-for VM in $([ -f ~/ActiveVMs ] && grep -v '^#' ~/ActiveVMs || echo "Warning: ~/ActiveVMs not found, ignoring." >&2); do
+for VM in $(read_vm_list ~/ActiveVMs); do
 	echo "--------------------------------------------------------------------------------"
 	echo "Shutting >> "$VM" << down on $(date) ..."
 	~/itops-scripts/physical-machines/vm-off.sh "$VM"
 done
-for VM in $([ -f ~/ActiveVMs ] && grep -v '^#' ~/ActiveVMs || echo "Warning: ~/ActiveVMs not found, ignoring." >&2); do
+for VM in $(read_vm_list ~/ActiveVMs); do
 	echo "--------------------------------------------------------------------------------"
 	echo "Removing old "$VM" backups ..."
 	find $BACKUP_DIR -type f -mtime +0 -name "$VM*"
@@ -41,7 +43,7 @@ for VM in $([ -f ~/ActiveVMs ] && grep -v '^#' ~/ActiveVMs || echo "Warning: ~/A
 	echo ""
 	sleep 3
 	# If the VM backed-up is an essential service, start it now
-	for ESSENTIAL_SERVICE in $([ -f ~/EssentialNetServices ] && grep -v '^#' ~/EssentialNetServices || echo "Warning: ~/EssentialNetServices not found, ignoring." >&2); do
+	for ESSENTIAL_SERVICE in $(read_vm_list ~/EssentialNetServices); do
 		if [ "$VM" == "$ESSENTIAL_SERVICE" ]; then
 			echo "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
 			echo "|| "$VM" runs essential services, starting it now ..."
@@ -52,7 +54,7 @@ for VM in $([ -f ~/ActiveVMs ] && grep -v '^#' ~/ActiveVMs || echo "Warning: ~/A
 	done
 done
 # Start all non-essential service VMs
-for VM in $([ -f ~/ActiveVMs ] && grep -v '^#' ~/ActiveVMs || echo "Warning: ~/ActiveVMs not found, ignoring." >&2); do
+for VM in $(read_vm_list ~/ActiveVMs); do
 	if [ "$VM" != "$ESSENTIAL_SERVICE" ]; then
 		echo "Restarting >> "$VM" << on $(date) ..."
 			~/itops-scripts/physical-machines/vm-on.sh "$VM"

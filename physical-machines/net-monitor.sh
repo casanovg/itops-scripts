@@ -89,7 +89,7 @@ if [ $INTERNET_REACHED = 1 ]; then
     echo ""
 
     # echo "Checking that there is only one firewall VM running across the physical servers ..."
-    # for ESSENTIAL_SERVICE in $([ -f ~/EssentialNetServices ] && grep -v '^#' ~/EssentialNetServices || echo "Warning: ~/EssentialNetServices not found, ignoring." >&2); do
+    # for ESSENTIAL_SERVICE in $(read_vm_list ~/EssentialNetServices); do
     #     echo -n $ESSENTIAL_SERVICE;
     #     if [ $THIS == $ESSENTIAL_SERVICE ]; then
     #         echo " It's here";

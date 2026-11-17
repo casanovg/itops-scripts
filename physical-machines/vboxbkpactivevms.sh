@@ -8,11 +8,13 @@ BackupDir='/data/VirtualBox-Exports'
 DateNow=$(date -I --date='now')
 LogFile='/data/VirtualBox-Exports/Log/vboxbackup.log'
 
+source ~/itops-scripts/common/set-vm-lists.sh
+
 echo "********************************************************************************"
 echo "* $DateNow * Backing-up  >>> $(hostname -s | tr [a-z] [A-Z]) <<< VirtualBox Virtual Machines"
 echo "********************************************************************************"
 
-for virtualmachine in $([ -f /root/ActiveVMs ] && grep -v '^#' /root/ActiveVMs || echo "Warning: /root/ActiveVMs not found, ignoring." >&2); do
+for virtualmachine in $(read_vm_list /root/ActiveVMs); do
 	echo "--------------------------------------------------------------------------------"
 	echo "- Starting >> $virtualmachine << VM Backup on $(date)"
 	echo "Trying to shutdown" $virtualmachine on $DateNow "..."

@@ -4,7 +4,7 @@
 #                 sin detener nginx completo ni los hosts downstream (.20, .21, .35...).
 #
 # Host: NB-Hibou (10.77.77.33) — CONF_DIR=/etc/nginx/conf.d
-# Fuente versionada: ~/itops-scripts/virtual-machines/nb-hibou/rpx-toggle.sh
+# Fuente versionada: ~/itops-scripts/virtual-machines/cloud/rpx-toggle.sh
 #   (repo casanovg/itops-scripts, clonado en cada host). Instalado en
 #   /usr/local/sbin/rpx-toggle.sh (`sudo install -m 755 ...`).
 #

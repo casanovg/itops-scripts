@@ -1,41 +1,41 @@
 #!/usr/bin/env bash
 #
-# rpx-toggle.sh — Pausa / reanuda UN vhost del reverse proxy NB-Hibou
-#                 sin detener nginx completo ni los hosts downstream (.20, .21, .35...).
+# rpx-toggle.sh — Pause / resume ONE reverse-proxy vhost on NB-Hibou
+#                 without stopping all of nginx or the downstream hosts (.20, .21, .35...).
 #
 # Host: NB-Hibou (10.77.77.33) — CONF_DIR=/etc/nginx/conf.d
-# Fuente versionada: ~/itops-scripts/virtual-machines/cloud/rpx-toggle.sh
-#   (repo casanovg/itops-scripts, clonado en cada host). Instalado en
+# Versioned source: ~/itops-scripts/virtual-machines/cloud/rpx-toggle.sh
+#   (casanovg/itops-scripts repo, cloned on every host). Installed at
 #   /usr/local/sbin/rpx-toggle.sh (`sudo install -m 755 ...`).
 #
-# Descubrimiento DINÁMICO (sin lista fija): un "servicio" es cada archivo
-#   `loc.*.conf` o `rpx.*.conf` de CONF_DIR (los que nginx carga con
-#   `include *.conf`). Queda afuera todo lo demás: *.bak*, *.backup,
-#   *.___conf___, snippets como cloudflare-real-ip.conf, etc.
-#   Los `loc|rpx.*.conf.disabled` se muestran como HARD-OFF.
-#   Clave del servicio = nombre de archivo sin prefijo (rpx./loc.) ni
-#   .conf (p. ej. rpx.ai-ollama.conf → ai-ollama). También se acepta el
-#   basename completo o el FQDN (server_name).
-#   Los vhosts `loc.*` (servicios LOCALES del propio host) exigen --force.
+# DYNAMIC discovery (no hardcoded list): a "service" is each `loc.*.conf`
+#   or `rpx.*.conf` file in CONF_DIR (what nginx loads via `include *.conf`).
+#   Everything else is excluded: *.bak*, *.backup, *.___conf___, snippets
+#   such as cloudflare-real-ip.conf, etc.
+#   `loc|rpx.*.conf.disabled` files show up as HARD-OFF.
+#   Service key = filename without prefix (rpx./loc.) or .conf
+#   (e.g. rpx.ai-ollama.conf → ai-ollama). The full basename or the
+#   FQDN (server_name) are also accepted.
+#   `loc.*` vhosts (services LOCAL to this host) require --force.
 #
-# Mecanismo default (soft): el vhost vivo se respalda en BACKUP_DIR y se reemplaza
-#   por un stub con el MISMO server_name y los MISMOS certs LE que devuelve 503
+# Default mechanism (soft): the live vhost is backed up to BACKUP_DIR and replaced
+#   with a stub using the SAME server_name and the SAME LE certs that returns 503
 #   "Servicio no disponible en este momento / Service temporarily unavailable".
-#   TLS sigue terminando (Cloudflare no da 525/526) y el timer certbot-renew
-#   (DNS-01) sigue renovando sin tocar HTTP.
-# Mecanismo --hard: foo.conf → foo.conf.disabled (nginx solo carga *.conf).
-#   El SNI queda sin match y Cloudflare devuelve 525/526: solo emergencias.
+#   TLS keeps terminating (no Cloudflare 525/526) and the certbot-renew
+#   timer (DNS-01) keeps renewing without touching HTTP.
+# Mechanism --hard: foo.conf → foo.conf.disabled (nginx only loads *.conf).
+#   The SNI no longer matches and Cloudflare returns 525/526: emergencies only.
 #
-# Uso:
-#   rpx-toggle.sh status [svc|fqdn|all]...   # estado (default: todo lo descubierto)
-#   rpx-toggle.sh list                        # inventario: solo loc./rpx. (.conf/.disabled)
-#   rpx-toggle.sh off <svc|fqdn>... [--hard] [--force]   # 'all' solo con --force
+# Usage:
+#   rpx-toggle.sh status [svc|fqdn|all]...   # status (default: everything discovered)
+#   rpx-toggle.sh list                        # inventory: only loc./rpx. (.conf/.disabled)
+#   rpx-toggle.sh off <svc|fqdn>... [--hard] [--force]   # 'all' only with --force
 #   rpx-toggle.sh on  <svc|fqdn>... [--hard] [--force]
 #
-# Ejemplos:
+# Examples:
 #   rpx-toggle.sh off ai-ollama
 #   rpx-toggle.sh off ai.w1.ar photos.w1.ar
-#   rpx-toggle.sh off seafile-and-calibre --force   # loc.* = servicio local
+#   rpx-toggle.sh off seafile-and-calibre --force   # loc.* = local service
 #
 set -euo pipefail
 
@@ -47,7 +47,7 @@ usage() {
   sed -n '2,/^set /p' "$0" | sed 's/^# \{0,1\}//'
 }
 
-discover() { # "ESTADO|basename" — loc./rpx.*.conf (los que nginx carga) + sus .disabled
+discover() { # "STATE|basename" — loc./rpx.*.conf (what nginx loads) + their .disabled
   local f base
   shopt -s nullglob
   local files=("$CONF_DIR"/loc.*.conf "$CONF_DIR"/rpx.*.conf \
@@ -61,7 +61,7 @@ discover() { # "ESTADO|basename" — loc./rpx.*.conf (los que nginx carga) + sus
   done
 }
 
-server_names() { # <file> → server_names públicos únicos; "" si no hay directiva; "_" si es catch-all
+server_names() { # <file> → unique public server_names; "" if no directive; "_" if catch-all
   local raw names
   raw=$(grep -hE '^\s*server_name\s+' "$1" 2>/dev/null || true)
   [[ -z "$raw" ]] && { echo ""; return 0; }
@@ -72,14 +72,14 @@ server_names() { # <file> → server_names públicos únicos; "" si no hay direc
   echo "$names"
 }
 
-ssl_paths() { # <file> → "<fullchain> <privkey>" (vacío si no tiene TLS)
+ssl_paths() { # <file> → "<fullchain> <privkey>" (empty if no TLS)
   local crt key
   crt=$(grep -m1 -oP '^\s*ssl_certificate\s+\K[^;\s]+' "$1" 2>/dev/null || true)
   key=$(grep -m1 -oP '^\s*ssl_certificate_key\s+\K[^;\s]+' "$1" 2>/dev/null || true)
   echo "$crt $key"
 }
 
-stem_of() { # <basename> → clave (sin prefijo rpx./loc. ni .conf/.disabled)
+stem_of() { # <basename> → key (no rpx./loc. prefix, no .conf/.disabled)
   local b="$1"
   b="${b%.disabled}"
   b="${b%.conf}"
@@ -88,7 +88,7 @@ stem_of() { # <basename> → clave (sin prefijo rpx./loc. ni .conf/.disabled)
   echo "$b"
 }
 
-resolve() { # <svc|fqdn|basename> → basenames (uno por línea); rc=1 si no matchea
+resolve() { # <svc|fqdn|basename> → basenames (one per line); rc=1 on no match
   local a="${1%.disabled}" st base stem exact=() fuzzy=()
   while IFS='|' read -r st base; do
     if [[ "$base" == "$a" || "$base" == "$a.conf" ]]; then exact+=("$base"); continue; fi
@@ -100,10 +100,10 @@ resolve() { # <svc|fqdn|basename> → basenames (uno por línea); rc=1 si no mat
   done < <(discover)
   if [[ ${#exact[@]} -gt 0 ]]; then printf '%s\n' "${exact[@]}"; return 0; fi
   if [[ ${#fuzzy[@]} -gt 1 ]]; then
-    echo "Ambiguo '$1': ${fuzzy[*]} — usá el nombre de archivo completo" >&2; return 1
+    echo "Ambiguous '$1': ${fuzzy[*]} — use the full filename" >&2; return 1
   fi
   if [[ ${#fuzzy[@]} -eq 0 ]]; then
-    echo "Desconocido '$1'. Descubiertos: $(discover | cut -d'|' -f2 | paste -sd' ' -)" >&2; return 1
+    echo "Unknown '$1'. Discovered: $(discover | cut -d'|' -f2 | paste -sd' ' -)" >&2; return 1
   fi
   printf '%s\n' "${fuzzy[@]}"
 }
@@ -111,16 +111,16 @@ resolve() { # <svc|fqdn|basename> → basenames (uno por línea); rc=1 si no mat
 is_soft_off() { [[ -f "$CONF_DIR/$1" ]] && grep -q "$STUB_MARKER" "$CONF_DIR/$1"; }
 is_hard_off() { [[ ! -f "$CONF_DIR/$1" && -f "$CONF_DIR/$1.disabled" ]]; }
 
-vhost_path() { # <live-basename> → ruta existente (live o .disabled)
+vhost_path() { # <live-basename> → existing path (live or .disabled)
   if [[ -f "$CONF_DIR/$1" ]]; then echo "$CONF_DIR/$1"; else echo "$CONF_DIR/$1.disabled"; fi
 }
 
 reload_nginx() {
   nginx -t || return 1
   if systemctl is-active --quiet nginx 2>/dev/null; then
-    systemctl reload nginx && echo "nginx recargado."
+    systemctl reload nginx && echo "nginx reloaded."
   else
-    echo "nginx detenido — cambios validados (nginx -t OK), aplican al iniciarlo."
+    echo "nginx stopped — changes validated (nginx -t OK), they apply on start."
   fi
 }
 
@@ -128,10 +128,10 @@ write_stub() { # <live-file> <backup-path>
   local live="$1" bak="$2" names crt key
   names=$(server_names "$live")
   read -r crt key < <(ssl_paths "$live")
-  [[ -z "${names// }" ]] && { echo "No se pudo extraer server_name de $live" >&2; return 1; }
+  [[ -z "${names// }" ]] && { echo "Could not extract server_name from $live" >&2; return 1; }
   {
-    echo "# $STUB_MARKER (off) — original en $bak"
-    echo "# Generado: $(date -u +%FT%TZ) — rpx-toggle.sh off"
+    echo "# $STUB_MARKER (off) — original at $bak"
+    echo "# Generated: $(date -u +%FT%TZ) — rpx-toggle.sh off"
     echo "server {"
     echo "    listen 80;"
     echo "    server_name $names;"
@@ -164,8 +164,8 @@ write_stub() { # <live-file> <backup-path>
   }
 }
 
-do_status() { # basenames (uno por línea vía stdin) → tabla
-  printf '%-22s %-32s %-16s %s\n' SERVICIO ARCHIVO ESTADO SERVER_NAME
+do_status() { # basenames (one per line via stdin) → table
+  printf '%-22s %-32s %-16s %s\n' SERVICE FILE STATE SERVER_NAME
   local base st names
   while IFS= read -r base; do
     [[ -z "$base" ]] && continue
@@ -178,8 +178,8 @@ do_status() { # basenames (uno por línea vía stdin) → tabla
   done
 }
 
-do_list() { # inventario: solo loc./rpx.*.conf y sus .disabled
-  printf '%-38s %-10s %-22s %s\n' ARCHIVO ESTADO SERVICIO SERVER_NAME
+do_list() { # inventory: only loc./rpx.*.conf and their .disabled
+  printf '%-38s %-10s %-22s %s\n' FILE STATE SERVICE SERVER_NAME
   local f base st svc names
   shopt -s nullglob
   local files=("$CONF_DIR"/loc.*.conf "$CONF_DIR"/rpx.*.conf \
@@ -201,48 +201,52 @@ do_list() { # inventario: solo loc./rpx.*.conf y sus .disabled
 
 do_off() { # basenames (args) + hard flag
   local hard="$1"; shift
-  local ts f live
+  local ts f live changed=0
   ts=$(date +%Y%m%d-%H%M%S)
   mkdir -p "$BACKUP_DIR"
   for f in "$@"; do
     live="$CONF_DIR/$f"
-    if is_soft_off "$f"; then echo "$f: ya OFF (soft), skip"; continue; fi
-    if is_hard_off "$f"; then echo "$f: ya OFF (hard), skip"; continue; fi
+    if is_soft_off "$f"; then echo "$f: already OFF (soft), skip"; continue; fi
+    if is_hard_off "$f"; then echo "$f: already OFF (hard), skip"; continue; fi
     if [[ "$hard" == 1 ]]; then
       cp -a "$live" "$BACKUP_DIR/${f}.${ts}.hardbak"
       mv "$live" "$live.disabled"
-      echo "$f: OFF hard (→ $f.disabled, backup en $BACKUP_DIR)"
+      echo "$f: OFF hard (→ $f.disabled, backup in $BACKUP_DIR)"
+      changed=1
     else
       local bak="$BACKUP_DIR/${f}.${ts}.softbak"
       cp -a "$live" "$bak"
-      write_stub "$live" "$bak" > "$live.new" || { echo "$f: ERROR generando stub, no se tocó" >&2; return 1; }
+      write_stub "$live" "$bak" > "$live.new" || { echo "$f: ERROR generating stub, untouched" >&2; return 1; }
       mv "$live.new" "$live"
-      echo "$f: OFF soft 503 (original en $bak)"
+      echo "$f: OFF soft 503 (original at $bak)"
+      changed=1
     fi
   done
-  reload_nginx
+  if [[ "$changed" == 1 ]]; then reload_nginx; else echo "No changes — nginx untouched."; fi
 }
 
 do_on() { # basenames (args) + hard flag
   local hard="$1"; shift
-  local f live latest
+  local f live latest changed=0
   for f in "$@"; do
     live="$CONF_DIR/$f"
     if [[ "$hard" == 1 ]]; then
       if is_hard_off "$f"; then
         mv "$live.disabled" "$live"
-        echo "$f: ON (restaurado desde .disabled)"
-      else echo "$f: no estaba OFF hard, skip"; fi
+        echo "$f: ON (restored from .disabled)"
+        changed=1
+      else echo "$f: was not OFF hard, skip"; fi
     else
       if is_soft_off "$f"; then
         latest=$(ls -t "$BACKUP_DIR/${f}."*.softbak 2>/dev/null | head -1 || true)
-        [[ -n "$latest" ]] || { echo "$f: stub sin backup en $BACKUP_DIR, no toco" >&2; continue; }
+        [[ -n "$latest" ]] || { echo "$f: stub without backup in $BACKUP_DIR, untouched" >&2; continue; }
         cp -a "$latest" "$live"
-        echo "$f: ON (restaurado desde $latest)"
-      else echo "$f: no estaba OFF soft, skip"; fi
+        echo "$f: ON (restored from $latest)"
+        changed=1
+      else echo "$f: was not OFF soft, skip"; fi
     fi
   done
-  reload_nginx
+  if [[ "$changed" == 1 ]]; then reload_nginx; else echo "No changes — nginx untouched."; fi
 }
 
 main() {
@@ -260,10 +264,13 @@ main() {
   done
   if [[ "$cmd" == list ]]; then do_list; return 0; fi
   if [[ "$cmd" != status && "$cmd" != off && "$cmd" != on ]]; then usage; return 1; fi
+  if [[ ("$cmd" == off || "$cmd" == on) && $EUID -ne 0 && -z "${RPX_ALLOW_NONROOT:-}" ]]; then
+    echo "off/on require root (they read certs/logs and reload nginx): retry with sudo." >&2; return 1
+  fi
   local files=() t r
   if [[ ${#targets[@]} -eq 0 || " ${targets[*]} " == *" all "* ]]; then
     if [[ "$cmd" != status && "$force" != 1 ]]; then
-      echo "'$cmd all' exige --force (afecta a todos los vhosts descubiertos)" >&2; return 1
+      echo "'$cmd all' requires --force (it affects every discovered vhost)" >&2; return 1
     fi
     while IFS='|' read -r _ base; do files+=("$base"); done < <(discover)
   else
@@ -275,7 +282,7 @@ main() {
   if [[ "$cmd" != status && "$force" != 1 ]]; then
     for base in "${files[@]}"; do
       if [[ "$base" == loc.* ]]; then
-        echo "$base es servicio LOCAL (loc.*): reintentá con --force." >&2; return 1
+        echo "$base is a LOCAL service (loc.*): retry with --force." >&2; return 1
       fi
     done
   fi

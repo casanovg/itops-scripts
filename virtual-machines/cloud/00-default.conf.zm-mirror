@@ -1,0 +1,83 @@
+# VARIANTE INACTIVA (no termina en .conf → nginx la ignora).
+# Default TEMPORAL para pruebas: todo lo que llega SIN SNI/host válido
+# (IP directa) cae en ZoneMinder, igual que zm.w1.ar.
+# Espejo de rpx.zoneminder.conf. Para activarla:
+#   sudo cp ~/itops-scripts/virtual-machines/cloud/00-default.conf.zm-mirror \
+#           /etc/nginx/conf.d/00-default.conf \
+#   && sudo nginx -t && sudo systemctl reload nginx
+# Para volver a 444 (producción):
+#   sudo cp ~/itops-scripts/virtual-machines/cloud/00-default.conf \
+#           /etc/nginx/conf.d/00-default.conf \
+#   && sudo nginx -t && sudo systemctl reload nginx
+# Verificación local (en NB-Hibou, sin red en el medio):
+#   curl -skSI https://127.0.0.1/   # ZM: 301 → /zm/ | 444: cierra (curl 52/56)
+
+server {
+    listen 80 default_server;
+    listen 443 ssl default_server;
+    server_name _;
+
+    ssl_certificate /etc/letsencrypt/live/zm.w1.ar/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/zm.w1.ar/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    location = / {
+        return 301 /zm/;
+    }
+    location = /zm {
+        return 301 /zm/;
+    }
+
+    location /zm/ {
+        proxy_pass http://10.77.77.21;
+        proxy_http_version 1.1;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Port $server_port;
+        client_max_body_size 100M;
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 600s;
+        proxy_read_timeout 600s;
+        send_timeout 600s;
+        proxy_buffers 256 16k;
+        proxy_buffer_size 16k;
+    }
+
+    location /cgi-bin/ {
+        proxy_pass http://10.77.77.21;
+        proxy_http_version 1.1;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Port $server_port;
+        gzip off;
+        proxy_buffering off;
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 600s;
+        proxy_read_timeout 600s;
+        send_timeout 600s;
+    }
+
+    location /cgi-bin-zm/ {
+        proxy_pass http://10.77.77.21;
+        proxy_http_version 1.1;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Port $server_port;
+        gzip off;
+        proxy_buffering off;
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 600s;
+        proxy_read_timeout 600s;
+        send_timeout 600s;
+    }
+}

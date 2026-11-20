@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 #
-# rpx-toggle.sh — Pause / resume ONE reverse-proxy vhost on NB-Hibou
-#                 without stopping all of nginx or the downstream hosts (.20, .21, .35...).
+# rpx-toggle.sh — Pause / resume ONE reverse-proxy vhost on this host
+#                 without stopping all of nginx or the downstream backends.
 #
-# Host: NB-Hibou (10.77.77.33) — CONF_DIR=/etc/nginx/conf.d
+# Shared server-agnostic script: the same file runs on every reverse-proxy host.
 # Versioned source: ~/itops-scripts/virtual-machines/cloud/rpx-toggle.sh
 #   (casanovg/itops-scripts repo, cloned on every host). Installed at
 #   /usr/local/sbin/rpx-toggle.sh (`sudo install -m 755 ...`).
@@ -33,9 +33,9 @@
 #   rpx-toggle.sh on  <svc|fqdn>... [--hard] [--force]
 #
 # Examples:
-#   rpx-toggle.sh off ai-ollama
-#   rpx-toggle.sh off ai.w1.ar photos.w1.ar
-#   rpx-toggle.sh off seafile-and-calibre --force   # loc.* = local service
+#   rpx-toggle.sh off <svc>
+#   rpx-toggle.sh off <fqdn1> <fqdn2>
+#   rpx-toggle.sh off <svc-local> --force   # loc.* = local service
 #
 set -euo pipefail
 
